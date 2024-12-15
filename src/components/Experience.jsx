@@ -2,7 +2,8 @@ import { Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { useRef } from "react";
 import { CharacterController } from "./CharacterController";
-import { Map } from "./Map";
+import { Map } from "./map";
+import { useState, useEffect } from "react";
 
 const maps = {
   ground3: {

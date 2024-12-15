@@ -4,7 +4,7 @@ import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
-import { Character } from "./Character";
+import { Character } from "./character";
 
 const normalizeAngle = (angle) => {
   while (angle > Math.PI) angle -= 2 * Math.PI;
@@ -31,7 +31,7 @@ export const CharacterController = () => {
   // Define constants to replace `useControls`
   const WALK_SPEED = 2.0; // Adjust as needed
   const RUN_SPEED = 2.8;  // Adjust as needed
-  const ROTATION_SPEED = degToRad(1.2); // Adjust as needed
+  const ROTATION_SPEED = degToRad(1.0); // Adjust as needed
   const rb = useRef();
   const container = useRef();
   const character = useRef();
@@ -71,65 +71,54 @@ export const CharacterController = () => {
   useFrame(({ camera, mouse }) => {
     if (rb.current) {
       const vel = rb.current.linvel();
-
+  
       const movement = {
         x: 0,
         z: 0,
       };
-
-      if (get().forward) {
-        movement.z = 1;
-      }
-      if (get().backward) {
-        movement.z = -1;
-      }
-
-      let speed = get().run ? RUN_SPEED : WALK_SPEED;
-
+  
+      // Movement direction based on key controls
+      if (get().forward) movement.z = 1;
+      if (get().backward) movement.z = -1;
+  
+      let speed = RUN_SPEED; // Default speed for key controls
+  
       if (isClicking.current) {
-        console.log("clicking", mouse.x, mouse.y);
-        if (Math.abs(mouse.x) > 0.1) {
-          movement.x = -mouse.x;
-        }
+        // Mouse/touch input handling
+        const radius = Math.hypot(mouse.x, mouse.y); // Distance from center
+        speed = MathUtils.clamp(radius / 0.1, 0, 1) * RUN_SPEED; // Interpolate speed
+        
+        // Update movement direction based on mouse
+        if (Math.abs(mouse.x) > 0.1) movement.x = -mouse.x;
         movement.z = mouse.y + 0.4;
-        if (Math.abs(movement.x) > 0.5 || Math.abs(movement.z) > 0.5) {
-          speed = RUN_SPEED;
-        }
       }
 
-      if (get().left) {
-        movement.x = 1;
-      }
-      if (get().right) {
-        movement.x = -1;
-      }
+      if (get().left) movement.x = 1;
+      if (get().right) movement.x = -1;
 
       if (movement.x !== 0) {
         rotationTarget.current += ROTATION_SPEED * movement.x;
       }
-
+  
+      // Update character velocity and animation
       if (movement.x !== 0 || movement.z !== 0) {
         characterRotationTarget.current = Math.atan2(movement.x, movement.z);
         vel.x =
-          Math.sin(rotationTarget.current + characterRotationTarget.current) *
-          speed;
+          Math.sin(rotationTarget.current + characterRotationTarget.current) * speed;
         vel.z =
-          Math.cos(rotationTarget.current + characterRotationTarget.current) *
-          speed;
-        if (speed === RUN_SPEED) {
-          setAnimation("run");
-        } else {
-          setAnimation("walk");
-        }
+          Math.cos(rotationTarget.current + characterRotationTarget.current) * speed;
+  
+        setAnimation(speed === RUN_SPEED ? "run" : "walk");
       } else {
         setAnimation("idle");
       }
+  
       character.current.rotation.y = lerpAngle(
         character.current.rotation.y,
         characterRotationTarget.current,
         0.1
       );
-
+  
       rb.current.setLinvel(vel, true);
     }
 
@@ -141,11 +130,11 @@ export const CharacterController = () => {
     );
 
     cameraPosition.current.getWorldPosition(cameraWorldPosition.current);
-    camera.position.lerp(cameraWorldPosition.current, 0.1);
+    camera.position.lerp(cameraWorldPosition.current, 1);
 
     if (cameraTarget.current) {
       cameraTarget.current.getWorldPosition(cameraLookAtWorldPosition.current);
-      cameraLookAt.current.lerp(cameraLookAtWorldPosition.current, 0.1);
+      cameraLookAt.current.lerp(cameraLookAtWorldPosition.current, 1);
 
       camera.lookAt(cameraLookAt.current);
     }

@@ -3,6 +3,26 @@
   height: 100vh;
 }
 
+#startMenu {
+  display: none;
+  visibility: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #2C2C31e5;
+  z-index: 1000;
+}
+#startMenu.init {
+  display: block;
+  visibility: visible;
+}
+#startMenu.lightMode {
+  background-color: #EAE9EFe5;
+}
+
+
 body {
   margin: 0;
 }
