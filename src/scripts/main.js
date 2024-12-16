@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to load story parts from the JSON file
     function loadStoryParts(storyName) {
-        fetch('/src/scripts/stories.json')
+        fetch('/stories.json')
             .then(response => response.json())
             .then(data => {
                 storyParts = data.stories.filter(story => story.story === storyName);
@@ -103,6 +103,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (event.code === "Space") {
             nextStoryPart();
         }
+    });
+    document.addEventListener("touchstart", function (event) {
+        nextStoryPart();
     });
 
     // Start a specific story on load

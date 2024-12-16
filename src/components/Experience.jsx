@@ -20,10 +20,10 @@ export const Experience = ({ gameIdle }) => {
   useEffect(() => {
     if (gameIdle) {
       // Logic for idle state, like camera panning, disabling character controller, etc.
-      console.log("Game is idle. Camera panning, no physics or character controller.");
+      console.log("game idle");
     } else {
       // Logic for when the game starts (e.g., enable character controller, load the player, etc.)
-      console.log("Game started. Enable character controller and physics.");
+      console.log("game started");
     }
   }, [gameIdle]);
 
