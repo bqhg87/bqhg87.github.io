@@ -172,7 +172,7 @@ export const CharacterController = () => {
   });``
 
   return (
-    <RigidBody colliders={false} lockRotations ref={rb} friction={5} linearDamping={2} gravityScale={3}>
+    <RigidBody colliders={false} lockRotations ref={rb} friction={1} linearDamping={2} gravityScale={3}>
       <group ref={container}>
         <group ref={cameraTarget} position-z={1.5} />
         <group ref={cameraPosition} position-y={1} position-z={-3} />
