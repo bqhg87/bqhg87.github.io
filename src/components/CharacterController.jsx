@@ -28,13 +28,15 @@ const lerpAngle = (start, end, t) => {
 };
 
 export const CharacterController = () => {
-  // Define constants to replace `useControls`
-  const WALK_SPEED = 2.0; // Adjust as needed
-  const RUN_SPEED = 2.8;  // Adjust as needed
+  const MAX_SPEED = 5.2;
   const ROTATION_SPEED = degToRad(1.0); // Adjust as needed
   const rb = useRef();
   const container = useRef();
   const character = useRef();
+  const fvAcceleration = 0.05;
+  const fvDeceleration = 2*fvAcceleration;
+  const fvFBLR = { FB: 0, LR: 0 };
+  const fvMax = 1;
 
   const [animation, setAnimation] = useState("idle");
 
@@ -57,7 +59,6 @@ export const CharacterController = () => {
     };
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
-    // touch
     document.addEventListener("touchstart", onMouseDown);
     document.addEventListener("touchend", onMouseUp);
     return () => {
@@ -71,30 +72,60 @@ export const CharacterController = () => {
   useFrame(({ camera, mouse }) => {
     if (rb.current) {
       const vel = rb.current.linvel();
-  
+
       const movement = {
         x: 0,
         z: 0,
       };
+
+      if (get().forward === get().backward) {
+        if (Math.abs(fvFBLR.FB) < fvDeceleration + 0.0001) {
+          fvFBLR.FB = 0
+        } else {
+        fvFBLR.FB = Math.sign(fvFBLR.FB) * (Math.abs(fvFBLR.FB) - fvDeceleration);
+        }
+      } else if (get().forward && ((Math.abs(fvFBLR.FB) < fvMax - 0.001) || fvFBLR.FB < 0)) {
+        fvFBLR.FB += fvAcceleration;
+      } else if (get().backward && ((Math.abs(fvFBLR.FB) < fvMax - 0.001) || fvFBLR.FB > 0)) {
+        fvFBLR.FB -= fvAcceleration;
+      }
+    
+      if (get().left === get().right) {
+        if (Math.abs(fvFBLR.LR) < fvDeceleration + 0.0001) {
+          fvFBLR.LR = 0
+        } else {
+        fvFBLR.LR = Math.sign(fvFBLR.LR) * (Math.abs(fvFBLR.LR) - fvDeceleration);
+        }
+      } else if (get().right && ((Math.abs(fvFBLR.LR) < fvMax - 0.001) || fvFBLR.LR < 0)) {
+        fvFBLR.LR += fvAcceleration;
+      } else if (get().left && ((Math.abs(fvFBLR.LR) < fvMax - 0.001) || fvFBLR.LR > 0)) {
+        fvFBLR.LR -= fvAcceleration;
+      }  
+    
+      const speedMod = (Math.hypot(fvFBLR.FB, fvFBLR.LR))/Math.sqrt(2) * 1;
+
+      let diagMod = 1
+      if ((get().forward || get().backward) && (get().left || get().right)) {
+        diagMod = 0.7;
+      } else {diagMod = 1}
   
-      // Movement direction based on key controls
-      if (get().forward) movement.z = 1;
-      if (get().backward) movement.z = -1;
+      let speed = MAX_SPEED * speedMod * diagMod; // Default speed for key controls
   
-      let speed = RUN_SPEED; // Default speed for key controls
-  
+      if (get().forward) movement.z = fvFBLR.FB;
+      if (get().backward) movement.z = fvFBLR.FB;
+
       if (isClicking.current) {
         // Mouse/touch input handling
         const radius = Math.hypot(mouse.x, mouse.y); // Distance from center
-        speed = MathUtils.clamp(radius / 0.1, 0, 1) * RUN_SPEED; // Interpolate speed
+        speed = MathUtils.clamp(radius / 0.6, 0, 0.7) * MAX_SPEED; // Interpolate speed
 
         // Update movement direction based on mouse
         if (Math.abs(mouse.x) > 0.1) movement.x = -mouse.x;
         movement.z = mouse.y + 0.4;
       }
 
-      if (get().left) movement.x = 1;
-      if (get().right) movement.x = -1;
+      if (get().left) movement.x = -fvFBLR.LR;
+      if (get().right) movement.x = -fvFBLR.LR;
 
       if (movement.x !== 0) {
         rotationTarget.current += ROTATION_SPEED * movement.x;
@@ -108,7 +139,7 @@ export const CharacterController = () => {
         vel.z =
           Math.cos(rotationTarget.current + characterRotationTarget.current) * speed;
   
-        setAnimation(speed === RUN_SPEED ? "run" : "walk");
+        setAnimation(speed == (MAX_SPEED) ? "run" : "walk");
       } else {
         setAnimation("idle");
       }
@@ -116,7 +147,7 @@ export const CharacterController = () => {
       character.current.rotation.y = lerpAngle(
         character.current.rotation.y,
         characterRotationTarget.current,
-        0.1
+        0.17
       );
   
       rb.current.setLinvel(vel, true);
@@ -126,11 +157,11 @@ export const CharacterController = () => {
     container.current.rotation.y = MathUtils.lerp(
       container.current.rotation.y,
       rotationTarget.current,
-      0.1
+      0.15
     );
 
     cameraPosition.current.getWorldPosition(cameraWorldPosition.current);
-    camera.position.lerp(cameraWorldPosition.current, 1);
+    camera.position.lerp(cameraWorldPosition.current, 0.9);
 
     if (cameraTarget.current) {
       cameraTarget.current.getWorldPosition(cameraLookAtWorldPosition.current);
@@ -138,29 +169,10 @@ export const CharacterController = () => {
 
       camera.lookAt(cameraLookAt.current);
     }
-  });
-
-
-const useCameraCollision = (camera, objects) => {
-  const raycaster = new THREE.Raycaster();
-  const intersections = new THREE.Vector3();
-
-  useFrame(() => {
-    // Cast a ray from the camera position
-    raycaster.set(camera.position, camera.getWorldDirection(new THREE.Vector3()));
-    const hits = raycaster.intersectObjects(objects);
-
-    if (hits.length > 0) {
-      intersections.copy(hits[0].point);
-      // Trigger effect
-    } else {
-      // Reset effect
-    }
-  });
-};
+  });``
 
   return (
-    <RigidBody colliders={false} lockRotations ref={rb}>
+    <RigidBody colliders={false} lockRotations ref={rb} friction={5} linearDamping={2} gravityScale={3}>
       <group ref={container}>
         <group ref={cameraTarget} position-z={1.5} />
         <group ref={cameraPosition} position-y={1} position-z={-3} />
