@@ -47,7 +47,7 @@ export const CharacterController = () => {
   const cameraLookAt = useRef(new Vector3());
   const [, get] = useKeyboardControls();
   const isClicking = useRef(false);
-
+  
   useEffect(() => {
     const onMouseDown = (e) => {
       isClicking.current = true;
@@ -87,7 +87,7 @@ export const CharacterController = () => {
         // Mouse/touch input handling
         const radius = Math.hypot(mouse.x, mouse.y); // Distance from center
         speed = MathUtils.clamp(radius / 0.1, 0, 1) * RUN_SPEED; // Interpolate speed
-        
+
         // Update movement direction based on mouse
         if (Math.abs(mouse.x) > 0.1) movement.x = -mouse.x;
         movement.z = mouse.y + 0.4;
