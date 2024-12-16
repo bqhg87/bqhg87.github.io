@@ -1,0 +1,20 @@
+{
+    "stories": [
+        {
+            "story": "story1",
+            "part": "1",
+            "text": "This is the beginning of the first story."
+          },
+          {
+            "story": "story1",
+            "part": "2",
+            "text": "The story continues with more details.",
+            "callbackOnClose": "startGame"
+          },
+      {
+        "story": "story2",
+        "part": "1",
+        "text": "Here starts the second story."
+      }
+    ]
+}
