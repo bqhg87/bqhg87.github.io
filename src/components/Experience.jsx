@@ -47,7 +47,6 @@ export const Experience = ({ gameIdle }) => {
           model={`models/${map}.glb`}
         />
         {!gameIdle && <CharacterController />}
-        {gameIdle && <IdleCamera gameIdle={gameIdle} />}
       </Physics>
     </>
   );
