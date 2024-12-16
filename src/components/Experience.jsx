@@ -1,7 +1,6 @@
 import { Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { CharacterController } from "./CharacterController";
-import { IdleCamera } from "./IdleCamera";
 import { Map } from "./map";
 import { useRef, useEffect } from "react";
 
@@ -47,7 +46,6 @@ export const Experience = ({ gameIdle }) => {
           model={`models/${map}.glb`}
         />
         {!gameIdle && <CharacterController />}
-        <IdleCamera/>
       </Physics>
     </>
   );

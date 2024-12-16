@@ -2,7 +2,7 @@ const startMenu = document.getElementById("startMenu");
 
 // Set the startMenuPassed variable to false on first load or reset
 function resetStartMenu() {
-    localStorage.setItem('startMenuPassed', 'true'); //OVERRIDE
+    localStorage.setItem('startMenuPassed', 'false'); //OVERRIDE
     if (localStorage.getItem('startMenuPassed') === null) {
         localStorage.setItem('startMenuPassed', 'false'); // If not set, init as false
     }
@@ -22,6 +22,7 @@ function passStartMenu() {
     initStartMenu();
 }
 
+window.passStartMenu = passStartMenu;
 resetStartMenu();
 initStartMenu();
 

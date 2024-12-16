@@ -1,6 +1,48 @@
 #root {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  overflow: clip;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  contain: strict;
+  z-index: -1000;
+}
+
+main {
+  visibility: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28pt;
+  width: calc(100vw - 2*(28pt));
+  height: calc(100vh - 2*(28pt));
+  overflow: hidden;
+  z-index: 1;
+}
+
+#topIslandUI {
+  visibility: hidden;
+  position: sticky;
+  border-radius: 16pt;
+  padding: 16pt;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-self: center;
+  width: 460px;
+  max-width: 100%;
+  height: fit-content;
+  background-color: #2C2C31e5;
+  z-index: 1000;
+}
+#topIslandUI.lightMode {
+  /* background-color: #f7f7fa;*/
+  background-color: #f7f7fae5;
 }
 
 #startMenu {
@@ -12,7 +54,6 @@
   width: 100vw;
   height: 100vh;
   background-color: #2C2C31e5;
-  z-index: 1000;
 }
 #startMenu.init {
   display: grid;
@@ -67,5 +108,42 @@ h2 {
   font-size: 24pt;
 }
 h3 {
-  font-size: 18pt;
+  display: inline-block;
+  font-size: 12pt;
+}
+
+#animatedText {
+  display: block;
+  width: 100%;
+  color: white;
+  word-wrap: break-word;
+  white-space: normal;
+}
+#animatedText.lightMode {
+  color: rgb(22, 22, 22);
+}
+
+.word {
+  display: inline-block;
+  opacity: 0; /* Initially hide the word */
+}
+
+.char {
+  display: inline-block;
+  opacity: 0; /* Start with invisible characters */
+  animation: fadeInUp 0.4s forwards;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  90% {
+    transform: translateY(-1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

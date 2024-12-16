@@ -1,7 +1,8 @@
 import { KeyboardControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
-import { useState, useEffect } from 'react';
+import { IdleCamera } from "./components/IdleCamera";
+import { useState } from 'react';
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -17,15 +18,19 @@ function App() {
     setGameIdle(false);
   }
 
+  window.startGame = startGame;
+
   return (
     <KeyboardControls map={keyboardMap}>
       <Canvas
+        
         shadows
         camera={{ position: [3, 3, 3], near: 0.1, fov: 50 }}
         style={{
           touchAction: "none",
         }}
       >
+        {gameIdle && <IdleCamera />}
         <color attach="background" args={["#ececec"]} />
         <Experience gameIdle={gameIdle} />
       </Canvas>

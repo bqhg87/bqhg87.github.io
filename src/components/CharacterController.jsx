@@ -122,6 +122,8 @@ export const CharacterController = () => {
         // Update movement direction based on mouse
         if (Math.abs(mouse.x) > 0.0) movement.x = -mouse.x;
         movement.z = (mouse.y + 0.35);
+
+        console.log("Mouse Input Active - X:", mouse.x, "Y:", mouse.y);
       }
 
       if (get().left) movement.x = -fvFBLR.LR;
