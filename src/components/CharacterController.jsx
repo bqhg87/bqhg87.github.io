@@ -116,12 +116,12 @@ export const CharacterController = () => {
 
       if (isClicking.current) {
         // Mouse/touch input handling
-        const radius = Math.hypot(mouse.x, mouse.y); // Distance from center
-        speed = MathUtils.clamp(radius / 0.6, 0, 0.7) * MAX_SPEED; // Interpolate speed
+        const radius = Math.hypot(mouse.x, (mouse.y + 0.35)); // Distance from center
+        speed = MathUtils.clamp(radius / 0.6, 0, 0.6) * MAX_SPEED; // Interpolate speed
 
         // Update movement direction based on mouse
-        if (Math.abs(mouse.x) > 0.1) movement.x = -mouse.x;
-        movement.z = mouse.y + 0.4;
+        if (Math.abs(mouse.x) > 0.0) movement.x = -mouse.x;
+        movement.z = (mouse.y + 0.35);
       }
 
       if (get().left) movement.x = -fvFBLR.LR;
