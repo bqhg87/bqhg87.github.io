@@ -15,14 +15,57 @@
   z-index: 1000;
 }
 #startMenu.init {
-  display: block;
+  display: grid;
   visibility: visible;
+  grid-template-columns: 1fr 500pt 1fr;
+  grid-template-rows: 1fr 80pt 100pt 40pt 1fr;
 }
 #startMenu.lightMode {
   background-color: #EAE9EFe5;
 }
 
+#startMenuTitle {
+  display: grid;
+  color: white;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+  grid-column: 2/ span 1;
+  grid-row: 2/ span 1;
+}
+#startMenuTitle.lightMode {
+  color: rgb(22, 22, 22);
+}
+
+#startMenuDescription {
+  display: grid;
+  color: white;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+  grid-column: 2/ span 1;
+  grid-row: 3/ span 1;
+}
+#startMenuDescription.lightMode {
+  color: rgb(22, 22, 22);
+}
 
 body {
   margin: 0;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: "Lexend", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+h1 {
+  font-size: 48pt;
+}
+h2 {
+  font-size: 24pt;
+}
+h3 {
+  font-size: 18pt;
 }

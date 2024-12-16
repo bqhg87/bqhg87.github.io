@@ -1,4 +1,4 @@
-const elementsToStyle = ['startMenu'];
+const elementsToStyle = ['startMenu', 'startMenuTitle', 'startMenuDescription'];
 
 function applySystemTheme() {
   const isLightMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;

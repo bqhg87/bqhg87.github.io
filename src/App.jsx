@@ -13,15 +13,6 @@ const keyboardMap = [
 function App() {
   const [gameIdle, setGameIdle] = useState(true);
 
-  useEffect(() => {
-    const startMenuPassed = localStorage.getItem('startMenuPassed');
-    if (startMenuPassed === 'false') {
-      setGameIdle(true);
-    } else {
-      setGameIdle(false);
-    }
-  }, []);
-
   function startGame() {
     setGameIdle(false);
   }
