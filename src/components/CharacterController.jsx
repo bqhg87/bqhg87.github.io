@@ -49,18 +49,6 @@ export const CharacterController = () => {
   const cameraLookAt = useRef(new Vector3());
   const [, get] = useKeyboardControls();
   const isClicking = useRef(false);
-
-  useEffect(() => {
-    const onMouseMove = (e) => {
-      console.log("Mouse position:", e.clientX, e.clientY);
-    };
-  
-    document.addEventListener("mousemove", onMouseMove);
-  
-    return () => {
-      document.removeEventListener("mousemove", onMouseMove);
-    };
-  }, []);
   
   useEffect(() => {
     const onMouseDown = (e) => {

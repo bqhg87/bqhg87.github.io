@@ -7,7 +7,7 @@ import { useRef, useEffect } from "react";
 const maps = {
   medieval_fantasy_book: {
     scale: 1,
-    position: [-4, -6, -6],
+    position: [-4, 0, -6],
   },
 };
 

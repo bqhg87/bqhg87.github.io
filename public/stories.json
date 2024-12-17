@@ -8,7 +8,17 @@
           {
             "story": "story1",
             "part": "2",
-            "text": "The story continues with more details.",
+            "text": "The story continues with more details. I truly mean a LOT of details. I'm typing a lot in this part to test some functionality yipee!"
+          },
+          {
+            "story": "story1",
+            "part": "3",
+            "text": "A story can contain many words."
+          },
+          {
+            "story": "story1",
+            "part": "4",
+            "text": "The story starts to get a bit boring I suppose.",
             "callbackOnClose": "startGame"
           },
       {

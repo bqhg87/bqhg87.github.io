@@ -5,14 +5,22 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentStory = '';
     let currentPartIndex = 0;
     let storyParts = [];
+    let isAnimating = false; // Flag to track animation status
+    let delayAmount = 0.05;
+    let cumulativeDelay = 0;
 
     // Function to load and animate story part
     function animatedTextLoad(textContent, styledRanges = [], callback = null) {
-        textElement.textContent = ''; // Clear existing text
-        let cumulativeDelay = 0;
+        cumulativeDelay = 0;
         let currentStyledRangeIndex = 0;
         let inStyledRange = false;
         let currentRange = null;
+        
+        // Mark that animation is starting
+        isAnimating = true;
+        console.log(isAnimating);
+
+        textElement.textContent = ''; // Clear existing text
 
         for (let i = 0; i < textContent.length; i++) {
             if (styledRanges[currentStyledRangeIndex] && i === styledRanges[currentStyledRangeIndex].startCharacter) {
@@ -38,10 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             charSpan.style.animationDelay = `${cumulativeDelay}s`;
             textElement.appendChild(charSpan);
-            cumulativeDelay += 0.05;
+            cumulativeDelay += delayAmount;
         }
 
-        if (callback) {
+        // After all text is loaded, we need to handle the callback and mark animation as done
+        if (callback && !isAnimating) {
             const totalDelay = cumulativeDelay * 1000;
             setTimeout(() => {
                 if (typeof window[callback] === 'function') {
@@ -51,6 +60,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }, totalDelay);
         }
+
+        // After the animation completes, set the flag to false
+        setTimeout(() => {
+            isAnimating = false;
+            delayAmount = 0.05;
+            console.log(isAnimating);
+        }, cumulativeDelay * 1000); // Animation duration in ms
     }
 
     // Function to load story parts from the JSON file
@@ -78,12 +94,20 @@ document.addEventListener("DOMContentLoaded", function () {
     function nextStoryPart() {
         const currentPart = storyParts[currentPartIndex];
 
+        // If animation is still running, skip to the full text instantly
+        if (isAnimating) {
+            delayAmount = 0;
+            cumulativeDelay = 0;
+            let currentPart = storyParts[currentPartIndex];
+            return;  // Prevent further actions
+        }
+
         // Run callbackOnClose if it exists
-        if (currentPart.callbackOnClose && typeof window[currentPart.callbackOnClose] === 'function') {
+        if (currentPart.callbackOnClose && !isAnimating && typeof window[currentPart.callbackOnClose] === 'function') {
             window[currentPart.callbackOnClose]();
         }
 
-        if (currentPartIndex < storyParts.length - 1) {
+        if ((currentPartIndex < storyParts.length - 1) && !isAnimating) {
             currentPartIndex++;
             const nextPart = storyParts[currentPartIndex];
             animatedTextLoad(nextPart.text, nextPart.styledRanges || [], nextPart.callback || null);
@@ -105,6 +129,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     document.addEventListener("touchstart", function (event) {
+        nextStoryPart();
+    });
+    document.addEventListener("click", function (event) {
         nextStoryPart();
     });
 

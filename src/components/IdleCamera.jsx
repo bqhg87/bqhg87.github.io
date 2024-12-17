@@ -9,25 +9,25 @@ export const IdleCamera = ({ speed = 0.00003, path, lookAtPoints }) => {
 
   // Default path if none is provided
   const defaultPath = [
-    new Vector3(20, 0, 20),
-    new Vector3(-10, 0, 30),
-    new Vector3(-20, -5, 30),
-    new Vector3(-30, 0, 20),
-    new Vector3(-40, 0, 0),
-    new Vector3(-40, 10, -50),
-    new Vector3(10, 5, -40),
-    new Vector3(40, -5, -20),
+    new Vector3(20, 5, 20),
+    new Vector3(-10, 5, 30),
+    new Vector3(-20, 0, 30),
+    new Vector3(-30, 5, 20),
+    new Vector3(-40, 5, 0),
+    new Vector3(-40, 15, -50),
+    new Vector3(10, 10, -40),
+    new Vector3(40, 0, -20),
   ];
 
   const defaultLookAtPoints = [
+    new Vector3(-10, 0, -10),
+    new Vector3(0, 0, 20),
+    new Vector3(30, -5, 0),
+    new Vector3(-20, 5, 5),
+    new Vector3(-50, 5, 5),
+    new Vector3(-0, 0, 0),
+    new Vector3(-0, -10, -10),
     new Vector3(-10, -5, -10),
-    new Vector3(0, -5, 20),
-    new Vector3(30, -10, 0),
-    new Vector3(-20, 0, 5),
-    new Vector3(-50, 0, 5),
-    new Vector3(-0, -5, 0),
-    new Vector3(-0, -15, -10),
-    new Vector3(-10, -10, -10),
   ];
 
   const cameraPath = path || defaultPath;
