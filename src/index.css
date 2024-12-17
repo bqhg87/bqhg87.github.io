@@ -10,7 +10,7 @@
   -moz-user-select: none;
   user-select: none;
   contain: strict;
-  z-index: -1000;
+  z-index: 1;
 }
 
 main {
@@ -22,7 +22,7 @@ main {
   width: calc(100vw - 2*(28pt));
   height: calc(100vh - 2*(28pt));
   overflow: hidden;
-  z-index: 1;
+  z-index: 0;
 }
 
 #topIslandUI {

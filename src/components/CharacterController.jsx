@@ -29,7 +29,7 @@ const lerpAngle = (start, end, t) => {
 
 export const CharacterController = () => {
   const MAX_SPEED = 5.2;
-  const ROTATION_SPEED = degToRad(1.0); // Adjust as needed
+  const ROTATION_SPEED = degToRad(1.1); // Adjust as needed
   const rb = useRef();
   const container = useRef();
   const character = useRef();
@@ -49,6 +49,18 @@ export const CharacterController = () => {
   const cameraLookAt = useRef(new Vector3());
   const [, get] = useKeyboardControls();
   const isClicking = useRef(false);
+
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      console.log("Mouse position:", e.clientX, e.clientY);
+    };
+  
+    document.addEventListener("mousemove", onMouseMove);
+  
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+    };
+  }, []);
   
   useEffect(() => {
     const onMouseDown = (e) => {
@@ -72,11 +84,7 @@ export const CharacterController = () => {
   useFrame(({ camera, mouse }) => {
     if (rb.current) {
       const vel = rb.current.linvel();
-
-      const movement = {
-        x: 0,
-        z: 0,
-      };
+      const movement = { x: 0, z: 0 };
 
       if (get().forward === get().backward) {
         if (Math.abs(fvFBLR.FB) < fvDeceleration + 0.0001) {
