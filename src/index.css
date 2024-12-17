@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   overflow: clip;
   -webkit-user-select: none;
@@ -20,7 +20,7 @@ main {
   align-items: center;
   padding: 28pt;
   width: calc(100vw - 2*(28pt));
-  height: calc(100vh - 2*(28pt));
+  height: calc(100% - 2*(28pt));
   overflow: hidden;
   z-index: 0;
 }
