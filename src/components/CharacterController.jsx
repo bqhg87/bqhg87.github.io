@@ -29,6 +29,7 @@ const lerpAngle = (start, end, t) => {
 
 export const CharacterController = () => {
   const MAX_SPEED = 5.2;
+  const RUN_SPEED = 2.4;
   const ROTATION_SPEED = degToRad(1.1); // Adjust as needed
   const rb = useRef();
   const container = useRef();
@@ -106,14 +107,14 @@ export const CharacterController = () => {
       } else {diagMod = 1}
   
       let speed = MAX_SPEED * speedMod * diagMod; // Default speed for key controls
-  
+
       if (get().forward) movement.z = fvFBLR.FB;
       if (get().backward) movement.z = fvFBLR.FB;
 
       if (isClicking.current) {
         // Mouse/touch input handling
         const radius = Math.hypot(mouse.x, (mouse.y + 0.35)); // Distance from center
-        speed = MathUtils.clamp(radius / 0.6, 0, 0.6) * MAX_SPEED; // Interpolate speed
+        speed = MathUtils.clamp(radius / 0.6, 0, 0.7) * MAX_SPEED; // Interpolate speed
 
         // Update movement direction based on mouse
         if (Math.abs(mouse.x) > 0.0) movement.x = -mouse.x;
@@ -134,8 +135,8 @@ export const CharacterController = () => {
           Math.sin(rotationTarget.current + characterRotationTarget.current) * speed;
         vel.z =
           Math.cos(rotationTarget.current + characterRotationTarget.current) * speed;
-  
-        setAnimation(speed == (MAX_SPEED) ? "run" : "walk");
+
+        setAnimation(speed > (RUN_SPEED) || speedMod !== 0 ? "run" : "walk");
       } else {
         setAnimation("idle");
       }
