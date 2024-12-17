@@ -1,6 +1,5 @@
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useThree } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
@@ -50,23 +49,6 @@ export const CharacterController = () => {
   const cameraLookAt = useRef(new Vector3());
   const [, get] = useKeyboardControls();
   const isClicking = useRef(false);
-
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const onMouseMove = (event) => {
-      setMousePosition({
-        x: (event.clientX / window.innerWidth) * 2 - 1,
-        y: -(event.clientY / window.innerHeight) * 2 + 1
-      });
-    };
-  
-    window.addEventListener('mousemove', onMouseMove);
-  
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-    };
-  }, []);
   
   useEffect(() => {
     const onMouseDown = (e) => {
@@ -134,14 +116,12 @@ export const CharacterController = () => {
 
       if (isClicking.current) {
         // Mouse/touch input handling
-        const radius = Math.hypot(mousePosition.x, (mousePosition.y + 0.35)); // Distance from center
+        const radius = Math.hypot(mouse.x, (mouse.y + 0.35)); // Distance from center
         speed = MathUtils.clamp(radius / 0.6, 0, 0.6) * MAX_SPEED; // Interpolate speed
 
         // Update movement direction based on mouse
-        if (Math.abs(mousePosition.x) > 0.0) movement.x = -mousePosition.x;
-        movement.z = (mousePosition.y + 0.35);
-
-        console.log("Mouse Input Active - X:", mousePosition.x, "Y:", mousePosition.y);
+        if (Math.abs(mouse.x) > 0.0) movement.x = -mouse.x;
+        movement.z = (mouse.y + 0.35);
       }
 
       if (get().left) movement.x = -fvFBLR.LR;

@@ -23,7 +23,6 @@ function App() {
   return (
     <KeyboardControls map={keyboardMap}>
       <Canvas
-        
         shadows
         camera={{ position: [3, 3, 3], near: 0.1, fov: 50 }}
         style={{
