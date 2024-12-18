@@ -193,7 +193,6 @@ document.addEventListener("DOMContentLoaded", function () {
             previousStoryPart();
         }
     });
-    document.addEventListener("touchstart", nextStoryPart);
     document.addEventListener("click", nextStoryPart);
 
     // Start a specific story
