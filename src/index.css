@@ -21,6 +21,7 @@ main {
   flex-direction: column;
   align-items: center;
   padding: var(--main-padding);
+  padding-top: clamp(12pt, calc(2vw + 12pt), 28pt);
   width: var(--main-width);
   height: calc(100% - 2*(var(--main-padding)));
   overflow: hidden;
@@ -28,7 +29,7 @@ main {
 }
 @media (max-width: calc(460px + 2*28pt)) {
   main {
-    --main-padding: clamp(16pt, 7vw, 28pt);
+    --main-padding: clamp(12pt, calc(2vw + 12pt), 28pt);
   }
 }
 
