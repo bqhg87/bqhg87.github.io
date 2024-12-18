@@ -1,14 +1,16 @@
 {
     "stories": [
-        {
+          {
             "story": "story1",
             "part": "1",
-            "text": "This is the beginning of the story."
+            "text": "This is the beginning of the story.",
+            "callback": { "function": "openGuide", "args": ["continue", true] }
           },
           {
             "story": "story1",
             "part": "2",
-            "text": "The story continues with more details. I truly mean a LOT of details. I'm typing a lot in this part to test some functionality yipee!"
+            "text": "The story continues with more details. I truly mean a LOT of details. I'm typing a lot in this part to test some functionality yipee!",
+            "callback": { "function": "closeGuide", "args": ["continue", true] }
           },
           {
             "story": "story1",

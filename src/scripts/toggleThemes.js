@@ -1,5 +1,7 @@
-const elementsToStyle = ['startMenu', 'startMenuTitle', 'startMenuDescription', 'animatedText', 'topIslandUI'];
+// Define the elements that need to be styled based on the theme
+const elementsToStyle = ['startMenu', 'startMenuTitle', 'startMenuDescription', 'animatedText', 'topIslandUI', 'bottomIslandGuideUI', 'bottomIslandGuideText'];
 
+// Define the applySystemTheme function
 function applySystemTheme() {
   const isLightMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
 
@@ -15,7 +17,10 @@ function applySystemTheme() {
   });
 }
 
-// Event listener
+// Attach the function to the window object to make it global
+window.applySystemTheme = applySystemTheme;
+
+// Add an event listener to automatically apply the theme when the system theme changes
 window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', applySystemTheme);
 
 // Apply the theme on page load

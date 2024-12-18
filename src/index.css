@@ -34,7 +34,7 @@ main {
 }
 
 #topIslandUI {
-  position: sticky;
+  position: relative;
   border-radius: 16pt;
   padding: 16pt;
   top: 0;
@@ -45,11 +45,53 @@ main {
   max-width: calc(460px - 2*(16pt));
   height: fit-content;
   background-color: #2C2C31e5;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   z-index: 1000;
 }
 #topIslandUI.lightMode {
   /* background-color: #f7f7fa;*/
   background-color: #f7f7fae5;
+}
+
+#bottomIslandGuideUI {
+  position: absolute;
+  border-radius: 12pt;
+  padding: 12pt;
+  margin-bottom: var(--main-padding);
+  bottom: 0;
+  display: flex;
+  align-self: center;
+  text-align: center;
+  width: fit-content;
+  max-width: calc(460px - 2*(16pt));
+  height: 0;
+  background-color: rgba(44, 44, 49, 0.8); /* Default background color */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: 1000;
+
+  /* Apply animation */
+  animation: fadeOpacity 2s infinite; /* 2s duration, looping infinitely */
+}
+#bottomIslandGuideUI.lightMode {
+  background-color: rgba(247, 247, 250, 0.8); /* Default for light mode */
+}
+@keyframes fadeOpacity {
+  0% {background-color: rgba(44, 44, 49, 0.4);}
+  50% {background-color: rgba(44, 44, 49, 0.8);}
+  100% {background-color: rgba(44, 44, 49, 0.4);}
+}
+#bottomIslandGuideUI.lightMode {
+  /* Separate animation for light mode */
+  animation: fadeOpacityLight 2s infinite;
+}
+@keyframes fadeOpacityLight {
+  0% {background-color: rgba(247, 247, 250, 0.4);}
+  50% {background-color: rgba(247, 247, 250, 0.8);}
+  100% {background-color: rgba(247, 247, 250, 0.4);}
 }
 
 #startMenu {
@@ -127,6 +169,18 @@ h3 {
   white-space: normal;
 }
 #animatedText.lightMode {
+  color: rgb(22, 22, 22);
+}
+
+#bottomIslandGuideText {
+  display: block;
+  width: 100%;
+  color: white;
+  word-wrap: break-word;
+  white-space: normal;
+  margin-top: -8pt;
+}
+#bottomIslandGuideText.lightMode {
   color: rgb(22, 22, 22);
 }
 

@@ -1,220 +1,62 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const textElement = document.getElementById("animatedText");
-    const topIslandUI = document.getElementById("topIslandUI");
+const GuideUI = document.getElementById('bottomIslandGuideUI');
+const GuideText = document.getElementById('bottomIslandGuideText');
 
-    let currentStory = '';
-    let currentPartIndex = 0;
-    let storyParts = [];
-    let isAnimating = false; // Track animation status
-    let isSkipped = false; // Track skip status
-    let animationTimeouts = []; // Store animation timeouts
-    let delayAmount = 0.05; // Delay between characters (seconds)
+// Function to detect input type and set the appropriate guide text
+function updateGuide(guideType) {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+  const hasKeyboard = 'onkeydown' in window;
 
-    let touchStartX = 0; // Starting X position for swipe
-    let touchEndX = 0; // Ending X position for swipe
-
-    // Function to clear all timeouts
-    function clearAnimationTimeouts() {
-        animationTimeouts.forEach(timeout => clearTimeout(timeout));
-        animationTimeouts = [];
+  if (guideType === 'continue') {
+    if (isTouchDevice) {
+      GuideText.textContent = 'Swipe to continue...';
+    } else if (hasKeyboard) {
+      GuideText.textContent = 'Press space to continue...';
+    } else {
+      GuideText.textContent = 'Click anywhere to continue...';
     }
+  }
+}
 
-    // Function to instantly display full text with the same structure as animated
-    function displayFullTextInstantly(textContent, styledRanges) {
-        textElement.textContent = ''; // Clear existing content
+// Function to open the guide with optional fade effect
+function openGuide(guideType, fade = false) {
+  updateGuide(guideType); // Update the guide text based on the type
+  
+  // Set display:flex and optionally fade in
+  if (fade) {
+    GuideUI.style.opacity = 0; // Start with 0 opacity
+    GuideUI.style.display = 'flex';
+    const fadeIn = setInterval(() => {
+      let currentOpacity = parseFloat(GuideUI.style.opacity);
+      if (currentOpacity < 1) {
+        GuideUI.style.opacity = (currentOpacity + 0.1).toFixed(1); // Gradually increase opacity
+      } else {
+        clearInterval(fadeIn); // Stop once fully visible
+      }
+    }, 30); // Fade in over 500ms (10 steps of 50ms each)
+  } else {
+    GuideUI.style.opacity = 1; // Set opacity to 1 directly
+    GuideUI.style.display = 'flex';
+  }
+}
 
-        let words = textContent.split(' '); // Split text into words
-        words.forEach((word, wordIndex) => {
-            const wordSpan = document.createElement('span');
-            wordSpan.style.display = 'inline-block'; // Match animated structure
+// Function to close the guide with optional fade effect
+function closeGuide(guideType, fade = false) {
+  if (fade) {
+    const fadeOut = setInterval(() => {
+      let currentOpacity = parseFloat(GuideUI.style.opacity);
+      if (currentOpacity > 0) {
+        GuideUI.style.opacity = (currentOpacity - 0.1).toFixed(1); // Gradually decrease opacity
+      } else {
+        clearInterval(fadeOut); // Stop once fully hidden
+        GuideUI.style.display = 'none'; // Set display:none after fading out
+      }
+    }, 30); // Fade out over 500ms (10 steps of 50ms each)
+  } else {
+    GuideUI.style.opacity = 0; // Set opacity to 0 directly
+    GuideUI.style.display = 'none';
+  }
+}
 
-            [...word].forEach((char, charIndex) => {
-                const charSpan = document.createElement('span');
-                charSpan.classList.add('char'); // Ensure consistent styling
-                charSpan.textContent = char;
-
-                // Disable animations by overriding animation styles
-                charSpan.style.animation = 'none';
-                charSpan.style.animationDelay = '0s';
-                charSpan.style.visibility = 'visible'; // Ensure text is visible immediately
-                charSpan.style.opacity = '1'; // Ensure text is fully opaque
-
-                // Apply styles for specific ranges
-                const range = styledRanges.find(range =>
-                    wordIndex === range.wordIndex && charIndex >= range.startCharacter && charIndex <= range.endCharacter
-                );
-                if (range?.style) {
-                    charSpan.style.cssText += range.style; // Combine styles
-                    charSpan.style.animation = 'none'; // Ensure no animation in styled spans
-                    charSpan.style.animationDelay = '0s';
-                    charSpan.style.visibility = 'visible'; // Ensure styled spans are visible
-                    charSpan.style.opacity = '1'; // Ensure styled spans are fully opaque
-                }
-
-                wordSpan.appendChild(charSpan); // Append character to word span
-            });
-
-            textElement.appendChild(wordSpan); // Add the word span to the text element
-
-            // Add a space after each word except the last
-            if (wordIndex < words.length - 1) {
-                const spaceSpan = document.createElement('span');
-                spaceSpan.textContent = '\u00A0'; // Non-breaking space
-                textElement.appendChild(spaceSpan);
-            }
-        });
-    }
-
-    // Function to animate text word-by-word
-    function animatedTextLoad(textContent, styledRanges = [], callback = null) {
-        isAnimating = true;
-        isSkipped = false;
-        clearAnimationTimeouts();
-        textElement.textContent = ''; // Clear existing content
-
-        let words = textContent.split(' ');
-        let cumulativeDelay = 0;
-
-        words.forEach((word, wordIndex) => {
-            const wordSpan = document.createElement('span');
-            wordSpan.style.display = 'inline-block';
-            textElement.appendChild(wordSpan);
-
-            [...word].forEach((char, charIndex) => {
-                const charSpan = document.createElement('span');
-                charSpan.classList.add('char'); // Apply popping animation
-                charSpan.textContent = char;
-
-                // Apply styles for ranges
-                const range = styledRanges.find(range =>
-                    wordIndex === range.wordIndex && charIndex >= range.startCharacter && charIndex <= range.endCharacter
-                );
-                if (range?.style) {
-                    charSpan.style.cssText = range.style;
-                }
-
-                // Delayed appending for animation
-                const timeout = setTimeout(() => {
-                    if (isSkipped) return;
-                    wordSpan.appendChild(charSpan);
-                }, cumulativeDelay * 1000);
-                animationTimeouts.push(timeout);
-
-                cumulativeDelay += delayAmount;
-            });
-
-            // Add a space after each word except the last
-            if (wordIndex < words.length - 1) {
-                const spaceSpan = document.createElement('span');
-                spaceSpan.textContent = '\u00A0';
-                textElement.appendChild(spaceSpan);
-            }
-        });
-
-        // Mark animation as complete
-        const endTimeout = setTimeout(() => {
-            if (isSkipped) return;
-            isAnimating = false;
-            if (callback && typeof window[callback] === 'function') {
-                window[callback]();
-            }
-        }, cumulativeDelay * 1000);
-        animationTimeouts.push(endTimeout);
-    }
-
-    // Function to load story parts
-    function loadStoryParts(storyName) {
-        fetch('/stories.json')
-            .then(response => response.json())
-            .then(data => {
-                storyParts = data.stories.filter(story => story.story === storyName);
-                currentPartIndex = 0;
-                topIslandUI.style.display = 'flex';
-
-                if (storyParts.length > 0) {
-                    const currentPart = storyParts[currentPartIndex];
-                    animatedTextLoad(currentPart.text, currentPart.styledRanges || [], currentPart.callback || null);
-                }
-            })
-            .catch(error => console.error('Error loading story data:', error));
-    }
-
-    // Function to skip animation or move to the next story part
-    function nextStoryPart() {
-        const currentPart = storyParts[currentPartIndex];
-
-        if (isAnimating) {
-            isSkipped = true;
-            isAnimating = false;
-            clearAnimationTimeouts();
-            displayFullTextInstantly(currentPart.text, currentPart.styledRanges || []);
-            return;
-        }
-
-        if (currentPart.callbackOnClose && typeof window[currentPart.callbackOnClose] === 'function') {
-            window[currentPart.callbackOnClose]();
-        }
-
-        if (currentPartIndex < storyParts.length - 1) {
-            currentPartIndex++;
-            const nextPart = storyParts[currentPartIndex];
-            animatedTextLoad(nextPart.text, nextPart.styledRanges || [], nextPart.callback || null);
-        } else {
-            topIslandUI.style.display = 'none';
-        }
-    }
-
-    // Function to move to the previous story part
-    function previousStoryPart() {
-        if (isAnimating) {
-            isSkipped = true;
-            isAnimating = false;
-            clearAnimationTimeouts();
-            displayFullTextInstantly(storyParts[currentPartIndex].text, storyParts[currentPartIndex].styledRanges || []);
-            return;
-        }
-
-        if (currentPartIndex > 0) {
-            currentPartIndex--;
-            const previousPart = storyParts[currentPartIndex];
-            animatedTextLoad(previousPart.text, previousPart.styledRanges || [], previousPart.callback || null);
-        }
-    }
-
-    // Function to start a story
-    function story(storyName) {
-        currentStory = storyName;
-        loadStoryParts(storyName);
-    }
-
-    // Event listeners for keyboard and mouse
-    document.addEventListener("keydown", function (event) {
-        if (event.code === "Space" || event.code === "ArrowRight") {
-            nextStoryPart();
-        }
-        if (event.code === "ArrowLeft") {
-            previousStoryPart();
-        }
-    });
-    document.addEventListener("click", nextStoryPart);
-
-    // Swipe event listeners
-    document.addEventListener("touchstart", function (e) {
-        touchStartX = e.touches[0].clientX;
-    });
-
-    document.addEventListener("touchend", function (e) {
-        touchEndX = e.changedTouches[0].clientX;
-
-        if (touchEndX < touchStartX) {
-            // Swipe left -> previous part
-            previousStoryPart();
-        } else if (touchEndX > touchStartX) {
-            // Swipe right -> next part
-            nextStoryPart();
-        }
-    });
-
-    // Start a specific story
-    story('story1');
-});
+// Make the functions global
+window.openGuide = openGuide;
+window.closeGuide = closeGuide;
