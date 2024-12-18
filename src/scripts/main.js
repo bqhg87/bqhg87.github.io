@@ -5,71 +5,121 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentStory = '';
     let currentPartIndex = 0;
     let storyParts = [];
-    let isAnimating = false; // Flag to track animation status
-    let delayAmount = 0.05;
-    let cumulativeDelay = 0;
+    let isAnimating = false; // Track animation status
+    let isSkipped = false; // Track skip status
+    let animationTimeouts = []; // Store animation timeouts
+    let delayAmount = 0.05; // Delay between characters (seconds)
 
-    // Function to load and animate story part
-    function animatedTextLoad(textContent, styledRanges = [], callback = null) {
-        cumulativeDelay = 0;
-        let currentStyledRangeIndex = 0;
-        let inStyledRange = false;
-        let currentRange = null;
-        
-        // Mark that animation is starting
-        isAnimating = true;
-        console.log(isAnimating);
-
-        textElement.textContent = ''; // Clear existing text
-
-        for (let i = 0; i < textContent.length; i++) {
-            if (styledRanges[currentStyledRangeIndex] && i === styledRanges[currentStyledRangeIndex].startCharacter) {
-                inStyledRange = true;
-                currentRange = styledRanges[currentStyledRangeIndex];
-            }
-
-            if (inStyledRange && currentRange && i === currentRange.endCharacter + 1) {
-                inStyledRange = false;
-                currentRange = null;
-                currentStyledRangeIndex++;
-            }
-
-            const charSpan = document.createElement('span');
-            charSpan.classList.add('char');
-            charSpan.textContent = textContent[i] === ' ' ? '\u00A0' : textContent[i];
-
-            if (inStyledRange && currentRange) {
-                if (currentRange.style) {
-                    charSpan.style.cssText = currentRange.style;
-                }
-            }
-
-            charSpan.style.animationDelay = `${cumulativeDelay}s`;
-            textElement.appendChild(charSpan);
-            cumulativeDelay += delayAmount;
-        }
-
-        // After all text is loaded, we need to handle the callback and mark animation as done
-        if (callback && !isAnimating) {
-            const totalDelay = cumulativeDelay * 1000;
-            setTimeout(() => {
-                if (typeof window[callback] === 'function') {
-                    window[callback]();
-                } else {
-                    console.warn(`Callback function "${callback}" is not defined.`);
-                }
-            }, totalDelay);
-        }
-
-        // After the animation completes, set the flag to false
-        setTimeout(() => {
-            isAnimating = false;
-            delayAmount = 0.05;
-            console.log(isAnimating);
-        }, cumulativeDelay * 1000); // Animation duration in ms
+    // Function to clear all timeouts
+    function clearAnimationTimeouts() {
+        animationTimeouts.forEach(timeout => clearTimeout(timeout));
+        animationTimeouts = [];
     }
 
-    // Function to load story parts from the JSON file
+    // Function to instantly display full text with the same structure as animated
+    function displayFullTextInstantly(textContent, styledRanges) {
+        textElement.textContent = ''; // Clear existing content
+
+        let words = textContent.split(' '); // Split text into words
+        words.forEach((word, wordIndex) => {
+            const wordSpan = document.createElement('span');
+            wordSpan.style.display = 'inline-block'; // Match animated structure
+
+            [...word].forEach((char, charIndex) => {
+                const charSpan = document.createElement('span');
+                charSpan.classList.add('char'); // Ensure consistent styling
+                charSpan.textContent = char;
+
+                // Disable animations by overriding animation styles
+                charSpan.style.animation = 'none';
+                charSpan.style.animationDelay = '0s';
+                charSpan.style.visibility = 'visible'; // Ensure text is visible immediately
+                charSpan.style.opacity = '1'; // Ensure text is fully opaque
+
+                // Apply styles for specific ranges
+                const range = styledRanges.find(range =>
+                    wordIndex === range.wordIndex && charIndex >= range.startCharacter && charIndex <= range.endCharacter
+                );
+                if (range?.style) {
+                    charSpan.style.cssText += range.style; // Combine styles
+                    charSpan.style.animation = 'none'; // Ensure no animation in styled spans
+                    charSpan.style.animationDelay = '0s';
+                    charSpan.style.visibility = 'visible'; // Ensure styled spans are visible
+                    charSpan.style.opacity = '1'; // Ensure styled spans are fully opaque
+                }
+
+                wordSpan.appendChild(charSpan); // Append character to word span
+            });
+
+            textElement.appendChild(wordSpan); // Add the word span to the text element
+
+            // Add a space after each word except the last
+            if (wordIndex < words.length - 1) {
+                const spaceSpan = document.createElement('span');
+                spaceSpan.textContent = '\u00A0'; // Non-breaking space
+                textElement.appendChild(spaceSpan);
+            }
+        });
+    }
+
+    // Function to animate text word-by-word
+    function animatedTextLoad(textContent, styledRanges = [], callback = null) {
+        isAnimating = true;
+        isSkipped = false;
+        clearAnimationTimeouts();
+        textElement.textContent = ''; // Clear existing content
+
+        let words = textContent.split(' ');
+        let cumulativeDelay = 0;
+
+        words.forEach((word, wordIndex) => {
+            const wordSpan = document.createElement('span');
+            wordSpan.style.display = 'inline-block';
+            textElement.appendChild(wordSpan);
+
+            [...word].forEach((char, charIndex) => {
+                const charSpan = document.createElement('span');
+                charSpan.classList.add('char'); // Apply popping animation
+                charSpan.textContent = char;
+
+                // Apply styles for ranges
+                const range = styledRanges.find(range =>
+                    wordIndex === range.wordIndex && charIndex >= range.startCharacter && charIndex <= range.endCharacter
+                );
+                if (range?.style) {
+                    charSpan.style.cssText = range.style;
+                }
+
+                // Delayed appending for animation
+                const timeout = setTimeout(() => {
+                    if (isSkipped) return;
+                    wordSpan.appendChild(charSpan);
+                }, cumulativeDelay * 1000);
+                animationTimeouts.push(timeout);
+
+                cumulativeDelay += delayAmount;
+            });
+
+            // Add a space after each word except the last
+            if (wordIndex < words.length - 1) {
+                const spaceSpan = document.createElement('span');
+                spaceSpan.textContent = '\u00A0';
+                textElement.appendChild(spaceSpan);
+            }
+        });
+
+        // Mark animation as complete
+        const endTimeout = setTimeout(() => {
+            if (isSkipped) return;
+            isAnimating = false;
+            if (callback && typeof window[callback] === 'function') {
+                window[callback]();
+            }
+        }, cumulativeDelay * 1000);
+        animationTimeouts.push(endTimeout);
+    }
+
+    // Function to load story parts
     function loadStoryParts(storyName) {
         fetch('/stories.json')
             .then(response => response.json())
@@ -80,39 +130,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (storyParts.length > 0) {
                     const currentPart = storyParts[currentPartIndex];
-                    animatedTextLoad(
-                        currentPart.text,
-                        currentPart.styledRanges || [],
-                        currentPart.callback || null
-                    );
+                    animatedTextLoad(currentPart.text, currentPart.styledRanges || [], currentPart.callback || null);
                 }
             })
             .catch(error => console.error('Error loading story data:', error));
     }
 
-    // Function to move to the next part of the story
+    // Function to skip animation or move to the next story part
     function nextStoryPart() {
         const currentPart = storyParts[currentPartIndex];
 
-        // If animation is still running, skip to the full text instantly
         if (isAnimating) {
-            delayAmount = 0;
-            cumulativeDelay = 0;
-            let currentPart = storyParts[currentPartIndex];
-            return;  // Prevent further actions
+            isSkipped = true;
+            isAnimating = false;
+            clearAnimationTimeouts();
+            displayFullTextInstantly(currentPart.text, currentPart.styledRanges || []);
+            return;
         }
 
-        // Run callbackOnClose if it exists
-        if (currentPart.callbackOnClose && !isAnimating && typeof window[currentPart.callbackOnClose] === 'function') {
+        if (currentPart.callbackOnClose && typeof window[currentPart.callbackOnClose] === 'function') {
             window[currentPart.callbackOnClose]();
         }
 
-        if ((currentPartIndex < storyParts.length - 1) && !isAnimating) {
+        if (currentPartIndex < storyParts.length - 1) {
             currentPartIndex++;
             const nextPart = storyParts[currentPartIndex];
             animatedTextLoad(nextPart.text, nextPart.styledRanges || [], nextPart.callback || null);
         } else {
-            topIslandUI.style.visibility = 'hidden'; // Hide UI when the story ends
+            topIslandUI.style.visibility = 'hidden';
+        }
+    }
+
+    // Function to move to the previous story part
+    function previousStoryPart() {
+        if (isAnimating) {
+            isSkipped = true;
+            isAnimating = false;
+            clearAnimationTimeouts();
+            displayFullTextInstantly(storyParts[currentPartIndex].text, storyParts[currentPartIndex].styledRanges || []);
+            return;
+        }
+
+        if (currentPartIndex > 0) {
+            currentPartIndex--;
+            const previousPart = storyParts[currentPartIndex];
+            animatedTextLoad(previousPart.text, previousPart.styledRanges || [], previousPart.callback || null);
         }
     }
 
@@ -122,19 +184,18 @@ document.addEventListener("DOMContentLoaded", function () {
         loadStoryParts(storyName);
     }
 
-    // Listen for spacebar press to load the next story part
+    // Event listeners
     document.addEventListener("keydown", function (event) {
-        if (event.code === "Space") {
+        if (event.code === "Space" || event.code === "ArrowRight") {
             nextStoryPart();
         }
+        if (event.code === "ArrowLeft") {
+            previousStoryPart();
+        }
     });
-    document.addEventListener("touchstart", function (event) {
-        nextStoryPart();
-    });
-    document.addEventListener("click", function (event) {
-        nextStoryPart();
-    });
+    document.addEventListener("touchstart", nextStoryPart);
+    document.addEventListener("click", nextStoryPart);
 
-    // Start a specific story on load
+    // Start a specific story
     story('story1');
 });

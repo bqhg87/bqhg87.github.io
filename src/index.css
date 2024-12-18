@@ -14,15 +14,22 @@
 }
 
 main {
+  --main-padding: 28pt;
+  --main-width: calc(100vw - 2*(var(--main-padding))); /* Define a custom property */
   visibility: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 28pt;
-  width: calc(100vw - 2*(28pt));
-  height: calc(100% - 2*(28pt));
+  padding: var(--main-padding);
+  width: var(--main-width);
+  height: calc(100% - 2*(var(--main-padding)));
   overflow: hidden;
   z-index: 0;
+}
+@media (max-width: calc(460px + 2*28pt)) {
+  main {
+    --main-padding: clamp(16pt, 7vw, 28pt);
+  }
 }
 
 #topIslandUI {
@@ -34,8 +41,8 @@ main {
   left: 0;
   display: flex;
   align-self: center;
-  width: 460px;
-  max-width: 100%;
+  width: calc(var(--main-width) - 2*(16pt));
+  max-width: calc(460px - 2*(16pt));
   height: fit-content;
   background-color: #2C2C31e5;
   z-index: 1000;
