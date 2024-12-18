@@ -16,6 +16,7 @@ function App() {
 
   function startGame() {
     setGameIdle(false);
+    openGuide('controls', true);
   }
 
   window.startGame = startGame;

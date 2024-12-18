@@ -15,29 +15,46 @@ function updateGuide(guideType) {
       GuideText.textContent = 'Click anywhere to continue...';
     }
   }
+
+  if (guideType === 'controls') {
+    if (isTouchDevice) {
+      GuideText.textContent = 'Swipe to move';
+    } else if (hasKeyboard) {
+      GuideText.textContent = 'Use WASD or arrow keys to move';
+    } else {
+      GuideText.textContent = 'Drag your cursor to move';
+    }
+  }
 }
 
 // Function to open the guide with optional fade effect
 function openGuide(guideType, fade = false) {
-  updateGuide(guideType); // Update the guide text based on the type
+    updateGuide(guideType); // Update the guide text based on the type
+    
+    // Set display:flex and optionally fade in
+    if (fade) {
+      GuideUI.style.opacity = 0; // Start with 0 opacity
+      GuideUI.style.display = 'flex';
+      const fadeIn = setInterval(() => {
+        let currentOpacity = parseFloat(GuideUI.style.opacity);
+        if (currentOpacity < 1) {
+          GuideUI.style.opacity = (currentOpacity + 0.1).toFixed(1); // Gradually increase opacity
+        } else {
+          clearInterval(fadeIn); // Stop once fully visible
+        }
+      }, 30); // Fade in over 500ms (10 steps of 50ms each)
+    } else {
+      GuideUI.style.opacity = 1; // Set opacity to 1 directly
+      GuideUI.style.display = 'flex';
+    }
   
-  // Set display:flex and optionally fade in
-  if (fade) {
-    GuideUI.style.opacity = 0; // Start with 0 opacity
-    GuideUI.style.display = 'flex';
-    const fadeIn = setInterval(() => {
-      let currentOpacity = parseFloat(GuideUI.style.opacity);
-      if (currentOpacity < 1) {
-        GuideUI.style.opacity = (currentOpacity + 0.1).toFixed(1); // Gradually increase opacity
-      } else {
-        clearInterval(fadeIn); // Stop once fully visible
-      }
-    }, 30); // Fade in over 500ms (10 steps of 50ms each)
-  } else {
-    GuideUI.style.opacity = 1; // Set opacity to 1 directly
-    GuideUI.style.display = 'flex';
+    // If the guideType is 'controls', close the guide after 3 seconds
+    if (guideType === 'controls') {
+      setTimeout(() => {
+        closeGuide(guideType, fade);
+      }, 3000); // Close the guide after 3 seconds
+    }
   }
-}
 
 // Function to close the guide with optional fade effect
 function closeGuide(guideType, fade = false) {

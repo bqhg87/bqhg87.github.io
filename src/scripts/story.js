@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const topIslandUI = document.getElementById("topIslandUI");
 
     let currentStory = '';
+    let isStoryFinished = false; // Flag to track if the story has finished
     let currentPartIndex = 0;
     let storyParts = [];
     let isAnimating = false; // Track animation status
@@ -151,6 +152,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to skip animation or move to the next story part
     function nextStoryPart() {
+        if (isStoryFinished) return; // Don't proceed if the story is finished
+
         const currentPart = storyParts[currentPartIndex];
 
         if (isAnimating) {
@@ -161,21 +164,29 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // First, update the UI (transition to next part)
         if (currentPart.callbackOnClose && typeof window[currentPart.callbackOnClose] === 'function') {
-            window[currentPart.callbackOnClose]();
+            // Use setTimeout to ensure callback runs after transition
+            setTimeout(() => {
+                window[currentPart.callbackOnClose]();
+            }, 0); // You can adjust the timeout if you need a longer delay
         }
 
+        // Proceed to the next story part or finish the story
         if (currentPartIndex < storyParts.length - 1) {
             currentPartIndex++;
             const nextPart = storyParts[currentPartIndex];
             animatedTextLoad(nextPart.text, nextPart.styledRanges || [], nextPart.callback || null);
         } else {
             topIslandUI.style.display = 'none';
+            isStoryFinished = true; // Mark story as finished
         }
     }
 
     // Function to move to the previous story part
     function previousStoryPart() {
+        if (isStoryFinished) return;
+
         if (isAnimating) {
             isSkipped = true;
             isAnimating = false;
