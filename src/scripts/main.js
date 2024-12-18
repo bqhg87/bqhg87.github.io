@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let animationTimeouts = []; // Store animation timeouts
     let delayAmount = 0.05; // Delay between characters (seconds)
 
+    let touchStartX = 0; // Starting X position for swipe
+    let touchEndX = 0; // Ending X position for swipe
+
     // Function to clear all timeouts
     function clearAnimationTimeouts() {
         animationTimeouts.forEach(timeout => clearTimeout(timeout));
@@ -126,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 storyParts = data.stories.filter(story => story.story === storyName);
                 currentPartIndex = 0;
-                topIslandUI.style.visibility = 'visible';
+                topIslandUI.style.display = 'flex';
 
                 if (storyParts.length > 0) {
                     const currentPart = storyParts[currentPartIndex];
@@ -157,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const nextPart = storyParts[currentPartIndex];
             animatedTextLoad(nextPart.text, nextPart.styledRanges || [], nextPart.callback || null);
         } else {
-            topIslandUI.style.visibility = 'hidden';
+            topIslandUI.style.display = 'none';
         }
     }
 
@@ -184,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadStoryParts(storyName);
     }
 
-    // Event listeners
+    // Event listeners for keyboard and mouse
     document.addEventListener("keydown", function (event) {
         if (event.code === "Space" || event.code === "ArrowRight") {
             nextStoryPart();
@@ -194,6 +197,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     document.addEventListener("click", nextStoryPart);
+
+    // Swipe event listeners
+    document.addEventListener("touchstart", function (e) {
+        touchStartX = e.touches[0].clientX;
+    });
+
+    document.addEventListener("touchend", function (e) {
+        touchEndX = e.changedTouches[0].clientX;
+
+        if (touchEndX < touchStartX) {
+            // Swipe left -> previous part
+            previousStoryPart();
+        } else if (touchEndX > touchStartX) {
+            // Swipe right -> next part
+            nextStoryPart();
+        }
+    });
 
     // Start a specific story
     story('story1');

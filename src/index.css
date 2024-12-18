@@ -33,7 +33,6 @@ main {
 }
 
 #topIslandUI {
-  visibility: hidden;
   position: sticky;
   border-radius: 16pt;
   padding: 16pt;
