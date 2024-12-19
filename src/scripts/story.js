@@ -208,6 +208,18 @@ document.addEventListener("DOMContentLoaded", function () {
         loadStoryParts(storyName);
     }
 
+    function fcGamemodeSelector() {
+        showButtons(
+            // leaked ['Create Chaos', 'Restore Truth'],
+            ['button 1', 'button 2'], // Button texts
+            [,] // Button click functions
+        );
+    };
+    function closeButtons() { //sorta temporary cause will probably have them close once they are pressed instead of in the story
+        closeButtons();
+    };
+    window.fcGamemodeSelector = fcGamemodeSelector
+
     // Event listeners for keyboard and mouse
     document.addEventListener("keydown", function (event) {
         if (event.code === "Space" || event.code === "ArrowRight") {

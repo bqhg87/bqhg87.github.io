@@ -94,50 +94,80 @@ main {
   100% {background-color: rgba(247, 247, 250, 0.4);}
 }
 
-#startMenu {
+#bottomIslandButtonsUI {
+  position: absolute;
+  border-radius: 18pt;
+  padding: 18pt 6pt 20pt 6pt;
+  gap: 6pt;
+  margin-bottom: var(--main-padding);
+  bottom: 0;
   display: none;
-  visibility: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #2C2C31e5;
+  align-self: center;
+  width: fit-content;
+  min-width: fit-content;
+  height: 0;
+  background-color: hsla(240, 5%, 18%, 0.898); /* Default background color */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: 1000;
+  --buttonResting: hsl(240, 3%, 30%);
+  --buttonHover: hsl(240, 3%, 26%);
+  --buttonActive: hsl(240, 3%, 26%);
+  --shadowResting: hsl(240, 5%, 18%);
+  --shadowHover: hsl(240, 5%, 16%);
 }
-#startMenu.init {
-  display: grid;
+#bottomIslandButtonsUI.lightMode {
+  background-color: hsla(240, 23%, 97%, 0.898); /* Default for light mode */
+  --buttonResting: hsl(240, 21%, 100%);
+  --buttonHover: hsl(240, 21%, 96%);
+  --buttonActive: hsl(240, 21%, 96%);
+  --shadowResting: hsl(240, 23%, 88%);
+  --shadowHover: hsl(240, 23%, 86%);
+}
+
+.buttonWrapper {
+  position: relative;
+  display: inline-flex; /* Prevent shadow overlap with other buttons */
+  border-radius: 14pt;
+  margin-top: -14pt;
+  height: calc(2*14pt + 2pt);
+}
+
+.shadowButton {
   visibility: visible;
-  grid-template-columns: 1fr 500pt 1fr;
-  grid-template-rows: 1fr 80pt 100pt 40pt 1fr;
+  margin-top: 2pt;
+  border-radius: 14pt;
+  padding: 0;
+  height: 28pt;
+  background-color: var(--shadowResting);
+  z-index: 0;
 }
-#startMenu.lightMode {
-  background-color: #EAE9EFe5;
+.shadowButton.hover {
+  background-color: var(--shadowHover);
 }
-
-#startMenuTitle {
-  display: grid;
-  color: white;
-  justify-self: center;
-  align-self: center;
-  text-align: center;
-  grid-column: 2/ span 1;
-  grid-row: 2/ span 1;
-}
-#startMenuTitle.lightMode {
-  color: rgb(22, 22, 22);
+.shadowButton.active {
+  visibility: none;
 }
 
-#startMenuDescription {
-  display: grid;
-  color: white;
-  justify-self: center;
-  align-self: center;
+button {
+  all: unset;
+  position: relative;
+  border-radius: 14pt;
   text-align: center;
-  grid-column: 2/ span 1;
-  grid-row: 3/ span 1;
+  min-width: fit-content;
+  padding: 14pt;
+  height: 0;
+  top: -2pt;
+  background-color: var(--buttonResting);
+  z-index: 100;
 }
-#startMenuDescription.lightMode {
-  color: rgb(22, 22, 22);
+button.hover {
+  background-color: var(--buttonHover);
+}
+button.active {
+  background-color: var(--buttonActive);
+  transform: translateY(2pt);
 }
 
 body {
@@ -181,6 +211,18 @@ h3 {
   margin-top: -8pt;
 }
 #bottomIslandGuideText.lightMode {
+  color: rgb(22, 22, 22);
+}
+
+.buttonText {
+  display: block;
+  width: 100%;
+  color: white;
+  word-wrap: break-word;
+  white-space: nowrap;
+  margin-top: -8pt;
+}
+.buttonText.lightMode {
   color: rgb(22, 22, 22);
 }
 
