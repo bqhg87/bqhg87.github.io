@@ -104,6 +104,7 @@ form {
   all: unset;
   position: absolute;
   align-self: center;
+  display: none;
   visibility: none;
   opacity: 0;
   transition: opacity 0.3s, visibility 0.3s;
@@ -152,6 +153,8 @@ input::placeholder {
   margin-bottom: var(--main-tb-padding);
   bottom: 0;
   display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
   align-self: center;
   width: fit-content;
   min-width: fit-content;
@@ -186,10 +189,10 @@ input::placeholder {
 
 .shadowButton {
   visibility: visible;
-  margin-top: 2pt;
-  border-radius: 14pt;
   padding: 0;
+  border-radius: 14pt;
   height: 28pt;
+  margin-top: 2pt;
   background-color: var(--shadowResting);
   z-index: 0;
 }

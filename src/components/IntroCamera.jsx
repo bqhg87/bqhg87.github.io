@@ -1,11 +1,14 @@
 import { useRef, useEffect, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Vector3, CatmullRomCurve3 } from "three";
+import { Vector3, CatmullRomCurve3, Euler } from "three";
 
 export const IntroCamera = ({ speed = 0.003, path, lookAtPoints }) => {
   const cameraRef = useRef();
   const tRef = useRef(0);
   const { set, size } = useThree();
+
+  // State to track mouse movement
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   // Default path and look-at points if none are provided
   const defaultPath = [
@@ -38,6 +41,21 @@ export const IntroCamera = ({ speed = 0.003, path, lookAtPoints }) => {
     }
   }, [set]);
 
+  // Handle mouse movement for camera responsiveness
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      const x = (event.clientX / window.innerWidth) * 2 - 1; // Normalize x to [-1, 1]
+      const y = -(event.clientY / window.innerHeight) * 2 + 1; // Normalize y to [-1, 1]
+      setMouse({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   useFrame(() => {
     if (cameraRef.current) {
       // Only update the camera's position until tRef reaches 1
@@ -64,6 +82,19 @@ export const IntroCamera = ({ speed = 0.003, path, lookAtPoints }) => {
         const finalLookAt = lookAtCurve.getPoint(1);
         cameraRef.current.position.copy(finalPosition);
         cameraRef.current.lookAt(finalLookAt);
+
+        // Smoothly adjust the camera's rotation based on mouse movement
+        const rotationSpeed = 0.05; // Adjust the speed of the rotation change
+        const targetRotation = new Euler(
+          mouse.y * Math.PI * 0.1, // Vertical movement influences pitch
+          mouse.x * Math.PI * 0.1, // Horizontal movement influences yaw
+          0,
+          "XYZ"
+        );
+
+        // Smoothly interpolate between current and target rotation
+        cameraRef.current.rotation.x = cameraRef.current.rotation.x + (targetRotation.x - cameraRef.current.rotation.x) * rotationSpeed;
+        cameraRef.current.rotation.y = cameraRef.current.rotation.y + (targetRotation.y - cameraRef.current.rotation.y) * rotationSpeed;
       }
     }
   });

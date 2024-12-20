@@ -3,10 +3,18 @@ document.addEventListener("DOMContentLoaded", () => {
   let activeElement = null;  // Track the currently active element
   let isMousePressed = false; // Track if the mouse is pressed
   
-  // Event delegation for hover and active effects
+  // Helper function to reset button states
+  function resetButtonState(buttonWrapper) {
+    const shadowButton = buttonWrapper.querySelector('.shadowButton');
+    const button = buttonWrapper.querySelector('button');
+    shadowButton.classList.remove('hover', 'active');
+    button.classList.remove('hover', 'active');
+  }
+
+  // When mouse enters a button wrapper (including shadowButton and button)
   buttonsContainer.addEventListener('mouseenter', (event) => {
-    if (!isMousePressed && event.target.closest('.buttonWrapper')) {
-      const wrapper = event.target.closest('.buttonWrapper');
+    const wrapper = event.target.closest('.buttonWrapper');
+    if (wrapper && !isMousePressed) {
       const shadowButton = wrapper.querySelector('.shadowButton');
       const button = wrapper.querySelector('button');
       shadowButton.classList.add('hover');
@@ -14,29 +22,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, true);
   
+  // When mouse leaves a button wrapper (reset everything if leaving)
   buttonsContainer.addEventListener('mouseleave', (event) => {
-    if (!isMousePressed && event.target.closest('.buttonWrapper')) {
-      const wrapper = event.target.closest('.buttonWrapper');
-      const shadowButton = wrapper.querySelector('.shadowButton');
-      const button = wrapper.querySelector('button');
-      shadowButton.classList.remove('hover');
-      button.classList.remove('hover');
+    const wrapper = event.target.closest('.buttonWrapper');
+    if (wrapper) {
+      resetButtonState(wrapper); // Reset hover and active states when leaving
+      isMousePressed = false; // Ensure mouse pressed state is reset when leaving
     }
   }, true);
   
+  // When mouse is pressed on a button wrapper (including shadowButton and button)
   buttonsContainer.addEventListener('mousedown', (event) => {
-    if (event.target.closest('.buttonWrapper')) {
+    const wrapper = event.target.closest('.buttonWrapper');
+    if (wrapper) {
       isMousePressed = true;
-      activeElement = event.target.closest('.buttonWrapper');
-      const shadowButton = activeElement.querySelector('.shadowButton');
-      const button = activeElement.querySelector('button');
-      shadowButton.classList.remove('hover');
-      button.classList.remove('hover');
+      activeElement = wrapper;
+      resetButtonState(wrapper); // Reset hover on mousedown
+      const shadowButton = wrapper.querySelector('.shadowButton');
+      const button = wrapper.querySelector('button');
       shadowButton.classList.add('active');
       button.classList.add('active');
     }
   });
   
+  // When mouse is released
   buttonsContainer.addEventListener('mouseup', (event) => {
     if (activeElement && isMousePressed) {
       isMousePressed = false;
@@ -44,25 +53,32 @@ document.addEventListener("DOMContentLoaded", () => {
       const button = activeElement.querySelector('button');
       shadowButton.classList.remove('active');
       button.classList.remove('active');
-  
-      // Check if the mouse is still over the element and re-add hover class
+
+      // Trigger the button function on mouse up
+      const buttonFunction = activeElement.querySelector('button').onclick;
+      if (buttonFunction) {
+        buttonFunction(); // Trigger the function
+      }
+
+      // Reapply hover if mouse is still over the element
       if (activeElement.matches(':hover')) {
         shadowButton.classList.add('hover');
         button.classList.add('hover');
       }
-      activeElement = null;
+
+      activeElement = null; // Reset the active element
     }
   });
-  
+
   // For mobile touch events
   buttonsContainer.addEventListener('touchstart', (event) => {
-    if (event.target.closest('.buttonWrapper')) {
+    const wrapper = event.target.closest('.buttonWrapper');
+    if (wrapper) {
       isMousePressed = true;
-      activeElement = event.target.closest('.buttonWrapper');
-      const shadowButton = activeElement.querySelector('.shadowButton');
-      const button = activeElement.querySelector('button');
-      shadowButton.classList.remove('hover');
-      button.classList.remove('hover');
+      activeElement = wrapper;
+      resetButtonState(wrapper); // Reset hover on touchstart
+      const shadowButton = wrapper.querySelector('.shadowButton');
+      const button = wrapper.querySelector('button');
       shadowButton.classList.add('active');
       button.classList.add('active');
     }
@@ -117,7 +133,7 @@ function showButtons(buttonTexts, buttonFunctions) {
   }, 10); // Timeout ensures the transition works properly
 }
 
-function closeButtons(fade = true) {
+function closeButtons(fade) {
   const buttonsContainer = document.getElementById('bottomIslandButtonsUI');
 
   if (fade) {

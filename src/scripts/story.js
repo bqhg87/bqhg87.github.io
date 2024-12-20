@@ -164,12 +164,24 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // First, update the UI (transition to next part)
-        if (currentPart.callbackOnClose && typeof window[currentPart.callbackOnClose] === 'function') {
-            // Use setTimeout to ensure callback runs after transition
-            setTimeout(() => {
-                window[currentPart.callbackOnClose]();
-            }, 0); // You can adjust the timeout if you need a longer delay
+        // Ensure that callbackOnClose is a valid object before proceeding
+        const callbackOnClose = currentPart.callbackOnClose;
+
+        // Check if callbackOnClose is defined and is an object
+        if (callbackOnClose && typeof callbackOnClose === 'object') {
+
+            // Ensure the function property exists and is a valid function
+            if (callbackOnClose.function && typeof window[callbackOnClose.function] === 'function') {
+                const callbackFn = window[callbackOnClose.function];
+                const callbackArgs = callbackOnClose.args || []; // Default to empty array if no arguments are provided
+
+                // Execute the callback function with arguments
+                setTimeout(() => {
+                    callbackFn(...callbackArgs);
+                }, 0); // Adjust the timeout if needed
+            } else if (callbackOnClose.function) {
+                // If the function is defined but not a valid function, log an error
+            }
         }
 
         // Proceed to the next story part or finish the story
@@ -184,23 +196,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to move to the previous story part
-    function previousStoryPart() {
-        if (isStoryFinished) return;
+    //function previousStoryPart() {
+    //    if (isStoryFinished) return;
 
-        if (isAnimating) {
-            isSkipped = true;
-            isAnimating = false;
-            clearAnimationTimeouts();
-            displayFullTextInstantly(storyParts[currentPartIndex].text, storyParts[currentPartIndex].styledRanges || []);
-            return;
-        }
+    //    if (isAnimating) {
+    //        isSkipped = true;
+    //        isAnimating = false;
+    //        clearAnimationTimeouts();
+    //        displayFullTextInstantly(storyParts[currentPartIndex].text, storyParts[currentPartIndex].styledRanges || []);
+    //       return;
+    //    }
 
-        if (currentPartIndex > 0) {
-            currentPartIndex--;
-            const previousPart = storyParts[currentPartIndex];
-            animatedTextLoad(previousPart.text, previousPart.styledRanges || [], previousPart.callback || null);
-        }
-    }
+    //    if (currentPartIndex > 0) {
+    //        currentPartIndex--;
+    //        const previousPart = storyParts[currentPartIndex];
+    //        animatedTextLoad(previousPart.text, previousPart.styledRanges || [], previousPart.callback || null);
+    //    }
+    //}
 
     // Function to start a story
     function story(storyName) {
@@ -217,8 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
             [,] // Button click functions
         );
     };
-    function closeButtons() { //sorta temporary cause will probably have them close once they are pressed instead of in the story
-        closeButtons();
+    function fcCloseButtons() { //sorta temporary cause will probably have them close once they are pressed instead of in the story
+        closeButtons(true);
     };
     window.fcGamemodeSelector = fcGamemodeSelector
 

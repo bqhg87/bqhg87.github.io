@@ -48,12 +48,12 @@ export const Experience = ({ gameState }) => {
       >
       </directionalLight>
       <ambientLight intensity={0.5} />
-      <Svg
+      {gameState === "intro" && <Svg
         ref={svgRef}
         src="/logo.svg"
         scale={0.005}
         position={[-4, 3, -8]}
-      />
+      />}
       <Physics key={map}>
         <Map
           scale={maps[map].scale}

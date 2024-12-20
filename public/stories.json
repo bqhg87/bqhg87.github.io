@@ -1,41 +1,47 @@
 {
-    "stories": [
-          {
-            "story": "story1",
-            "part": "1",
-            "text": "This is the beginning of the story.",
-            "callback": { "function": "openGuide", "args": ["continue", true] }
-          },
-          {
-            "story": "story1",
-            "part": "2",
-            "text": "The story continues with more details. I truly mean a LOT of details. I'm typing a lot in this part to test some functionality yipee!",
-            "callback": { "function": "closeGuide", "args": ["continue", true] }
-          },
-          {
-            "story": "story1",
-            "part": "3",
-            "text": "Feel free to type something really cool in the text box",
-            "callback": { "function": "openTextInput", "args": ["", true] },
-            "callbackOnClose": "closeTextInput"
-          },
-          {
-            "story": "story1",
-            "part": "4",
-            "text": "A story can contain many words.",
-            "callback": { "function": "fcGamemodeSelector", "args": ["", true]  },
-            "callbackOnClose": "closeButtons"
-          },
-          {
-            "story": "story1",
-            "part": "5",
-            "text": "The story starts to get a bit boring I suppose.",
-            "callbackOnClose": "startGame"
-          },
+  "stories": [
       {
-        "story": "story2",
-        "part": "1",
-        "text": "Here starts the second story."
+          "story": "story1",
+          "part": "1",
+          "text": "This is the beginning of the story.",
+          "callback": { "function": "openGuide", "args": ["continue", true] }
+      },
+      {
+          "story": "story1",
+          "part": "2",
+          "text": "The story continues with more details. I truly mean a LOT of details. I'm typing a lot in this part to test some functionality yipee!",
+          "callback": { "function": "closeGuide", "args": ["continue", true] }
+      },
+      {
+          "story": "story1",
+          "part": "3",
+          "text": "Feel free to type something really cool in the text box",
+          "callback": { "function": "openTextInput", "args": ["", true] },
+          "callbackOnClose": { "function": "closeTextInput", "args": [] }
+      },
+      {
+        "story": "story1",
+        "part": "4",
+        "text": "A story can contain many words.",
+        "callback": {
+          "function": "showButtons",
+          "args": [
+            ["button 1", "button 2"],
+            []
+          ]
+        }
+      },
+      {
+          "story": "story1",
+          "part": "5",
+          "text": "The story starts to get a bit boring I suppose.",
+          "callback": { "function": "closeButtons", "args": [true] },
+          "callbackOnClose": { "function": "startGame", "args": [] }
+      },
+      {
+          "story": "story2",
+          "part": "1",
+          "text": "Here starts the second story."
       }
-    ]
+  ]
 }

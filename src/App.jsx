@@ -30,13 +30,13 @@ function App() {
 
   // Function to transition to the 'game' state
   function startGame() {
-    closeButtons(false);
     setGameState("game");
     openGuide("controls", true);
   }
 
   // Function to transition to the 'story' state
   function startStory() {
+    closeButtons(false);
     setGameState("story");
   }
 
