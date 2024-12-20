@@ -10,18 +10,25 @@
             "story": "story1",
             "part": "2",
             "text": "The story continues with more details. I truly mean a LOT of details. I'm typing a lot in this part to test some functionality yipee!",
-            "callback": { "function": "closeGuide", "args": ["continue", true] },
-            "callbackOnClose": "fcGamemodeSelector"
+            "callback": { "function": "closeGuide", "args": ["continue", true] }
           },
           {
             "story": "story1",
             "part": "3",
-            "text": "A story can contain many words.",
-            "callbackOnClose": "closeButtons"
+            "text": "Feel free to type something really cool in the text box",
+            "callback": { "function": "openTextInput", "args": ["", true] },
+            "callbackOnClose": "closeTextInput"
           },
           {
             "story": "story1",
             "part": "4",
+            "text": "A story can contain many words.",
+            "callback": { "function": "fcGamemodeSelector", "args": ["", true]  },
+            "callbackOnClose": "closeButtons"
+          },
+          {
+            "story": "story1",
+            "part": "5",
             "text": "The story starts to get a bit boring I suppose.",
             "callbackOnClose": "startGame"
           },

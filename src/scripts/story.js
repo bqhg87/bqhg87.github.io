@@ -208,6 +208,8 @@ document.addEventListener("DOMContentLoaded", function () {
         loadStoryParts(storyName);
     }
 
+    window.story = story;
+
     function fcGamemodeSelector() {
         showButtons(
             // leaked ['Create Chaos', 'Restore Truth'],
@@ -249,5 +251,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Start a specific story
-    story('story1');
+    // story('story1');
 });

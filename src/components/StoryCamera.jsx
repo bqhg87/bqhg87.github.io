@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3, CatmullRomCurve3 } from "three";
 
-export const IdleCamera = ({ speed = 0.00003, path, lookAtPoints }) => {
+export const StoryCamera = ({ speed = 0.00003, path, lookAtPoints }) => {
   const cameraRef = useRef();
   const tRef = useRef(0);
   const { set, size } = useThree();

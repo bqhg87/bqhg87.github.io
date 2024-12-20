@@ -1,3 +1,7 @@
+html, body {
+  touch-action: none; /* Disables all touch gestures, including pinch zoom */
+}
+
 #root {
   position: fixed;
   top: 0;
@@ -16,12 +20,14 @@
 main {
   --main-padding: 28pt;
   --main-width: calc(100vw - 2*(var(--main-padding))); /* Define a custom property */
+  --main-tb-padding: clamp(12pt, calc(2vw + 12pt), 28pt);
   visibility: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: var(--main-padding);
-  padding-top: clamp(12pt, calc(2vw + 12pt), 28pt);
+  padding-top: var(--main-tb-padding);
+  padding-bottom: var(--main-tb-padding);
   width: var(--main-width);
   height: calc(100% - 2*(var(--main-padding)));
   overflow: hidden;
@@ -39,29 +45,29 @@ main {
   padding: 16pt;
   top: 0;
   left: 0;
-  display: flex;
+  display: none;
   align-self: center;
   width: calc(var(--main-width) - 2*(16pt));
   max-width: calc(460px - 2*(16pt));
   height: fit-content;
-  background-color: #2C2C31e5;
+  background-color: rgba(44, 44, 49, 0.9);
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
   z-index: 1000;
 }
 #topIslandUI.lightMode {
-  /* background-color: #f7f7fa;*/
-  background-color: #f7f7fae5;
+
+  background-color: rgba(246, 246, 249, 0.9);
 }
 
 #bottomIslandGuideUI {
   position: absolute;
   border-radius: 12pt;
   padding: 12pt;
-  margin-bottom: var(--main-padding);
+  margin-bottom: var(--main-tb-padding);
   bottom: 0;
-  display: flex;
+  display: none;
   align-self: center;
   text-align: center;
   width: fit-content;
@@ -94,19 +100,63 @@ main {
   100% {background-color: rgba(247, 247, 250, 0.4);}
 }
 
+form {
+  all: unset;
+  position: absolute;
+  align-self: center;
+  visibility: none;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+  bottom: var(--main-tb-padding);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: 1000;
+}
+
+input {
+  all: unset;
+  align-self: center;
+  border-radius: 100pt; /* yep */
+  border-style: solid;
+  border-width: calc(2pt + 1px);
+  padding: 2pt 6pt 2pt 6pt;
+  margin: 0;
+  width: calc(var(--main-width) - 2*(6pt) - 7px);
+  max-width: calc(360px - 2*(6pt) - 7px);
+  font-family: "Lexend", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  text-align: left;
+  font-size: 12pt;
+  color: white;
+  border-color: hsla(240, 4%, 18%, 0.9);
+  background-color: hsla(240, 4%, 18%, 0.5);
+  --placeholderTextColor: hsla(240, 3%, 22%, 0.9);
+}
+input.lightMode {
+  color: rgb(22, 22, 22);
+  border-color: hsla(240, 20%, 97%, 0.8);
+  background-color: hsla(240, 20%, 97%, 0.5);
+  --placeholderTextColor: hsla(240, 5%, 91%, 0.8);
+}
+input::placeholder {
+  color: var(--placeholderTextColor);
+}
+
 #bottomIslandButtonsUI {
   position: absolute;
   border-radius: 18pt;
   padding: 18pt 6pt 20pt 6pt;
   gap: 6pt;
-  margin-bottom: var(--main-padding);
+  margin-bottom: var(--main-tb-padding);
   bottom: 0;
   display: none;
   align-self: center;
   width: fit-content;
   min-width: fit-content;
   height: 0;
-  background-color: hsla(240, 5%, 18%, 0.898); /* Default background color */
+  background-color: hsla(240, 5%, 18%, 0.9); /* Default background color */
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
@@ -118,7 +168,7 @@ main {
   --shadowHover: hsl(240, 5%, 16%);
 }
 #bottomIslandButtonsUI.lightMode {
-  background-color: hsla(240, 23%, 97%, 0.898); /* Default for light mode */
+  background-color: hsla(240, 23%, 97%, 0.9); /* Default for light mode */
   --buttonResting: hsl(240, 21%, 100%);
   --buttonHover: hsl(240, 21%, 96%);
   --buttonActive: hsl(240, 21%, 96%);
@@ -221,6 +271,9 @@ h3 {
   word-wrap: break-word;
   white-space: nowrap;
   margin-top: -8pt;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 .buttonText.lightMode {
   color: rgb(22, 22, 22);

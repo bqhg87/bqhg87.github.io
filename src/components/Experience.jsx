@@ -1,8 +1,9 @@
-import { Environment } from "@react-three/drei";
+import { Environment, Svg } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { CharacterController } from "./CharacterController";
 import { Map } from "./map";
 import { useRef, useEffect } from "react";
+import { useFrame } from "@react-three/fiber";
 
 const maps = {
   medieval_fantasy_book: {
@@ -11,21 +12,28 @@ const maps = {
   },
 };
 
-export const Experience = ({ gameIdle }) => {
+export const Experience = ({ gameState }) => {
   const shadowCameraRef = useRef();
+  const svgRef = useRef();
 
   const map = "medieval_fantasy_book";
 
+  useFrame(({ camera }) => {
+    if (svgRef.current) {
+      svgRef.current.lookAt(camera.position);
+    }
+  });
+
   // When game is idle, you might want to disable the character controller and physics
   useEffect(() => {
-    if (gameIdle) {
-      // Logic for idle state, like camera panning, disabling character controller, etc.
-      console.log("game idle");
-    } else {
-      // Logic for when the game starts (e.g., enable character controller, load the player, etc.)
-      console.log("game started");
+    if (gameState === "intro") {
+      console.log("game intro");
+    } else if (gameState === "story") {
+      console.log("game story");
+    } else if (gameState === "game") {
+      console.log("game");
     }
-  }, [gameIdle]);
+  }, [gameState]);
 
   return (
     <>
@@ -39,13 +47,20 @@ export const Experience = ({ gameIdle }) => {
         shadow-bias={-0.00005}
       >
       </directionalLight>
+      <ambientLight intensity={0.5} />
+      <Svg
+        ref={svgRef}
+        src="/logo.svg"
+        scale={0.005}
+        position={[-4, 3, -8]}
+      />
       <Physics key={map}>
         <Map
           scale={maps[map].scale}
           position={maps[map].position}
           model={`models/${map}.glb`}
         />
-        {!gameIdle && <CharacterController />}
+        {gameState === "game" && <CharacterController />}
       </Physics>
     </>
   );
