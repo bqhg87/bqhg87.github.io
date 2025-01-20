@@ -7,15 +7,17 @@ const shroomsImage = new Image();
 image.src = './assets/painting.png';
 shroomsImage.src = './assets/shrooms.png';
 
-// Global scale factor for all objects
-const globalScale = 20; // Set this scale globally, it will affect size and positioning
+// Initial Global scale factor for all objects
+let globalScale = 20; // Set this scale globally, it will affect size and positioning
+const minScale = 10; // Minimum scale limit
+const maxScale = 100; // Maximum scale limit
 
 // List of objects to be drawn on the canvas
 const objectsToDraw = [
   {
     image: image,
-    x: 3,
-    y: 2
+    x: 2,
+    y: 1
   },
   {
     image: shroomsImage,
@@ -85,6 +87,27 @@ canvas.addEventListener('mouseup', () => {
   isDragging = false;
 });
 
+// Detect scroll events to adjust global scale
+canvas.addEventListener('wheel', (event) => {
+  event.preventDefault(); // Prevent page scrolling
+
+  // Determine the zoom direction (up or down)
+  let newScale = globalScale;
+  if (event.deltaY < 0) {
+    // Zoom in
+    newScale = Math.min(globalScale + 5, maxScale);
+  } else if (event.deltaY > 0) {
+    // Zoom out
+    newScale = Math.max(globalScale - 5, minScale);
+  }
+
+  // If the scale changes, update the global scale smoothly
+  if (newScale !== globalScale) {
+    globalScale = newScale;
+    draw(); // Redraw the canvas with new scale
+  }
+});
+
 // Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
   const dpr = window.devicePixelRatio || 1;
@@ -117,7 +140,7 @@ function draw() {
   objectsToDraw.forEach(obj => {
     const { image, x, y } = obj;
 
-    // Apply global scale to both size and position
+    // Apply global scale to both size and position, considering the translation
     const scaledX = (x * globalScale) + translationX;
     const scaledY = (y * globalScale) + translationY;
     const scaledWidth = image.width * globalScale;
