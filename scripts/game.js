@@ -14,15 +14,13 @@ const globalScale = 20; // Set this scale globally, it will affect size and posi
 const objectsToDraw = [
   {
     image: image,
-    x: 1,
-    y: 3,
-    zIndex: 1
+    x: 3,
+    y: 2
   },
   {
     image: shroomsImage,
-    x: 12,
-    y: 8,
-    zIndex: 2
+    x: 14,
+    y: 8
   }
 ];
 
@@ -42,6 +40,50 @@ function onImageLoad() {
 
 image.onload = onImageLoad;
 shroomsImage.onload = onImageLoad;
+
+// Variables for dragging the canvas
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+
+// Current translation of the canvas (origin point)
+let translationX = 0;
+let translationY = 0;
+
+// Check mouse position for drag start
+canvas.addEventListener('mousedown', (event) => {
+  isDragging = true;
+  dragStartX = event.clientX;
+  dragStartY = event.clientY;
+});
+
+// Check mouse position while dragging
+canvas.addEventListener('mousemove', (event) => {
+  if (isDragging) {
+    const dx = event.clientX - dragStartX;
+    const dy = event.clientY - dragStartY;
+
+    // Update the translation based on mouse movement
+    translationX += dx;
+    translationY += dy;
+
+    // Update the start position for the next move
+    dragStartX = event.clientX;
+    dragStartY = event.clientY;
+
+    draw(); // Redraw the canvas with new translation
+  } else {
+    // Log mouse position even when not dragging
+    const mouseX = Math.floor((event.clientX - translationX) / globalScale);
+    const mouseY = Math.floor((event.clientY - translationY) / globalScale);
+    console.log(`Mouse coordinates: X: ${mouseX}, Y: ${mouseY}`);
+  }
+});
+
+// Stop dragging on mouse up
+canvas.addEventListener('mouseup', () => {
+  isDragging = false;
+});
 
 // Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
@@ -68,33 +110,23 @@ function adjustForRetina() {
 
 // Draw all objects
 function draw() {
-  // Clear the canvas only for the newly resized part
+  // Clear the canvas
   c.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Sort objects by zIndex so that higher zIndex values are drawn last (on top)
-  objectsToDraw.sort((a, b) => a.zIndex - b.zIndex);
 
   // Draw each object from the objectsToDraw array
   objectsToDraw.forEach(obj => {
     const { image, x, y } = obj;
+
     // Apply global scale to both size and position
-    const scaledX = x * globalScale;
-    const scaledY = y * globalScale;
+    const scaledX = (x * globalScale) + translationX;
+    const scaledY = (y * globalScale) + translationY;
     const scaledWidth = image.width * globalScale;
     const scaledHeight = image.height * globalScale;
 
+    // Draw the image with the current translation (panned view)
     c.drawImage(image, scaledX, scaledY, scaledWidth, scaledHeight);
   });
 }
 
 // Resize canvas on window resize
 window.addEventListener('resize', adjustForRetina);
-
-// Mouse position tracking
-canvas.addEventListener('mousemove', (event) => {
-    const mouseX = event.clientX / globalScale;
-    const mouseY = event.clientY / globalScale;
-  
-    // Log the mouse coordinates adjusted for globalScale
-    console.log(`Mouse coordinates (scaled): x = ${Math.floor(mouseX)}, y = ${Math.floor(mouseY)}`);
-  });
