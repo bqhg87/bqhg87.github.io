@@ -87,26 +87,39 @@ document.addEventListener('mouseup', () => {
   isDragging = false;
 });
 
-// Detect scroll events to adjust global scale
+// Detect scroll events to adjust global scale and keep zoom centered
 canvas.addEventListener('wheel', (event) => {
-  event.preventDefault(); // Prevent page scrolling
-
-  // Determine the zoom direction (up or down)
-  let newScale = globalScale;
-  if (event.deltaY < 0) {
-    // Zoom in
-    newScale = Math.min(globalScale + 5, maxScale);
-  } else if (event.deltaY > 0) {
-    // Zoom out
-    newScale = Math.max(globalScale - 5, minScale);
-  }
-
-  // If the scale changes, update the global scale smoothly
-  if (newScale !== globalScale) {
-    globalScale = newScale;
-    draw(); // Redraw the canvas with new scale
-  }
-});
+    event.preventDefault(); // Prevent page scrolling
+  
+    // Determine the zoom direction (up or down)
+    let newScale = globalScale;
+    if (event.deltaY < 0) {
+      // Zoom in
+      newScale = Math.min(globalScale + 5, maxScale);
+    } else if (event.deltaY > 0) {
+      // Zoom out
+      newScale = Math.max(globalScale - 5, minScale);
+    }
+  
+    if (newScale !== globalScale) {
+      // Calculate the zoom factor
+      const zoomFactor = newScale / globalScale;
+  
+      // Find the current center of the canvas in the unscaled coordinate system
+      const centerX = (event.clientX - translationX) / globalScale;
+      const centerY = (event.clientY - translationY) / globalScale;
+  
+      // Update the global scale
+      globalScale = newScale;
+  
+      // Calculate the new translation to keep the zoom centered
+      translationX = event.clientX - centerX * globalScale;
+      translationY = event.clientY - centerY * globalScale;
+  
+      // Redraw the canvas with new scale and translation
+      draw();
+    }
+  });
 
 // Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
