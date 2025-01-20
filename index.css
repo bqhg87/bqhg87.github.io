@@ -2,7 +2,7 @@ html, body {
   touch-action: none; /* Disables all touch gestures, including pinch zoom */
 }
 
-#root {
+#game {
   position: fixed;
   top: 0;
   left: 0;
@@ -15,6 +15,12 @@ html, body {
   user-select: none;
   contain: strict;
   z-index: 1;
+}
+
+canvas {
+  /* Enforce pixel-perfect scaling for pixel art */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* Fallback for older browsers */
 }
 
 main {
