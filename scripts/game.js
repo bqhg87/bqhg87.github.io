@@ -59,31 +59,31 @@ canvas.addEventListener('mousedown', (event) => {
   dragStartY = event.clientY;
 });
 
-// Check mouse position while dragging
-canvas.addEventListener('mousemove', (event) => {
-  if (isDragging) {
-    const dx = event.clientX - dragStartX;
-    const dy = event.clientY - dragStartY;
-
-    // Update the translation based on mouse movement
-    translationX += dx;
-    translationY += dy;
-
-    // Update the start position for the next move
-    dragStartX = event.clientX;
-    dragStartY = event.clientY;
-
-    draw(); // Redraw the canvas with new translation
-  } else {
-    // Log mouse position even when not dragging
-    const mouseX = Math.floor((event.clientX - translationX) / globalScale);
-    const mouseY = Math.floor((event.clientY - translationY) / globalScale);
-    console.log(`Mouse coordinates: X: ${mouseX}, Y: ${mouseY}`);
-  }
-});
+// Listen for mouse movement on the entire document to continue dragging
+document.addEventListener('mousemove', (event) => {
+    if (isDragging) {
+      const dx = event.clientX - dragStartX;
+      const dy = event.clientY - dragStartY;
+  
+      // Update the translation based on mouse movement
+      translationX += dx;
+      translationY += dy;
+  
+      // Update the start position for the next move
+      dragStartX = event.clientX;
+      dragStartY = event.clientY;
+  
+      draw(); // Redraw the canvas with new translation
+    } else {
+      // Log mouse position even when not dragging
+      const mouseX = Math.floor((event.clientX - translationX) / globalScale);
+      const mouseY = Math.floor((event.clientY - translationY) / globalScale);
+      console.log(`Mouse coordinates: X: ${mouseX}, Y: ${mouseY}`);
+    }
+  });
 
 // Stop dragging on mouse up
-canvas.addEventListener('mouseup', () => {
+document.addEventListener('mouseup', () => {
   isDragging = false;
 });
 
