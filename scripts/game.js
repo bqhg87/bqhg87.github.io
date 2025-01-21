@@ -4,8 +4,10 @@ const c = canvas.getContext('2d');
 // Image loading
 const image = new Image();
 const shroomsImage = new Image();
+const spriteSheet = new Image();
 image.src = './assets/painting.png';
 shroomsImage.src = './assets/shrooms.png';
+spriteSheet.src = './assets/char.png';
 
 // Initial Global scale factor for all objects
 let globalScale = 20; // Set this scale globally, it will affect size and positioning
@@ -23,12 +25,22 @@ const objectsToDraw = [
     image: shroomsImage,
     x: 14,
     y: 8
+  },
+  // Add an object for the sprite frame (frame [0,0])
+  {
+    image: spriteSheet,
+    x: 8,
+    y: 4,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 48,
+    frameHeight: 48
   }
 ];
 
 // Track number of loaded images
 let imagesLoaded = 0;
-const totalImages = objectsToDraw.length;
+const totalImages = objectsToDraw.length; // Update to include spriteSheet
 
 // Check if the images load correctly
 function onImageLoad() {
@@ -42,6 +54,7 @@ function onImageLoad() {
 
 image.onload = onImageLoad;
 shroomsImage.onload = onImageLoad;
+spriteSheet.onload = onImageLoad;
 
 // Variables for dragging the canvas
 let isDragging = false;
@@ -51,6 +64,12 @@ let dragStartY = 0;
 // Current translation of the canvas (origin point)
 let translationX = 0;
 let translationY = 0;
+
+// Char speed variable (frameX cycle speed)
+let charSpeed = 7; // Adjust for how fast you want to cycle through frames
+
+// Key states for movement and frame cycling
+let keysPressed = {};
 
 // Check mouse position for drag start
 canvas.addEventListener('mousedown', (event) => {
@@ -74,13 +93,8 @@ document.addEventListener('mousemove', (event) => {
       dragStartY = event.clientY;
   
       draw(); // Redraw the canvas with new translation
-    } else {
-      // Log mouse position even when not dragging
-      const mouseX = Math.floor((event.clientX - translationX) / globalScale);
-      const mouseY = Math.floor((event.clientY - translationY) / globalScale);
-      console.log(`Mouse coordinates: X: ${mouseX}, Y: ${mouseY}`);
     }
-  });
+});
 
 // Stop dragging on mouse up
 document.addEventListener('mouseup', () => {
@@ -149,20 +163,86 @@ function draw() {
   // Clear the canvas
   c.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw each object from the objectsToDraw array
+  // Loop through each object in objectsToDraw
   objectsToDraw.forEach(obj => {
-    const { image, x, y } = obj;
+    const { image, x, y, frameX, frameY, frameWidth, frameHeight } = obj;
 
     // Apply global scale to both size and position, considering the translation
     const scaledX = (x * globalScale) + translationX;
     const scaledY = (y * globalScale) + translationY;
-    const scaledWidth = image.width * globalScale;
-    const scaledHeight = image.height * globalScale;
 
-    // Draw the image with the current translation (panned view)
-    c.drawImage(image, scaledX, scaledY, scaledWidth, scaledHeight);
+    // If this object is the sprite frame, draw only the specific frame
+    if (frameX !== undefined && frameY !== undefined) {
+      c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
+                  scaledX, scaledY, frameWidth * globalScale, frameHeight * globalScale);
+    } else {
+      // Otherwise, draw the full image (like the paintings and shrooms)
+      const scaledWidth = image.width * globalScale;
+      const scaledHeight = image.height * globalScale;
+      c.drawImage(image, scaledX, scaledY, scaledWidth, scaledHeight);
+    }
   });
 }
 
 // Resize canvas on window resize
 window.addEventListener('resize', adjustForRetina);
+
+// Keydown event listener
+document.addEventListener('keydown', (event) => {
+    const char = objectsToDraw[2]; // The sprite character
+  
+    // Adjust the position and frameY based on the key pressed
+    if (event.key === 's' || event.key === 'ArrowDown') {
+      char.frameY = 0; // Move down
+      char.y += 1;     // Move sprite down (increase y)
+    } else if (event.key === 'w' || event.key === 'ArrowUp') {
+      char.frameY = 1; // Move up
+      char.y -= 1;     // Move sprite up (decrease y)
+    } else if (event.key === 'a' || event.key === 'ArrowLeft') {
+      char.frameY = 2; // Move left
+      char.x -= 1;     // Move sprite left (decrease x)
+    } else if (event.key === 'd' || event.key === 'ArrowRight') {
+      char.frameY = 3; // Move right
+      char.x += 1;     // Move sprite right (increase x)
+    }
+  
+    keysPressed[event.key] = true; // Mark the key as pressed
+    cycleFrameX(); // Continue cycling frameX if any key is pressed
+  });
+  
+  // Keyup event listener
+  document.addEventListener('keyup', (event) => {
+    keysPressed[event.key] = false; // Mark the key as released
+  
+    // If no direction keys are pressed, stop cycling and reset frameX
+    if (!Object.values(keysPressed).includes(true)) {
+      objectsToDraw[2].frameX = 0;
+      stopCyclingFrameX(); // Stop cycling
+    }
+  });
+  
+  // Function to cycle frameX based on charSpeed
+  let frameCycleInterval;
+  function cycleFrameX() {
+    const char = objectsToDraw[2]; // The sprite character
+  
+    // If cycling is already happening, do nothing
+    if (frameCycleInterval) {
+      return;
+    }
+  
+    // Start cycling if any direction key is pressed
+    if (Object.values(keysPressed).includes(true)) {
+      frameCycleInterval = setInterval(() => {
+        char.frameX = (char.frameX + 1) % 4; // Cycle through frames 0-3
+        draw(); // Redraw the image with the new frameX
+      }, 1000 / charSpeed); // Speed based on charSpeed
+    }
+  }
+  
+  // Stop cycling frameX
+  function stopCyclingFrameX() {
+    clearInterval(frameCycleInterval);
+    frameCycleInterval = null;
+    draw(); // Ensure to redraw the image when stopping cycling
+  }
