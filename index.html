@@ -2,35 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="stylesheet" href="index.css">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@340&display=swap" rel="stylesheet">
     <title>PINS Project</title>
   </head>
   <body>
-    <main>
-      <div id="topIslandUI">
-        <h3 id="animatedText"></h3>
+    <header>
+      <div class="logo"></div>
+      <div class="headButtons">
+        <button class="headButton" id="menuToggle" data-sprite-y="0"></button>
+        <button class="headButton" id="charToggle" data-sprite-y="2"></button>
+        <button class="headButton" id="meterToggle" data-sprite-y="3"></button>
       </div>
-      <div id="bottomIslandGuideUI">
-        <h3 id="bottomIslandGuideText"></h3>
+    </header>
+    <aside id="sideMenuWrapper">
+      <div class="sideMenu">
+        <ul>
+          <li><a href="#" draggable="false">About</a></li>
+          <li><a href="#" draggable="false">Credits</a></li>
+          <span class="menuTitle">General</span>
+          <ul class="subMenu">
+            <li><a href="#" draggable="false">What is Misinformation in Physics?</a></li>
+            <li><a href="#" draggable="false">Blob</a></li>
+            <li><a href="#" draggable="false">This is really cool</a></li>
+          </ul>
+          <span class="menuTitle">Another Section</span>
+          <ul class="subMenu">
+            <li><a href="#" draggable="false">What should I put here?</a></li>
+            <li><a href="#" draggable="false">I don't know</a></li>
+            <li><a href="#" draggable="false">We should probably figure it out</a></li>
+            <li><a href="#" draggable="false">Ya I guess so</a></li>
+            <li><a href="#" draggable="false">A</a></li>
+            <li><a href="#" draggable="false">hallå</a></li>
+            <li><a href="#" draggable="false">mycket sämre än förväntat, och då var förväntningarna ändå inte så höga.</a></li>
+            <li><a href="#" draggable="false">lol</a></li>
+            <li><a href="#" draggable="false">lalallalalala</a></li>
+          </ul>
+        </ul>
       </div>
-      <div id="bottomIslandButtonsUI">
-        <div class="buttonWrapper">
-          <div class="shadowButton">
-            <button id="button-1"><h3 class="buttonText"></h3></button>
-          </div>
-        </div>
-      </div>
-      <form id="textInput"><input type="text" spellcheck="false" placeholder="Type something in here"></input></form>
-    </main>
+    </aside>
     <canvas id="game"></canvas>
-    <!--<script type="module" src="/scripts/toggleThemes.js"></script>
-    <script type="module" src="/scripts/story.js"></script>
-    <script type="module" src="/scripts/guide.js"></script>
-    <script type="module" src="/scripts/buttons.js"></script>
-    <script type="module" src="/scripts/main.js"></script>-->
     <script type="module" src="/scripts/game.js"></script>
+    <script type="module" src="/scripts/buttons.js"></script>
   </body>
 </html>

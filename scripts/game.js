@@ -14,13 +14,13 @@ charSheet.src = './assets/char.png';
 const objectsToDraw = [
   {
     image: paintingImage,
-    x: 2,
+    x: -22.5,
     y: 1
   },
   {
     image: shroomsImage,
     x: 14,
-    y: 8
+    y: -40
   },
   {
     image: charSheet,
@@ -61,9 +61,9 @@ charSheet.onload = onImageLoad;
 let freeCam = false; // freeCam is mostly for use in programming
 
 let centerOnLoad = false; // Initially not centered (Variable to track it only centers on load)
-let globalScale = 10; // Set this scale globally, it will affect size and positioning
-const minScale = 5; // Minimum scale limit
-const maxScale = 20; // Maximum scale limit
+let globalScale = 4; // Set this scale globally, it will affect size and positioning
+const minScale = 4; // Minimum scale limit
+const maxScale = 4; // Maximum scale limit
 const dpr = window.devicePixelRatio || 1;
 
 let isDragging = false;
@@ -306,7 +306,6 @@ function updateCharDirection() {
     } else {
         charDirection = '';
     }
-    console.log(charDirection)
 }
   
 // Set the animation speed (lower value = faster animation)

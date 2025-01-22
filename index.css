@@ -1,8 +1,12 @@
 html, body {
+  --pixelScale: 2.5px;
   touch-action: none; /* Disables all touch gestures, including pinch zoom */
   overflow: hidden; /* Prevents scrolling and zooming by accident */
   width: 100%;
   height: 100%;
+}
+body {
+  overscroll-behavior: none;
 }
 
 #game {
@@ -25,294 +29,208 @@ canvas {
   /* Enforce pixel-perfect scaling for pixel art */
   image-rendering: pixelated;
   image-rendering: crisp-edges; /* Fallback for older browsers */
+  transform: none; /* Prevent scaling by default */
 }
 
 main {
-  --main-padding: 28pt;
-  --main-width: calc(100vw - 2*(var(--main-padding))); /* Define a custom property */
-  --main-tb-padding: clamp(12pt, calc(2vw + 12pt), 28pt);
-  visibility: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--main-padding);
-  padding-top: var(--main-tb-padding);
-  padding-bottom: var(--main-tb-padding);
-  width: var(--main-width);
-  height: calc(100% - 2*(var(--main-padding)));
+  display: grid;
   overflow: hidden;
   z-index: 0;
 }
-@media (max-width: calc(460px + 2*28pt)) {
-  main {
-    --main-padding: clamp(12pt, calc(2vw + 12pt), 28pt);
-  }
-}
 
-#topIslandUI {
-  position: relative;
-  border-radius: 16pt;
-  padding: 16pt;
+header {
+  position: absolute;
   top: 0;
   left: 0;
-  display: none;
-  align-self: center;
-  width: calc(var(--main-width) - 2*(16pt));
-  max-width: calc(460px - 2*(16pt));
-  height: fit-content;
-  background-color: rgba(44, 44, 49, 0.9);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  z-index: 1000;
-}
-#topIslandUI.lightMode {
-
-  background-color: rgba(246, 246, 249, 0.9);
-}
-
-#bottomIslandGuideUI {
-  position: absolute;
-  border-radius: 12pt;
-  padding: 12pt;
-  margin-bottom: var(--main-tb-padding);
-  bottom: 0;
-  display: none;
-  align-self: center;
-  text-align: center;
-  width: fit-content;
-  max-width: calc(460px - 2*(16pt));
-  height: 0;
-  background-color: rgba(44, 44, 49, 0.8); /* Default background color */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  z-index: 1000;
-
-  /* Apply animation */
-  animation: fadeOpacity 2s infinite; /* 2s duration, looping infinitely */
-}
-#bottomIslandGuideUI.lightMode {
-  background-color: rgba(247, 247, 250, 0.8); /* Default for light mode */
-}
-@keyframes fadeOpacity {
-  0% {background-color: rgba(44, 44, 49, 0.4);}
-  50% {background-color: rgba(44, 44, 49, 0.8);}
-  100% {background-color: rgba(44, 44, 49, 0.4);}
-}
-#bottomIslandGuideUI.lightMode {
-  /* Separate animation for light mode */
-  animation: fadeOpacityLight 2s infinite;
-}
-@keyframes fadeOpacityLight {
-  0% {background-color: rgba(247, 247, 250, 0.4);}
-  50% {background-color: rgba(247, 247, 250, 0.8);}
-  100% {background-color: rgba(247, 247, 250, 0.4);}
-}
-
-form {
-  all: unset;
-  position: absolute;
-  align-self: center;
-  display: none;
-  visibility: none;
-  opacity: 0;
-  transition: opacity 0.3s, visibility 0.3s;
-  bottom: var(--main-tb-padding);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  z-index: 1000;
-}
-
-input {
-  all: unset;
-  align-self: center;
-  border-radius: 100pt; /* yep */
-  border-style: solid;
-  border-width: calc(2pt + 1px);
-  padding: 2pt 6pt 2pt 6pt;
-  margin: 0;
-  width: calc(var(--main-width) - 2*(6pt) - 7px);
-  max-width: calc(360px - 2*(6pt) - 7px);
-  font-family: "Lexend", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  text-align: left;
-  font-size: 12pt;
-  color: white;
-  border-color: hsla(240, 4%, 18%, 0.9);
-  background-color: hsla(240, 4%, 18%, 0.5);
-  --placeholderTextColor: hsla(240, 3%, 22%, 0.9);
-}
-input.lightMode {
-  color: rgb(22, 22, 22);
-  border-color: hsla(240, 20%, 97%, 0.8);
-  background-color: hsla(240, 20%, 97%, 0.5);
-  --placeholderTextColor: hsla(240, 5%, 91%, 0.8);
-}
-input::placeholder {
-  color: var(--placeholderTextColor);
-}
-
-#bottomIslandButtonsUI {
-  position: absolute;
-  border-radius: 18pt;
-  padding: 18pt 6pt 20pt 6pt;
-  gap: 6pt;
-  margin-bottom: var(--main-tb-padding);
-  bottom: 0;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  align-self: center;
-  width: fit-content;
-  min-width: fit-content;
-  height: 0;
-  background-color: hsla(240, 5%, 18%, 0.9); /* Default background color */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  z-index: 1000;
-  --buttonResting: hsl(240, 3%, 30%);
-  --buttonHover: hsl(240, 3%, 26%);
-  --buttonActive: hsl(240, 3%, 26%);
-  --shadowResting: hsl(240, 5%, 18%);
-  --shadowHover: hsl(240, 5%, 16%);
-}
-#bottomIslandButtonsUI.lightMode {
-  background-color: hsla(240, 23%, 97%, 0.9); /* Default for light mode */
-  --buttonResting: hsl(240, 21%, 100%);
-  --buttonHover: hsl(240, 21%, 96%);
-  --buttonActive: hsl(240, 21%, 96%);
-  --shadowResting: hsl(240, 23%, 88%);
-  --shadowHover: hsl(240, 23%, 86%);
-}
-
-.buttonWrapper {
-  position: relative;
-  display: inline-flex; /* Prevent shadow overlap with other buttons */
-  border-radius: 14pt;
-  margin-top: -14pt;
-  height: calc(2*14pt + 2pt);
-}
-
-.shadowButton {
-  visibility: visible;
-  padding: 0;
-  border-radius: 14pt;
-  height: 28pt;
-  margin-top: 2pt;
-  background-color: var(--shadowResting);
-  z-index: 0;
-}
-.shadowButton.hover {
-  background-color: var(--shadowHover);
-}
-.shadowButton.active {
-  visibility: none;
-}
-
-button {
-  all: unset;
-  position: relative;
-  border-radius: 14pt;
-  text-align: center;
-  min-width: fit-content;
-  padding: 14pt;
-  height: 0;
-  top: -2pt;
-  background-color: var(--buttonResting);
-  z-index: 100;
-}
-button.hover {
-  background-color: var(--buttonHover);
-}
-button.active {
-  background-color: var(--buttonActive);
-  transform: translateY(2pt);
+  width: 100vw;
+  min-width: 320px;
+  height: calc(var(--pixelScale) * 20);
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  padding: calc(var(--pixelScale) * 4);
+  z-index: 10000;
 }
 
 body {
   margin: 0;
 }
 
-h1, h2, h3 {
-  margin: 0;
-  font-family: "Lexend", sans-serif;
-  font-weight: 400;
+@font-face {
+  font-family: 'mcPixel';
+  src: url('./assets/mcPixel.woff2') format('woff2');
+  font-weight: normal;
   font-style: normal;
 }
+
+h1, h2, h3, p, a, span {
+  margin: 0;
+  font-family: 'mcPixel', sans-serif;
+}
 h1 {
-  font-size: 48pt;
+  font-size: 42.2px; 
 }
 h2 {
-  font-size: 24pt;
+  font-size: 24.1px; 
 }
 h3 {
   display: inline-block;
-  font-size: 12pt;
+  font-size: 24.1px;
+}
+p {
+  font-size: calc(24.1px * 0.5); 
+}
+span {
+  font-size: calc(24.1px * 0.5);
+  cursor: default;
+  transition: color 0.2s ease;
+}
+span:hover {
+  color: rgb(97, 70, 60);
+}
+a {
+  opacity: 1;
+  font-size: calc(24.1px * 0.5);
+  text-decoration: none;
+  color: rgb(163, 123, 94);
+  transition: color 0.2s ease; /* Smooth transition */
+} 
+a:hover {
+  color: rgb(124, 96, 82);
+}
+a:active {
+  color: rgb(97, 70, 60);
+}
+ul {
+  list-style-type: none; /* Removes the bullets */
+  padding: 0; /* Optional: Removes any default padding */
+  margin: 0;
 }
 
-#animatedText {
-  display: block;
-  width: 100%;
-  color: white;
-  word-wrap: break-word;
-  white-space: normal;
+.subMenu li {
+  position: relative;
+  padding-left: calc((24.1px * 8/7 + 0.5px) * 0.5); /* Space for custom bullet */
 }
-#animatedText.lightMode {
-  color: rgb(22, 22, 22);
+.subMenu li a {
+  position: relative;
+  display: block; /* Make the <a> fill the whole width of the <li> */
+  text-decoration: none; /* Remove underline */
+  color: rgb(163, 123, 94); /* Default text color */
+  transition: color 0.2s ease; /* Smooth color change */
 }
-
-#bottomIslandGuideText {
-  display: block;
-  width: 100%;
-  color: white;
-  word-wrap: break-word;
-  white-space: normal;
-  margin-top: -8pt;
+.subMenu li::before {
+  content: '\2022'; /* Unicode for bullet point */
+  font-family: 'mcPixel';
+  position: absolute;
+  left: 0;
+  top: calc(20.7px * -0.5);
+  font-size: 20px; /* Size of the bullet */
+  color: rgb(163, 123, 94); /* Normal bullet color */
+  transition: color 0.2s ease; /* Smooth transition */
 }
-#bottomIslandGuideText.lightMode {
-  color: rgb(22, 22, 22);
+/* Hover state for both the bullet and text */
+li:hover::before,
+li:hover a {
+  color: rgb(124, 96, 82); /* Change color on hover */
 }
-
-.buttonText {
-  display: block;
-  width: 100%;
-  color: white;
-  word-wrap: break-word;
-  white-space: nowrap;
-  margin-top: -8pt;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-.buttonText.lightMode {
-  color: rgb(22, 22, 22);
+/* Active state (click) */
+li:active::before,
+li:active a {
+  color: rgb(97, 70, 60);
 }
 
-.word {
+span, li a {
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+}
+
+.menuTitle {
   display: inline-block;
-  opacity: 0; /* Initially hide the word */
+  padding-top: calc(24.1px * 0.5); /* Adds space above based on the font size */
+  color: rgb(124, 96, 82);
 }
 
-.char {
-  display: inline-block;
-  opacity: 0; /* Start with invisible characters */
-  animation: fadeInUp 0.4s forwards;
+.headButtons {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-right: calc(var(--pixelScale) * 6);
+  transition: opacity 0.2s ease; /* Smooth opacity transition */
 }
 
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(4px);
+.headButton {
+  width: calc(var(--pixelScale) * 18);  /* 18x20 sprites */
+  height: calc(var(--pixelScale) * 20); /* 18x20 sprites */
+  margin: 0 calc(var(--pixelScale) * 2) 0 calc(var(--pixelScale) * 2);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  background-image: url('./assets/headButtons.png');
+  padding: 0;
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  transition: opacity 0.2s ease;
+  opacity: 1; /* Initially visible */
+}
+.headButton.hidden {
+  opacity: 0.4;
+  pointer-events: none; /* Disable interaction */
+}
+
+#sideMenuWrapper {
+  height: 100%;
+  width: calc(var(--pixelScale) * 122); /* 24 to align with buttons*/
+  background-color: rgb(214, 186, 144);
+  padding-top: calc((calc(var(--pixelScale) * 8)) + calc(var(--pixelScale) * 20));
+  position: fixed;
+  top: 0;
+  right: 0;
+  transform: translateX(150%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+  box-shadow: calc(var(--pixelScale) * -4) 0 0 rgb(228, 208, 171), calc( var(--pixelScale) * -6) 0 0 rgb(163, 123, 94);
+}
+#sideMenuWrapper.show {
+  transform: translateX(0%);
+  opacity: 0.9;
+}
+@media (max-width: 320px) {
+  #sideMenuWrapper {
+    left: 15px !important;
+    right: auto;
   }
-  90% {
-    transform: translateY(-1px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+}
+
+.sideMenu {
+  display: flex;
+  width: calc(var(--pixelScale) * 122) - (var(--pixelScale) * 7);
+  height: calc(100% - 74px);
+  margin: 0 calc(var(--pixelScale) * 4) 0 calc(var(--pixelScale) * 6);
+  overflow-y: auto;
+  z-index: 10000;
+  
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgb(228, 208, 171) transparent; /* Red scrollbar, no background */
+}
+
+/* Webkit-based browsers */
+.sideMenu::-webkit-scrollbar {
+  width: calc(var(--pixelScale) * 2); /* Width of the scrollbar */
+}
+.sideMenu::-webkit-scrollbar-track {
+  background: transparent; /* Removes scrollbar background */
+  margin: var(--pixelScale); /* Adds space around the scrollbar */
+}
+.sideMenu::-webkit-scrollbar-thumb {
+  background-color: rgb(176, 143, 119); /* Default scrollbar color */
+  border: calc(var(--pixelScale) / 2) solid transparent; /* Space around the thumb */
+}
+.sideMenu::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(163, 123, 94); /* Hover state */
+}
+.sideMenu::-webkit-scrollbar-thumb:active {
+  background-color: rgb(137, 100, 95); /* Active state */
 }
