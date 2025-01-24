@@ -41,7 +41,7 @@ const totalImages = objectsToDraw.length; // Update to include charSheet
 function onImageLoad() {
   imagesLoaded++;
   if (imagesLoaded === totalImages) {
-    console.log("All images loaded");
+    console.log("All sprites loaded");
     adjustForRetina();  // Adjust for retina display and set canvas size
     draw();  // Draw the images once they're all loaded
   }
@@ -328,20 +328,39 @@ function cycleFrameX() {
 }
 
 let frameMoveInterval;
+let stoppedMoving = true;
+
 function charMove() {
     if (frameMoveInterval) return;
 
     frameMoveInterval = setInterval(() => {
+
         if (charStep < charStepMax) {
             charStep += charAcceleration;
         }
 
-        if (charDirection == 'down') {char.y += charStep;}
-        if (charDirection == 'up') {char.y -= charStep;}
-        if (charDirection == 'left') {char.x -= charStep;}
-        if (charDirection == 'right') {char.x += charStep;}
+        if (charDirection == 'down') {char.y += charStep; moved();}
+        else if (charDirection == 'up') {char.y -= charStep; moved();}
+        else if (charDirection == 'left') {char.x -= charStep; moved();}
+        else if (charDirection == 'right') {char.x += charStep; moved();}
+        else {
+          stoppedMoving = true;
+          window.stoppedMoving = stoppedMoving;
+        }
         draw();
     }, charStepInterval); // Use charAnimateSpeed for animation timing
+}
+
+function moved() {
+  stoppedMoving = false;
+  window.stoppedMoving = stoppedMoving
+  let meterWrapper = document.getElementById('meterWrapper');
+  let articleWrapper = document.getElementById('articleWrapper');
+  let autoCloseInProgress = window.autoCloseInProgress;
+  if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show')) && !autoCloseInProgress) {
+    const autoCloseEvent = new Event('autoClose');
+    window.dispatchEvent(autoCloseEvent);
+  } 
 }
 
 // Stop cycling frameX

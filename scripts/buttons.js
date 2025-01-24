@@ -11,8 +11,52 @@ function setButtonSprite(buttonId, spriteX, spriteY) {
   button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 6}px`;  // Scale the sprite to fit the button
 }
 
+let autoCloseInProgress = false
+let buttonClickedDuringTimeout = true
+window.autoCloseInProgress = autoCloseInProgress
+
+window.addEventListener('autoClose', () => {
+  window.autoCloseInProgress = autoCloseInProgress
+
+  if (autoCloseInProgress) {
+    return;
+  } else if (!autoCloseInProgress) {
+    autoCloseInProgress = true;
+    buttonClickedDuringTimeout = false;
+    autoClose(2000);
+  }
+});
+
+function autoClose(time) {
+  autoCloseInProgress = true;
+  setTimeout(() => {
+    if (buttonClickedDuringTimeout || stoppedMoving) {
+      autoCloseInProgress = false;
+      window.autoCloseInProgress = autoCloseInProgress;
+      return;
+    } else {
+      console.log('Menus closed due to movement');
+      let meterWrapper = document.getElementById('meterWrapper');
+      let articleWrapper = document.getElementById('articleWrapper');
+      if (meterWrapper.classList.contains('show')) {
+        handleButtonClick('meterToggle');
+        checkButtonHover('meterToggle');
+      } else if (articleWrapper.classList.contains('show')) {
+        handleButtonClick('menuToggle');
+        checkButtonHover('menuToggle');
+      }
+      setTimeout(() => {
+        autoCloseInProgress = false;
+        window.autoCloseInProgress = autoCloseInProgress;
+      }, 200);
+    }
+  }, time);
+}
+
 // Function to handle button click, toggle visibility, and manage state
 function handleButtonClick(buttonId) {
+  buttonClickedDuringTimeout = true
+
   const buttons = document.querySelectorAll('.headButton');
   const clickedButton = document.getElementById(buttonId);
   const sideMenuWrapper = document.getElementById('sideMenuWrapper'); // Get the sideMenuWrapper element
@@ -136,8 +180,12 @@ function closeArticle() {
 // Event listener function to handle sprite changes based on interaction
 function addButtonEventListeners(buttonId) {
   const button = document.getElementById(buttonId);
-  
+
+  // Track whether the button is being hovered over
+  button.isHovered = false;
+
   button.addEventListener('mouseover', () => {
+    button.isHovered = true;
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
   });
@@ -148,6 +196,7 @@ function addButtonEventListeners(buttonId) {
   });
 
   button.addEventListener('mouseout', () => {
+    button.isHovered = false;
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 0, spriteY); // Normal state (spriteX = 0)
   });
@@ -156,6 +205,21 @@ function addButtonEventListeners(buttonId) {
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
   });
+}
+
+// Function to check if the mouse is hovering over a specific button
+function checkButtonHover(buttonId) {
+  const button = document.getElementById(buttonId);
+  
+  if (button && button.isHovered) {
+    // The mouse is hovering over the button, update styles accordingly
+    const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
+    setButtonSprite(buttonId, 1, spriteY); // Update hover state sprite
+  } else {
+    // The mouse is not hovering over the button, update to normal state
+    const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
+    setButtonSprite(buttonId, 0, spriteY); // Normal state sprite
+  }
 }
 
 // Initialize sprites for each button and add the click event listener

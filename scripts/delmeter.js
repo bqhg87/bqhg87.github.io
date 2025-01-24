@@ -30,8 +30,6 @@ function updateMeterDisplay() {
       0 calc(var(--pixelScale) * -1 * var(--pxScaleMultiplier)) 0 ${shadowColor}, /* Top */
       0 calc(var(--pixelScale) * 1 * var(--pxScaleMultiplier)) 0 ${shadowColor} /* Bottom */
     `;
-
-    console.log(`Meter is at ${meter}%`);
 }
 
 // Function to calculate the HSL color for the gradient based on the meter value
