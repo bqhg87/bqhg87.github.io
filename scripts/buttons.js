@@ -17,6 +17,7 @@ function handleButtonClick(buttonId) {
   const clickedButton = document.getElementById(buttonId);
   const sideMenuWrapper = document.getElementById('sideMenuWrapper'); // Get the sideMenuWrapper element
   const meterWrapper = document.getElementById('meterWrapper'); // Get the meterWrapper element
+  const articleWrapper = document.getElementById('articleWrapper'); // Get the articleWrapper element
   
   // If the clicked button is already toggled, untoggle it and hide all menus
   const isToggled = clickedButton.dataset.toggled === 'true';
@@ -58,6 +59,12 @@ function handleButtonClick(buttonId) {
     if (meterWrapper.classList.contains('show')) {
       meterWrapper.classList.remove('show'); // Hide the meter wrapper
     }
+
+    // Close the articleWrapper if the menu is untoggled
+    if (buttonId === 'menuToggle' && articleWrapper.classList.contains('show')) {
+      articleWrapper.classList.remove('show'); // Close the articleWrapper
+      closeArticle(); // Revert the URL to the root
+    }
   }
 
   // If a different button (not menuToggle or meterToggle) is toggled, hide both the side menu and meter wrapper
@@ -68,6 +75,24 @@ function handleButtonClick(buttonId) {
     if (meterWrapper.classList.contains('show')) {
       meterWrapper.classList.remove('show'); // Hide the meter wrapper
     }
+  }
+}
+
+// Function to handle closing the article and reverting the URL
+function closeArticle() {
+  const articleWrapper = document.getElementById('articleWrapper'); // Get the articleWrapper element
+  const params = new URLSearchParams(window.location.search);
+
+  // Remove the article parameter from the URL
+  if (params.has('article')) {
+    params.delete('article');
+    const newUrl = `${window.location.pathname}${params.toString()}`; // Construct the new URL
+    window.history.replaceState(null, '', newUrl); // Revert to the root URL without the 'article' parameter
+  }
+
+  // Hide the articleWrapper if it's visible
+  if (articleWrapper.classList.contains('show')) {
+    articleWrapper.classList.remove('show');
   }
 }
 
@@ -116,8 +141,19 @@ function addToggleListeners() {
   });
 }
 
+// Check if the page loads with an article and toggle menuToggle if necessary
+function handleInitialArticleLoad() {
+  const params = new URLSearchParams(window.location.search);
+  const article = params.get('article'); // Extract article parameter from the URL
+  
+  if (article) {
+    handleButtonClick('menuToggle'); // Automatically toggle the menuToggle button
+  }
+}
+
 // Initialize buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
   initializeButtons();  // Initialize all buttons with sprites
   addToggleListeners();  // Add toggle event to each button
+  handleInitialArticleLoad(); // Automatically toggle menu if an article is present in the URL
 });

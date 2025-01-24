@@ -21,25 +21,21 @@
       <aside id="sideMenuWrapper">
         <div class="sideMenu">
           <ul>
-            <li><a href="#" draggable="false">About</a></li>
-            <li><a href="#" draggable="false">Credits</a></li>
+            <li><a href="?article=about" data-article="about" draggable="false">About</a></li>
+            <li><a href="?article=credits" data-article="credits" draggable="false">Credits</a></li>
             <span class="menuTitle">General</span>
             <ul class="subMenu">
-              <li><a href="#" draggable="false">What is Misinformation in Physics?</a></li>
-              <li><a href="#" draggable="false">Blob</a></li>
-              <li><a href="#" draggable="false">This is really cool</a></li>
+              <li><a href="?article=general1" data-article="general1" draggable="false">General 1</a></li>
+              <li><a href="?article=general2" data-article="general2" draggable="false">General 2</a></li>
+              <li><a href="?article=general3" data-article="general3" draggable="false">General 3</a></li>
             </ul>
             <span class="menuTitle">Another Section</span>
             <ul class="subMenu">
-              <li><a href="#" draggable="false">What should I put here?</a></li>
-              <li><a href="#" draggable="false">I don't know</a></li>
-              <li><a href="#" draggable="false">We should probably figure it out</a></li>
-              <li><a href="#" draggable="false">Ya I guess so</a></li>
-              <li><a href="#" draggable="false">A</a></li>
-              <li><a href="#" draggable="false">hallå</a></li>
-              <li><a href="#" draggable="false">mycket sämre än förväntat, och då var förväntningarna ändå inte så höga.</a></li>
-              <li><a href="#" draggable="false">lol</a></li>
-              <li><a href="#" draggable="false">lalallalalala</a></li>
+              <li><a href="?article=article1" data-article="article1" draggable="false">Article 1</a></li>
+              <li><a href="?article=article2" data-article="article2" draggable="false">Article 2</a></li>
+              <li><a href="?article=article3" data-article="article3" draggable="false">Article 3</a></li>
+              <li><a href="?article=article4" data-article="article4" draggable="false">Article 4</a></li>
+              <li><a href="?article=article5" data-article="article5" draggable="false">Article 5</a></li>
             </ul>
           </ul>
         </div>
@@ -51,11 +47,14 @@
       </div>
       <p id="meterLabel">Delusion Meter (%)</p>
     </aside>
-    <aside class="pxDivWrapper" id="articleWrapper"></aside>
+    <aside class="pxDivWrapper" id="articleWrapper">
+      <div class="article"></div>
+    </aside>
     <canvas id="game"></canvas>
     <script type="module" src="/scripts/game.js"></script>
     <script type="module" src="/scripts/buttons.js"></script>
     <script type="module" src="/scripts/pxdiv.js"></script>
     <script type="module" src="/scripts/delmeter.js"></script>
+    <script type="module" src="/scripts/articles.js"></script>
   </body>
 </html>
