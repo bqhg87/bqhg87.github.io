@@ -192,6 +192,9 @@ window.addEventListener('openCharMenu', () => {
     zoomingInProgress = true; // Set zooming in progress
     animateZoom();
   }
+  setTimeout(() => {
+    allowMove = false;
+  }, (150)) // Will be better once i code the character movement better with decelertation
 });
 
 window.addEventListener('closeCharMenu', () => {
@@ -207,9 +210,10 @@ window.addEventListener('closeCharMenu', () => {
     zoomingInProgress = true; // Set zooming in progress
     animateZoom();
   }
+  setTimeout(() => {
+    allowMove = true;
+  }, (zoomDuration - 150))
 });
-
-
 
 // Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
@@ -374,7 +378,7 @@ function updateCharDirection() {
   
 // Set the animation speed (lower value = faster animation)
 const charAnimateSpeed = 100; // In milliseconds, adjust as needed
-const charAcceleration = 0.666666666666666;
+let charAcceleration = 0.666666666666666;
 const charStepMax = 2;
 let charStep = 0;
 const charStepInterval = 35;
@@ -395,12 +399,14 @@ function cycleFrameX() {
 
 let frameMoveInterval;
 let stoppedMoving = true;
+let allowMove = true;
 
 function charMove() {
     if (frameMoveInterval) return;
 
     frameMoveInterval = setInterval(() => {
 
+      if (allowMove === true) {
         if (charStep < charStepMax) {
             charStep += charAcceleration;
         }
@@ -414,6 +420,7 @@ function charMove() {
           window.stoppedMoving = stoppedMoving;
         }
         draw();
+      }
     }, charStepInterval); // Use charAnimateSpeed for animation timing
 }
 
