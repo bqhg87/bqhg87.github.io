@@ -133,14 +133,10 @@ li a {
   color: rgb(163, 123, 94); /* Normal bullet color */
   transition: color 0.2s ease; /* Smooth transition */
 }
-/* Hover state for both the bullet and text */
-li:hover::before,
-li:hover a {
-  color: rgb(124, 96, 82); /* Change color on hover */
+li:hover::before, li:hover a {
+  color: rgb(124, 96, 82);
 }
-/* Active state (click) */
-li:active::before,
-li:active a {
+li:active::before, li:active a {
   color: rgb(97, 70, 60);
 }
 
@@ -269,10 +265,18 @@ span, li a {
   z-index: 1;
   overflow-y: auto;
   color: rgb(124, 96, 82);
+  opacity: 1;
+  transition: opacity 0.2s ease;
 
   /* For Firefox */
   scrollbar-width: thin;
   scrollbar-color: rgb(228, 208, 171) transparent; /* Red scrollbar, no background */
+}
+.article.fade-out {
+  opacity: 0;
+}
+.article.fade-in {
+  opacity: 1;
 }
 
 #meterWrapper {
@@ -297,6 +301,10 @@ span, li a {
 #meterWrapper .pxDivBG, #articleWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
+}
+
+#sideMenuWrapper.fade-out, #meterWrapper.fade-out, #articleWrapper.fade-out {
+  opacity: 0; /* Make the element fade out */
 }
 
 #meterBG {
@@ -392,4 +400,9 @@ span, li a {
   background-position: calc(var(--pixelScale) * -8 * var(--pxScaleMultiplier)) calc(var(--pixelScale) * -8 * var(--pxScaleMultiplier));
   bottom: 0;
   right: 0;
+}
+
+.fadeOut {
+  transition: opacity 0.2 ease;
+  opacity: 0;
 }

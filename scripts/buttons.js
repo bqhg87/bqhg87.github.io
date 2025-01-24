@@ -38,33 +38,56 @@ function handleButtonClick(buttonId) {
     // Handle menuToggle logic for sideMenuWrapper
     if (buttonId === 'menuToggle') {
       sideMenuWrapper.classList.add('show'); // Show the side menu
-      meterWrapper.classList.remove('show'); // Hide the meterWrapper if sideMenu is shown
+      meterWrapper.classList.add('fade-out');
+      setTimeout(() => {
+        meterWrapper.classList.remove('show', 'fade-out'); // Hide the meterWrapper if sideMenu is shown
+      }, 200);
     }
     
     // Handle meterToggle logic for meterWrapper
     if (buttonId === 'meterToggle') {
       meterWrapper.classList.add('show'); // Show the meterWrapper
-      sideMenuWrapper.classList.remove('show'); // Hide the sideMenu if meterWrapper is shown
+      sideMenuWrapper.classList.add('fade-out');
+      articleWrapper.classList.add('fade-out');
+      setTimeout(() => {
+      sideMenuWrapper.classList.remove('show', 'fade-out'); // Hide the sideMenu if meterWrapper is shown
+      articleWrapper.classList.remove('show', 'fade-out');
+      closeArticle();
+      }, 200);
     }
   } else {
-    // If it's toggled, hide the menu and show all buttons again
+    // Fade out the elements instead of removing them immediately
+    if (sideMenuWrapper.classList.contains('show')) {
+      sideMenuWrapper.classList.add('fade-out'); // Add fade-out class
+    }
+    if (meterWrapper.classList.contains('show')) {
+      meterWrapper.classList.add('fade-out'); // Add fade-out class
+    }
+
+    // Close the articleWrapper if the menu is untoggled, and fade it out
+    if (buttonId === 'menuToggle' && articleWrapper.classList.contains('show')) {
+      articleWrapper.classList.add('fade-out'); // Add fade-out class immediately
+    }
+
     buttons.forEach(button => {
       button.classList.remove('hidden'); // Show all buttons
     });
-    
-    // Hide the side menu and meter wrapper if they're visible
-    if (sideMenuWrapper.classList.contains('show')) {
-      sideMenuWrapper.classList.remove('show'); // Hide the side menu
-    }
-    if (meterWrapper.classList.contains('show')) {
-      meterWrapper.classList.remove('show'); // Hide the meter wrapper
-    }
 
-    // Close the articleWrapper if the menu is untoggled
-    if (buttonId === 'menuToggle' && articleWrapper.classList.contains('show')) {
-      articleWrapper.classList.remove('show'); // Close the articleWrapper
-      closeArticle(); // Revert the URL to the root
-    }
+    const button = document.getElementById(buttonId);
+    const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
+    setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
+
+    // After fade-out, hide all elements and show buttons again
+    setTimeout(() => {
+
+      // After the fade-out transition, remove the 'show' class to hide the elements
+      sideMenuWrapper.classList.remove('show', 'fade-out');
+      meterWrapper.classList.remove('show', 'fade-out');
+      articleWrapper.classList.remove('show', 'fade-out'); // Ensure articleWrapper is hidden
+
+      // Trigger the article closing function after hiding the article
+      closeArticle();
+    }, 200); // Delay should match the duration of the fade-out animation (e.g., 300ms)
   }
 
   // If a different button (not menuToggle or meterToggle) is toggled, hide both the side menu and meter wrapper
@@ -75,24 +98,37 @@ function handleButtonClick(buttonId) {
     if (meterWrapper.classList.contains('show')) {
       meterWrapper.classList.remove('show'); // Hide the meter wrapper
     }
+    if (articleWrapper.classList.contains('show')) {
+      articleWrapper.classList.remove('show'); // Hide the article wrapper if it's visible
+    }
   }
 }
 
 // Function to handle closing the article and reverting the URL
 function closeArticle() {
-  const articleWrapper = document.getElementById('articleWrapper'); // Get the articleWrapper element
+  const articleWrapper = document.getElementById('articleWrapper');
   const params = new URLSearchParams(window.location.search);
 
-  // Remove the article parameter from the URL
+  // Remove 'article' from the URL
   if (params.has('article')) {
     params.delete('article');
-    const newUrl = `${window.location.pathname}${params.toString()}`; // Construct the new URL
-    window.history.replaceState(null, '', newUrl); // Revert to the root URL without the 'article' parameter
+    const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+    window.history.replaceState(null, '', newUrl);
   }
 
-  // Hide the articleWrapper if it's visible
+  // Trigger fade-out animation
   if (articleWrapper.classList.contains('show')) {
-    articleWrapper.classList.remove('show');
+    articleWrapper.classList.add('fade-out'); // Add fade-out class
+
+    // Wait for the transition to finish before fully hiding
+    articleWrapper.addEventListener(
+      'transitionend',
+      () => {
+        articleWrapper.classList.remove('show', 'fade-out'); // Remove show and fade-out
+        articleWrapper.removeEventListener('transitionend', arguments.callee); // Prevent multiple triggers
+      },
+      { once: true }
+    );
   }
 }
 

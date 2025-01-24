@@ -2,26 +2,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const sideMenu = document.querySelector('#sideMenuWrapper');
     const articleWrapper = document.querySelector('#articleWrapper');
     const articleDiv = articleWrapper.querySelector('.article');
-    
+  
     // List of valid articles
-    const validArticles = ['about', 'credits', 'general1', 'general2', 'general3', 'article1', 'article2', 'article3', 'article4', 'article5']; // Add your articles here
-    
+    const validArticles = ['about', 'credits', 'general1', 'general2', 'general3', 'article1', 'article2', 'article3', 'article4', 'article5'];
+  
     // Simulate fetching article content
     const fetchArticleContent = (article) => {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve(`<h1>${article}</h1><p>This is content for the ${article} article.</p>`);
-        }, 500); // Simulate network delay
+          resolve(`<p>${article}</p><p>This is content for the ${article} article.</p>`);
+        }, 0); // Simulate network delay
       });
     };
   
+    // Crossfade effect implementation
+    const crossDissolve = async (newContent) => {
+      // Step 1: Fade out
+      articleDiv.classList.add('fade-out');
+  
+      // Wait for the fade-out animation (200ms)
+      await new Promise((resolve) => setTimeout(resolve, 200));
+  
+      // Step 2: Update content
+      articleDiv.innerHTML = newContent;
+  
+      // Step 3: Trigger fade-in
+      articleDiv.classList.remove('fade-out');
+      articleDiv.classList.add('fade-in');
+  
+      // Remove fade-in class after the animation
+      setTimeout(() => {
+        articleDiv.classList.remove('fade-in');
+      }, 200);
+    };
+  
     // Load an article
-    const loadArticle = async (article) => {
+    const loadArticle = async (article, updateURL = true) => {
       const content = await fetchArticleContent(article);
-      articleDiv.innerHTML = content;
+      await crossDissolve(content);
       articleWrapper.classList.add('show');
-      // Update the URL without reloading
-      history.pushState({ article }, '', `?article=${article}`);
+  
+      // Update the URL after the animation finishes
+      if (updateURL) {
+        history.pushState({ article }, '', `?article=${article}`);
+      }
     };
   
     // Redirect to the root URL if the article is invalid
@@ -49,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(location.search);
       const article = params.get('article');
       if (article && redirectToRootIfInvalid(article)) {
-        loadArticle(article);
+        loadArticle(article, false); // Avoid updating URL on popstate
       } else {
         articleWrapper.classList.remove('show');
         articleDiv.innerHTML = '';
@@ -60,6 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(location.search);
     const initialArticle = params.get('article');
     if (initialArticle && redirectToRootIfInvalid(initialArticle)) {
-      loadArticle(initialArticle);
+      loadArticle(initialArticle, false); // Avoid updating URL on initial load
     }
   });
