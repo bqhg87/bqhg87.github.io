@@ -48,4 +48,4 @@ const meterLabel = document.getElementById("meterLabel");
 const meterBG = document.getElementById("meterBG");
 
 updateMeterDisplay();
- updateDelMeter(); // Loop (for testing)
+// updateDelMeter(); // Loop (for testing)

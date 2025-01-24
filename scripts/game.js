@@ -60,8 +60,6 @@ let freeCam = false; // freeCam is mostly for use in programming
 
 let centerOnLoad = false; // Initially not centered (Variable to track it only centers on load)
 let globalScale = 4; // Set this scale globally, it will affect size and positioning
-const minScale = 4; // Minimum scale limit
-const maxScale = 4; // Maximum scale limit
 const dpr = window.devicePixelRatio || 1;
 
 let isDragging = false;
@@ -118,10 +116,10 @@ canvas.addEventListener('wheel', (event) => {
     let newScale = globalScale;
     if (event.deltaY < 0) {
     // Zoom in
-    newScale = Math.min(globalScale + 1, maxScale);
+    newScale = Math.min(globalScale + 1, globalScale); // Previously: newScale = Math.min(globalScale + 1, maxScale); 
     } else if (event.deltaY > 0) {
     // Zoom out
-    newScale = Math.max(globalScale - 1, minScale);
+    newScale = Math.max(globalScale - 1, globalScale); // Previously: newScale = Math.max(globalScale - 1, minScale);
     }
 
     if (newScale !== globalScale) {
@@ -143,6 +141,74 @@ canvas.addEventListener('wheel', (event) => {
     draw();
     }
 });
+
+function easeInOut(t) {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}
+let zoomStartTime = null;
+let zoomStartScale = globalScale;
+let zoomTargetScale = globalScale;
+let zoomDuration = 600; // Duration for zoom animation in milliseconds
+let zoomProgress = 0; // Progress of zoom (0 to 1)
+
+let zoomingInProgress = false; // Flag to check if zooming is currently in progress
+
+function animateZoom() {
+  const currentTime = Date.now();
+  
+  // If no start time, initialize it
+  if (!zoomStartTime) zoomStartTime = currentTime;
+
+  const elapsedTime = currentTime - zoomStartTime;
+  const progress = Math.min(elapsedTime / zoomDuration, 1); // Progress ranges from 0 to 1
+
+  // Apply easing function to smooth the transition
+  const easedProgress = easeInOut(progress);
+
+  // Update the global scale based on the easing progress
+  globalScale = zoomStartScale + (zoomTargetScale - zoomStartScale) * easedProgress;
+
+  draw(); // Redraw the canvas with the updated scale
+
+  // If the zoom animation is not complete, request the next frame
+  if (progress < 1) {
+    requestAnimationFrame(animateZoom);
+  } else {
+    zoomingInProgress = false; // Animation is complete
+    zoomStartTime = null; // Reset start time for the next animation
+  }
+}
+
+window.addEventListener('openCharMenu', () => {
+  if (zoomingInProgress && zoomTargetScale === 4) {
+    // If zooming is in progress and we're zooming out, reverse the zoom direction
+    zoomStartScale = globalScale;
+    zoomTargetScale = 8; // Zoom in
+    zoomStartTime = null; // Reset start time to handle the smooth reverse
+  } else if (!zoomingInProgress) {
+    // If no zooming is in progress, start the zoom-in transition
+    zoomStartScale = globalScale;
+    zoomTargetScale = 8; // Zoom in
+    zoomingInProgress = true; // Set zooming in progress
+    animateZoom();
+  }
+});
+
+window.addEventListener('closeCharMenu', () => {
+  if (zoomingInProgress && zoomTargetScale === 8) {
+    // If zooming is in progress and we're zooming in, reverse the zoom direction
+    zoomStartScale = globalScale;
+    zoomTargetScale = 4; // Zoom out
+    zoomStartTime = null; // Reset start time to handle the smooth reverse
+  } else if (!zoomingInProgress) {
+    // If no zooming is in progress, start the zoom-out transition
+    zoomStartScale = globalScale;
+    zoomTargetScale = 4; // Zoom out
+    zoomingInProgress = true; // Set zooming in progress
+    animateZoom();
+  }
+});
+
 
 
 // Adjust canvas for Retina scaling and fit the viewport

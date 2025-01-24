@@ -53,6 +53,9 @@ function autoClose(time) {
   }, time);
 }
 
+let lastClickedButton = null;
+let prev = false;
+
 // Function to handle button click, toggle visibility, and manage state
 function handleButtonClick(buttonId) {
   buttonClickedDuringTimeout = true
@@ -62,7 +65,24 @@ function handleButtonClick(buttonId) {
   const sideMenuWrapper = document.getElementById('sideMenuWrapper'); // Get the sideMenuWrapper element
   const meterWrapper = document.getElementById('meterWrapper'); // Get the meterWrapper element
   const articleWrapper = document.getElementById('articleWrapper'); // Get the articleWrapper element
+
+  const openCharMenuEvent = new Event('openCharMenu');
+  const closeCharMenuEvent = new Event('closeCharMenu');
   
+  if (!(lastClickedButton === 'charToggle') && (buttonId === 'charToggle') && (prev === false)) {
+    prev = true;
+    window.dispatchEvent(openCharMenuEvent);
+  } else if ((lastClickedButton === 'charToggle') && !(buttonId === 'charToggle') && (prev === true)) {
+    prev = false;
+    window.dispatchEvent(closeCharMenuEvent);
+  } else if ((lastClickedButton === 'charToggle') && (buttonId === 'charToggle') && (prev === false)) {
+    prev = true;
+    window.dispatchEvent(openCharMenuEvent);
+  } else if (buttonId === 'charToggle') {
+    prev = false;
+    window.dispatchEvent(closeCharMenuEvent);
+  }
+
   // If the clicked button is already toggled, untoggle it and hide all menus
   const isToggled = clickedButton.dataset.toggled === 'true';
 
@@ -98,10 +118,6 @@ function handleButtonClick(buttonId) {
       closeArticle();
       }, 200);
     } 
-
-    if (buttonId === 'charToggle') {
-      console.log('oh hi')
-    }
   } else {
     // Fade out the elements instead of removing them immediately
     if (sideMenuWrapper.classList.contains('show')) {
@@ -151,6 +167,8 @@ function handleButtonClick(buttonId) {
       closeArticle();
     }, 200);
   }
+
+  lastClickedButton = buttonId;
 }
 
 // Function to handle closing the article and reverting the URL
