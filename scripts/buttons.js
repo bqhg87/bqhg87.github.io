@@ -44,7 +44,6 @@ function handleButtonClick(buttonId) {
       }, 200);
     }
     
-    // Handle meterToggle logic for meterWrapper
     if (buttonId === 'meterToggle') {
       meterWrapper.classList.add('show'); // Show the meterWrapper
       sideMenuWrapper.classList.add('fade-out');
@@ -54,7 +53,7 @@ function handleButtonClick(buttonId) {
       articleWrapper.classList.remove('show', 'fade-out');
       closeArticle();
       }, 200);
-    }
+    } 
   } else {
     // Fade out the elements instead of removing them immediately
     if (sideMenuWrapper.classList.contains('show')) {
@@ -79,28 +78,30 @@ function handleButtonClick(buttonId) {
 
     // After fade-out, hide all elements and show buttons again
     setTimeout(() => {
-
-      // After the fade-out transition, remove the 'show' class to hide the elements
       sideMenuWrapper.classList.remove('show', 'fade-out');
       meterWrapper.classList.remove('show', 'fade-out');
-      articleWrapper.classList.remove('show', 'fade-out'); // Ensure articleWrapper is hidden
-
-      // Trigger the article closing function after hiding the article
+      articleWrapper.classList.remove('show', 'fade-out');
       closeArticle();
-    }, 200); // Delay should match the duration of the fade-out animation (e.g., 300ms)
+    }, 200);
   }
 
   // If a different button (not menuToggle or meterToggle) is toggled, hide both the side menu and meter wrapper
   if (buttonId !== 'menuToggle' && buttonId !== 'meterToggle') {
     if (sideMenuWrapper.classList.contains('show')) {
-      sideMenuWrapper.classList.remove('show'); // Hide the side menu
+      sideMenuWrapper.classList.add('fade-out'); // Hide the side menu
     }
     if (meterWrapper.classList.contains('show')) {
-      meterWrapper.classList.remove('show'); // Hide the meter wrapper
+      meterWrapper.classList.add('fade-out'); // Hide the meter wrapper
     }
     if (articleWrapper.classList.contains('show')) {
-      articleWrapper.classList.remove('show'); // Hide the article wrapper if it's visible
+      articleWrapper.classList.add('fade-out'); // Hide the article wrapper if it's visible
     }
+    setTimeout(() => {
+      sideMenuWrapper.classList.remove('show', 'fade-out');
+      meterWrapper.classList.remove('show', 'fade-out');
+      articleWrapper.classList.remove('show', 'fade-out');
+      closeArticle();
+    }, 200);
   }
 }
 
