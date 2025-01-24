@@ -1,7 +1,7 @@
-console.log('Booting harmOS...');
-
 const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
+
+window.delMeter = 64;
 
 const paintingImage = new Image();
 const shroomsImage = new Image();
@@ -50,8 +50,6 @@ function onImageLoad() {
 paintingImage.onload = onImageLoad;
 shroomsImage.onload = onImageLoad;
 charSheet.onload = onImageLoad;
-
-
 
 
 /////////////////////

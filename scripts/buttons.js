@@ -16,31 +16,59 @@ function handleButtonClick(buttonId) {
   const buttons = document.querySelectorAll('.headButton');
   const clickedButton = document.getElementById(buttonId);
   const sideMenuWrapper = document.getElementById('sideMenuWrapper'); // Get the sideMenuWrapper element
+  const meterWrapper = document.getElementById('meterWrapper'); // Get the meterWrapper element
   
-  // Check if the clicked button is already toggled (i.e., active)
+  // If the clicked button is already toggled, untoggle it and hide all menus
   const isToggled = clickedButton.dataset.toggled === 'true';
 
+  // Untoggle all buttons and reset sprites, hide all buttons
   buttons.forEach(button => {
-    if (button.id === buttonId) {
-      // Toggle the clicked button's state
-      clickedButton.dataset.toggled = isToggled ? 'false' : 'true';
-      
-      // Specific behavior for menuToggle
-      if (buttonId === "menuToggle") {
-        if (!isToggled) {
-          sideMenuWrapper.classList.add('show'); // Show the sideMenuWrapper
-        } else {
-          sideMenuWrapper.classList.remove('show'); // Hide the sideMenuWrapper
-        }
-        setButtonSprite(buttonId, 1, isToggled ? button.dataset.spriteY : 1); // Toggle sprite state
-      } else {
-        setButtonSprite(buttonId, 1, isToggled ? button.dataset.spriteY : 1); // Toggle sprite state
-      }
-    } else {
-      // Hide all other buttons when the clicked button is toggled
-      button.classList.toggle('hidden', !isToggled); // Show other buttons if the button is untoggled
-    }
+    button.dataset.toggled = 'false'; // Untoggle all buttons
+    setButtonSprite(button.id, 0, button.dataset.spriteY); // Reset all buttons' sprites
+    button.classList.add('hidden'); // Hide all buttons
   });
+
+  // If the clicked button wasn't toggled, toggle it and show it
+  if (!isToggled) {
+    clickedButton.dataset.toggled = 'true';
+    setButtonSprite(buttonId, 1, 1); // Set sprite to spriteY=1 for toggled state
+    clickedButton.classList.remove('hidden'); // Make the clicked button visible
+    
+    // Handle menuToggle logic for sideMenuWrapper
+    if (buttonId === 'menuToggle') {
+      sideMenuWrapper.classList.add('show'); // Show the side menu
+      meterWrapper.classList.remove('show'); // Hide the meterWrapper if sideMenu is shown
+    }
+    
+    // Handle meterToggle logic for meterWrapper
+    if (buttonId === 'meterToggle') {
+      meterWrapper.classList.add('show'); // Show the meterWrapper
+      sideMenuWrapper.classList.remove('show'); // Hide the sideMenu if meterWrapper is shown
+    }
+  } else {
+    // If it's toggled, hide the menu and show all buttons again
+    buttons.forEach(button => {
+      button.classList.remove('hidden'); // Show all buttons
+    });
+    
+    // Hide the side menu and meter wrapper if they're visible
+    if (sideMenuWrapper.classList.contains('show')) {
+      sideMenuWrapper.classList.remove('show'); // Hide the side menu
+    }
+    if (meterWrapper.classList.contains('show')) {
+      meterWrapper.classList.remove('show'); // Hide the meter wrapper
+    }
+  }
+
+  // If a different button (not menuToggle or meterToggle) is toggled, hide both the side menu and meter wrapper
+  if (buttonId !== 'menuToggle' && buttonId !== 'meterToggle') {
+    if (sideMenuWrapper.classList.contains('show')) {
+      sideMenuWrapper.classList.remove('show'); // Hide the side menu
+    }
+    if (meterWrapper.classList.contains('show')) {
+      meterWrapper.classList.remove('show'); // Hide the meter wrapper
+    }
+  }
 }
 
 // Event listener function to handle sprite changes based on interaction
@@ -48,25 +76,21 @@ function addButtonEventListeners(buttonId) {
   const button = document.getElementById(buttonId);
   
   button.addEventListener('mouseover', () => {
-    // Check if the button is toggled, if not use hover state spriteX = 1
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
   });
 
   button.addEventListener('mousedown', () => {
-    // Check if the button is toggled, if not use active state spriteX = 2
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 2, spriteY); // Active state (spriteX = 2)
   });
 
   button.addEventListener('mouseout', () => {
-    // Check if the button is toggled and revert to default state
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 0, spriteY); // Normal state (spriteX = 0)
   });
 
   button.addEventListener('mouseup', () => {
-    // Check if the button is toggled, if not use hover state spriteX = 1
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
   });
@@ -84,7 +108,7 @@ function initializeButtons() {
   });
 }
 
-// Event listener for the "menuToggle" and other buttons to handle toggle action
+// Event listener for the "menuToggle", "meterToggle", and other buttons to handle toggle action
 function addToggleListeners() {
   const buttons = document.querySelectorAll('.headButton');
   buttons.forEach(button => {
@@ -97,11 +121,3 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeButtons();  // Initialize all buttons with sprites
   addToggleListeners();  // Add toggle event to each button
 });
-
-
-// Disable zooming via mouse wheel or trackpad
-window.addEventListener('wheel', (e) => {
-  if (e.ctrlKey || e.metaKey) {  // Check if the user is using Ctrl or Meta key (which indicates zoom intent)
-    e.preventDefault();
-  }
-}, { passive: false });

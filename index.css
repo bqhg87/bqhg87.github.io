@@ -1,5 +1,10 @@
 html, body {
   --pixelScale: 2.5px;
+  --c0: rgb(241, 229, 198);
+  --c1: rgb(214, 186, 144);
+  --c2: rgb(228, 208, 171);
+  --c3: rgb(163, 123, 94);
+
   touch-action: none; /* Disables all touch gestures, including pinch zoom */
   overflow: hidden; /* Prevents scrolling and zooming by accident */
   width: 100%;
@@ -111,7 +116,7 @@ ul {
   position: relative;
   padding-left: calc((24.1px * 8/7 + 0.5px) * 0.5); /* Space for custom bullet */
 }
-.subMenu li a {
+li a {
   position: relative;
   display: block; /* Make the <a> fill the whole width of the <li> */
   text-decoration: none; /* Remove underline */
@@ -175,13 +180,13 @@ span, li a {
 }
 .headButton.hidden {
   opacity: 0.4;
-  pointer-events: none; /* Disable interaction */
+  /* pointer-events: none; /* Disable interaction */
 }
 
 #sideMenuWrapper {
   height: 100%;
   width: calc(var(--pixelScale) * 122); /* 24 to align with buttons*/
-  background-color: rgb(214, 186, 144);
+  background-color: var(--c2);
   padding-top: calc((calc(var(--pixelScale) * 8)) + calc(var(--pixelScale) * 20));
   position: fixed;
   top: 0;
@@ -190,11 +195,11 @@ span, li a {
   opacity: 0;
   transition: opacity 0.2s ease;
   z-index: 1000;
-  box-shadow: calc(var(--pixelScale) * -4) 0 0 rgb(228, 208, 171), calc( var(--pixelScale) * -6) 0 0 rgb(163, 123, 94);
+  box-shadow: calc(var(--pixelScale) * -4) 0 0 var(--c0), calc( var(--pixelScale) * -6) 0 0 rgb(163, 123, 94);
 }
 #sideMenuWrapper.show {
   transform: translateX(0%);
-  opacity: 0.9;
+  opacity: 0.97;
 }
 @media (max-width: 320px) {
   #sideMenuWrapper {
@@ -235,8 +240,136 @@ span, li a {
 }
 
 #articleWrapper {
-  height: 100px;
-  width: 100px;
-  background-color: rgb(214, 186, 144);
+  --pxScaleMultiplier: 1.5;
+  height: calc(100% - (calc(var(--pixelScale) * 28 * 2)));
+  width: calc(100% - calc(var(--pixelScale) * (122 + 6)) - calc(var(--pixelScale) * 2 * 28));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  transform: translateX(150%);
+  position: fixed; /* Position relative to the viewport */
+  top: calc(var(--pixelScale) * 28);
+  left: calc(var(--pixelScale) * 28);
+}
+#articleWrapper.show {
+  transform: translateX(0); /* Adjust for the div's dimensions */
+  opacity: 0.97;
+}
+
+#meterWrapper {
+  --pxScaleMultiplier: 1;
+  height: calc(var(--pixelScale) * (20 + 6 + 4));
+  width: calc(var(--pixelScale) * 222);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  transform: translateX(150%);
+  position: fixed; /* Position relative to the viewport */
+  top: calc(var(--pixelScale) * 4);
+  left: 50%;
+}
+#meterWrapper.show {
+  transform: translateX(-50%); /* Adjust for the div's dimensions */
+  opacity: 0.97;
+}
+
+#meterWrapper .corner, #articleWrapper .corner {
+  background-image: url('./assets/uiCorners3.png');
+}
+#meterWrapper .pxDivBG, #articleWrapper .pxDivBG {
+  --c1: rgb(228, 208, 171);
+  --c2: rgb(241, 229, 198);
+}
+
+#meterBG {
+  position: relative;
+  top: calc(var(--pixelScale) * 7);
+  left: calc(var(--pixelScale) * 7);
+  height: calc(var(--pixelScale) * 7);
+  width: calc(var(--pixelScale) * (222 - 14));
+  background-color: blue;
+  box-shadow: 
+    calc(var(--pixelScale) * -1 * var(--pxScaleMultiplier)) 0 0 red, /* Left */
+    calc(var(--pixelScale) * 1 * var(--pxScaleMultiplier)) 0 0 red, /* Right */
+    0 calc(var(--pixelScale) * -1 * var(--pxScaleMultiplier)) 0 red, /* Top */
+    0 calc(var(--pixelScale) * 1 * var(--pxScaleMultiplier)) 0 red; /* Bottom */
+  z-index: 1005;
+}
+
+#meterFG {
+  background-color: lime;
+  height: 100%;
+  width: 66.6%;
+  max-width: 100%;
+}
+
+#meterLabel {
+  position: relative;
+  top: calc(var(--pixelScale) * 9);
+  text-align: center;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+}
+
+.pxDivWrapper {
+  min-width: calc(var(--pixelScale) * 10 * var(--pxScaleMultiplier));
+  min-height: calc(var(--pixelScale) * 10 * var(--pxScaleMultiplier));
   z-index: 1000;
+}
+
+.pxDivBG {
+  height: calc(100% - (calc(var(--pixelScale) * 8 * var(--pxScaleMultiplier))));
+  width: calc(100% - (calc(var(--pixelScale) * 8 * var(--pxScaleMultiplier))));
+  background-color: var(--c1);
+  margin: calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier));
+  box-shadow: 
+    calc(var(--pixelScale) * -1 * var(--pxScaleMultiplier)) 0 0 var(--c1), /* Left */
+    calc(var(--pixelScale) * 1 * var(--pxScaleMultiplier)) 0 0 var(--c1), /* Right */
+    0 calc(var(--pixelScale) * -1 * var(--pxScaleMultiplier)) 0 var(--c1), /* Top */
+    0 calc(var(--pixelScale) * 1 * var(--pxScaleMultiplier)) 0 var(--c1), /* Bottom */
+    calc(var(--pixelScale) * -3 * var(--pxScaleMultiplier)) 0 0 var(--c2), /* Left */
+    calc(var(--pixelScale) * 3 * var(--pxScaleMultiplier)) 0 0 var(--c2), /* Right */
+    0 calc(var(--pixelScale) * -3 * var(--pxScaleMultiplier)) 0 var(--c2), /* Top */
+    0 calc(var(--pixelScale) * 3 * var(--pxScaleMultiplier)) 0 var(--c2), /* Bottom */
+    calc(var(--pixelScale) * -4 * var(--pxScaleMultiplier)) 0 0 var(--c3), /* Left */
+    calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier)) 0 0 var(--c3), /* Right */
+    0 calc(var(--pixelScale) * -4 * var(--pxScaleMultiplier)) 0 var(--c3), /* Top */
+    0 calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier)) 0 var(--c3); /* Bottom */
+  position: absolute; /* Position relative to the wrapper */
+  top: 0;
+  left: 0;
+}
+.corner {
+  position: absolute;
+  background-image: url('./assets/uiCorners2.png');
+  background-size: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 4 * 3) calc(var(--pixelScale) * var(--pxScaleMultiplier) * 4 * 3);
+  padding: 0;
+  border: none;
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  width: calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier)); /* 4px * 4px */
+  height: calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier));
+}
+.corner.top-left {
+  background-position: 0 0;
+  top: 0;
+  left: 0;
+}
+.corner.top-right {
+  background-position: calc(var(--pixelScale) * -8 * var(--pxScaleMultiplier)) 0;
+  top: 0;
+  right: 0;
+}
+.corner.bottom-left {
+  background-position: 0 calc(var(--pixelScale) * -8 * var(--pxScaleMultiplier));
+  bottom: 0;
+  left: 0;
+}
+.corner.bottom-right {
+  background-position: calc(var(--pixelScale) * -8 * var(--pxScaleMultiplier)) calc(var(--pixelScale) * -8 * var(--pxScaleMultiplier));
+  bottom: 0;
+  right: 0;
 }
