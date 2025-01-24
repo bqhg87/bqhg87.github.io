@@ -264,6 +264,7 @@ span, li a {
   padding-right: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 1);
   z-index: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   color: rgb(124, 96, 82);
   opacity: 1;
   transition: opacity 0.2s ease;

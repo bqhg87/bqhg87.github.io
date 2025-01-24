@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchArticleContent = (article) => {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve(`<p>${article}</p><p>This is content for the ${article} article.</p>`);
+          resolve(`<p style="grid-column: 1 / 2;">${article}</p><p style="grid-column: 2 / span 2;">This is content for the ${article} article.</p>`);
         }, 0); // Simulate network delay
       });
     };

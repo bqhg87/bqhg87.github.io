@@ -98,6 +98,10 @@ function handleButtonClick(buttonId) {
       closeArticle();
       }, 200);
     } 
+
+    if (buttonId === 'charToggle') {
+      console.log('oh hi')
+    }
   } else {
     // Fade out the elements instead of removing them immediately
     if (sideMenuWrapper.classList.contains('show')) {
