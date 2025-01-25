@@ -186,15 +186,10 @@ window.closeArticle = function() {
   if (articleWrapper.classList.contains('show')) {
     articleWrapper.classList.add('fade-out'); // Add fade-out class
 
-    // Wait for the transition to finish before fully hiding
-    articleWrapper.addEventListener(
-      'transitionend',
-      () => {
-        articleWrapper.classList.remove('show', 'fade-out'); // Remove show and fade-out
-        articleWrapper.removeEventListener('transitionend', arguments.callee); // Prevent multiple triggers
-      },
-      { once: true }
-    );
+    setTimeout(() => {
+      articleWrapper.classList.remove('show', 'fade-out'); // Remove show and fade-out
+      updateHeadButtonsVisibility();
+    }, 200);
   }
 
   // Check if menuToggle was not pressed (i.e., side menu is not visible)
@@ -206,6 +201,7 @@ window.closeArticle = function() {
     sideMenuWrapper.classList.add('show');
   }
 }
+
 
 
 // Event listener function to handle sprite changes based on interaction

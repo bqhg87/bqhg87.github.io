@@ -4,14 +4,11 @@ function setCloseMenuButtonSprite(buttonId, spriteX, spriteY) {
     const buttonWidth = button.offsetWidth;
     const buttonHeight = button.offsetHeight;
     
-    // Adjust for retina scaling (assuming 2x scaling for retina displays)
-    const scaleFactor = window.devicePixelRatio || 1;
+    const backgroundPositionX = -spriteX * buttonWidth; // Negative offset for X-axis
+    const backgroundPositionY = -spriteY * buttonHeight; // Negative offset for Y-axis
     
-    const backgroundPositionX = -spriteX * buttonWidth / scaleFactor; // Negative offset for X-axis
-    const backgroundPositionY = -spriteY * buttonHeight / scaleFactor; // Negative offset for Y-axis
-    
-    button.style.backgroundPosition = `${backgroundPositionX * 2}px ${backgroundPositionY}px`;
-    button.style.backgroundSize = `${buttonWidth * 3 / 2 * scaleFactor}px ${buttonHeight / 2 * scaleFactor}px`; // Scale the sprite to fit the button
+    button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
+    button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 1}px`;  // Scale the sprite to fit the button    
 }
 
 // Function to handle sprite changes for the closeMenuButton (regular, hover, active)

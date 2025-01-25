@@ -457,6 +457,9 @@ span, li a {
     opacity: 0;
     pointer-events: none; /* Disable interaction */
   }
+  body.article-open header {
+    transform: translateY(1500%);
+  }
   #articleWrapper {
     left: calc(((100vw - 280px) / 338) * (2.5 * 28));
     right: calc(((100vw - 280px) / 338) * (2.5 * 28));
