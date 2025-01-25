@@ -9,9 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Simulate fetching article content
   const fetchArticleContent = (article) => {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(`<p style="height: fit-content;">${article}</p><p style="grid-column: span 2; height: fit-content;">This is content for the ${article} article. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam lobortis mattis tempor. Fusce quam nisi, malesuada sed sodales a, viverra sed neque. Proin ac fermentum lacus. In eu vehicula sapien, aliquam ultrices felis. Donec eget odio et turpis faucibus fermentum. Integer non ligula sed justo feugiat dignissim a quis sapien. Quisque sit amet neque at dolor sollicitudin molestie non vel odio. Suspendisse venenatis justo sed lectus aliquet tristique. Quisque sit amet ante ut nisi pharetra varius.</p><div class="reserved"></div>`);
-      }, 0); // Simulate network delay
+      resolve(`<p style="height: fit-content;">${article}</p><p style="grid-column: span 2; height: fit-content;">This is content for the ${article} article. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam lobortis mattis tempor. Fusce quam nisi, malesuada sed sodales a, viverra sed neque. Proin ac fermentum lacus. In eu vehicula sapien, aliquam ultrices felis. Donec eget odio et turpis faucibus fermentum. Integer non ligula sed justo feugiat dignissim a quis sapien. Quisque sit amet neque at dolor sollicitudin molestie non vel odio. Suspendisse venenatis justo sed lectus aliquet tristique. Quisque sit amet ante ut nisi pharetra varius.</p><div class="reserved"></div>`);
     });
   };
 
@@ -19,15 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const crossDissolve = async (newContent) => {
     articleDiv.classList.add('fade-out');
     await new Promise((resolve) => setTimeout(resolve, 200)); // Wait for fade-out animation
-
+  
     articleDiv.innerHTML = newContent;
-
+  
+    // Reset the scroll position to the top of the article
+    articleDiv.scrollTop = 0;
+  
     articleDiv.classList.remove('fade-out');
     articleDiv.classList.add('fade-in');
     setTimeout(() => {
       articleDiv.classList.remove('fade-in');
     }, 200);
   };
+  
 
   // Load an article
   const loadArticle = async (article, updateURL = true) => {

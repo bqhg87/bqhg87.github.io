@@ -213,6 +213,8 @@ function freezeDirection(direction, motionAllowed) {
   charDirectionHistory.push(direction);
   updateCharDirection();
   charDirectionHistory = [];
+  charMove();
+  stopCyclingFrameX();
   updateCharDirection();
   blockTravel = true;
   if (!motionAllowed) {
@@ -221,7 +223,7 @@ function freezeDirection(direction, motionAllowed) {
 }
 
 window.addEventListener('openCharMenu', () => {
-  freezeDirection('down', false)
+  freezeDirection('down', false);
   if (zoomingInProgress && zoomTargetScale === 4) {
     // If zooming is in progress and we're zooming out, reverse the zoom direction
     zoomStartScale = globalScale;
@@ -267,6 +269,11 @@ window.addEventListener('closeCharMenu', () => {
 
 // Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
+  charDirectionHistory = []; // stop character moving on resize otherwise it glitches
+  charMove();
+  stopCyclingFrameX();
+  updateCharDirection();
+
   // Set canvas size to match the window's inner width and height
   canvas.width = window.innerWidth * dpr;
   canvas.height = window.innerHeight * dpr;
