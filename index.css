@@ -54,9 +54,11 @@ header {
   height: calc(var(--pixelScale) * 20);
   display: flex;
   justify-content: space-between;
+  opacity: 1;
   align-items: center; 
   padding: calc(var(--pixelScale) * 4);
   z-index: 10000;
+  transition: opacity 0.2s ease;
 }
 
 body {
@@ -194,9 +196,16 @@ span, li a {
   padding: 0;
   opacity: 0.9;
   image-rendering: pixelated; /* Prevent anti-aliasing */
-  z-index: 1000;
+  z-index: 2000;
   margin-right: 27.5px;
   margin-top: 27.5px;
+}
+#closeMeter {
+  margin-right: 16.25px;
+  margin-top: 16.5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
 #sideMenuWrapper {
@@ -328,6 +337,7 @@ span, li a {
 #meterWrapper.show {
   transform: translateX(-50%); /* Adjust for the div's dimensions */
   opacity: 0.97;
+  z-index: 20000;
 }
 
 #meterWrapper .corner, #articleWrapper .corner {
@@ -452,13 +462,34 @@ span, li a {
     transform: translateX(-50%);
   }
 }
+@media (max-width: 908px) {
+  #meterWrapper {
+    width: calc(100vw - var(--pixelScale) * 140);
+  }
+  #meterBG {
+    width: calc(100vw - var(--pixelScale) * (140 + 14));
+  }
+}
+@media (max-width: 738px) {
+  body.meter-open header {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #closeMeter {
+    opacity: 0.9;
+    pointer-events: visible;
+  }
+  #meterBG {
+    width: calc(100% - var(--pixelScale) * (27));
+  }
+  #meterWrapper {
+    width: calc(738px - var(--pixelScale) * 140);
+  }
+}
 @media (max-width: 618px) {
-  body.article-open .headButtons {
+  body.article-open header {
     opacity: 0;
     pointer-events: none; /* Disable interaction */
-  }
-  body.article-open header {
-    transform: translateY(1500%);
   }
   #articleWrapper {
     left: calc(((100vw - 280px) / 338) * (2.5 * 28));
@@ -479,6 +510,19 @@ span, li a {
     grid-area: 1 / 3 / 2 / 4;
   }
 }
+@media (max-width: 408px) {
+  #meterBG {
+    width: calc(100% - var(--pixelScale) * (27));
+  }
+  #meterWrapper {
+    width: calc(100vw - var(--pixelScale) * 8);
+  }
+}
+@media (max-width: 490px) {
+  body.article-open header, body.meter-open header {
+    transform: translateY(1500%); /* ensures no interactions */
+  }
+}
 @media (max-width: 320px) {
   #sideMenuWrapper {
     left: 15px !important;
@@ -494,5 +538,11 @@ span, li a {
   }
   #articleWrapper.show {
     transform: translateX(0);
+  }
+  #meterWrapper {
+    width: calc(320px - var(--pixelScale) * (6));
+  }
+  #meterBG {
+    width: calc(100% - var(--pixelScale) * (27));
   }
 }

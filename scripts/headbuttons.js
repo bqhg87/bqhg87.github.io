@@ -53,6 +53,11 @@ function autoClose(time) {
   }, time);
 }
 
+window.closeMeter = function() {
+  handleButtonClick('meterToggle');
+  checkButtonHover('meterToggle');
+}
+
 let lastClickedButton = null;
 let prev = false;
 
@@ -144,6 +149,7 @@ function handleButtonClick(buttonId) {
       sideMenuWrapper.classList.remove('show', 'fade-out');
       meterWrapper.classList.remove('show', 'fade-out');
       articleWrapper.classList.remove('show', 'fade-out');
+      updateHeadButtonsVisibility();
       closeArticle();
     }, 200);
   }
@@ -167,6 +173,7 @@ function handleButtonClick(buttonId) {
     }, 200);
   }
 
+  updateHeadButtonsVisibility();
   lastClickedButton = buttonId;
 }
 
@@ -201,8 +208,6 @@ window.closeArticle = function() {
     sideMenuWrapper.classList.add('show');
   }
 }
-
-
 
 // Event listener function to handle sprite changes based on interaction
 function addButtonEventListeners(buttonId) {
@@ -272,11 +277,18 @@ function addToggleListeners() {
 // Function to check if article is open and viewport width is <= 618px
 window.updateHeadButtonsVisibility = function() {
   const articleWrapper = document.getElementById('articleWrapper');
+  const meterWrapper = document.getElementById('meterWrapper');
 
   if (window.innerWidth <= 618 && articleWrapper.classList.contains('show')) {
     document.body.classList.add('article-open');
   } else {
     document.body.classList.remove('article-open');
+  }
+
+  if (window.innerWidth <= 738 && meterWrapper.classList.contains('show')) {
+    document.body.classList.add('meter-open');
+  } else {
+    document.body.classList.remove('meter-open');
   }
 };
 

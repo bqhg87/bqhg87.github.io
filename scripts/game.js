@@ -604,5 +604,3 @@ function stopCyclingFrameX() {
     // Hypotenuse (distance between centers)
     return Math.sqrt(dx * dx + dy * dy);
   }
-  
-  

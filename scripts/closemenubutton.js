@@ -31,24 +31,22 @@ function addCloseMenuButtonEventListeners(buttonId) {
         button.isHovered = false;
         setCloseMenuButtonSprite(buttonId, 0, 0); // Regular state (spriteX = 0)
     });
-  
-    button.addEventListener('mouseup', () => {
-        setCloseMenuButtonSprite(buttonId, 1, 0); // Hover state (spriteX = 1)
-    });
-  
-    // Add click event to call closeArticle function
-    button.addEventListener('click', closeArticle); // Call closeArticle when button is clicked
 }
 
 // Function to initialize the closeMenuButton sprite
 function initializeCloseMenuButton() {
-    const button = document.getElementById('closeArticle');
-    
+    const articleButton = document.getElementById('closeArticle');
+    const meterButton = document.getElementById('closeMeter');
+
     // Set initial state to regular (spriteX = 0, spriteY = 0)
     setCloseMenuButtonSprite('closeArticle', 0, 0); // Regular state
+    setCloseMenuButtonSprite('closeMeter', 0, 0); // Regular state
     
     // Add event listeners for the hover/active states
     addCloseMenuButtonEventListeners('closeArticle');
+    articleButton.addEventListener('click', () => {closeArticle();});
+    addCloseMenuButtonEventListeners('closeMeter');
+    meterButton.addEventListener('click', () => {closeMeter();});
 }
 
 // Initialize the closeMenuButton on page load
@@ -59,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Function to check if the article has overflowed
 window.checkArticleOverflow = function() {
     const article = document.querySelector('.article');
-    const closeButton = document.querySelector('.closeMenuButton');
+    const closeButton = document.getElementById('closeArticle');
   
     // Check if the article has vertical overflow
     if (article.scrollHeight > article.clientHeight) {
@@ -74,5 +72,3 @@ window.checkArticleOverflow = function() {
 // Call the function on page load and window resize
 window.addEventListener('load', checkArticleOverflow);
 window.addEventListener('resize', checkArticleOverflow);
-  
-checkArticleOverflow();
