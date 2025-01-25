@@ -4,6 +4,7 @@ let meter = window.delMeter;
  let time = 0; // Time variable for smooth sinusoidal movement
  function updateDelMeter() {
     meter = 50 + 50 * Math.sin(time); // Oscillates between -50 and 50, then shifted to 0-100
+    // meter = window.delMeter;
     time += 0.05; // Increment time for the next frame
     updateMeterDisplay();
     requestAnimationFrame(updateDelMeter);
@@ -48,4 +49,4 @@ const meterLabel = document.getElementById("meterLabel");
 const meterBG = document.getElementById("meterBG");
 
 updateMeterDisplay();
-// updateDelMeter(); // Loop (for testing)
+updateDelMeter(); // Loop (for testing)

@@ -6,22 +6,14 @@ window.delMeter = 64;
 const paintingImage = new Image();
 const shroomsImage = new Image();
 const charSheet = new Image();
+const chickenNPC = new Image();
 paintingImage.src = './assets/painting.png';
 shroomsImage.src = './assets/shrooms.png';
+chickenNPC.src = './assets/chicken.png';
 charSheet.src = './assets/char.png';
 
 // List of objects to be drawn on the canvas (Replace with JSON and caching later)
 const objectsToDraw = [
-  {
-    image: paintingImage,
-    x: -22.5,
-    y: 1
-  },
-  {
-    image: shroomsImage,
-    x: 14,
-    y: -40
-  },
   {
     image: charSheet,
     x: -24,
@@ -29,9 +21,41 @@ const objectsToDraw = [
     frameX: 0,
     frameY: 0,
     frameWidth: 48,
-    frameHeight: 48
+    frameHeight: 48,
+    zIndex: 2
+  },
+  {
+    image: paintingImage,
+    x: -22.5,
+    y: 1,
+    frameWidth: 15,
+    frameHeight: 7,
+    zIndex: 1
+  },
+  {
+    image: shroomsImage,
+    name: 'shrooms',
+    x: 14,
+    y: -40,
+    frameWidth: 14,
+    frameHeight: 11,
+    zIndex: 1
+  },
+  {
+    image: chickenNPC,
+    name: 'chicken',
+    x: 120,
+    y: -14,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 16,
+    frameHeight: 16,
+    zIndex: 1
   }
 ];
+const char = objectsToDraw[0]; // Which one is the character to control?
+const chicken = objectsToDraw[3];
+const shrooms = objectsToDraw[2];
 
 // Track number of loaded images
 let imagesLoaded = 0;
@@ -43,12 +67,14 @@ function onImageLoad() {
   if (imagesLoaded === totalImages) {
     console.log("All sprites loaded");
     adjustForRetina();  // Adjust for retina display and set canvas size
+    chickenAnimate();
     draw();  // Draw the images once they're all loaded
   }
 }
 
 paintingImage.onload = onImageLoad;
 shroomsImage.onload = onImageLoad;
+chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
 
 
@@ -57,6 +83,7 @@ charSheet.onload = onImageLoad;
 /////////////////////
 
 let freeCam = false; // freeCam is mostly for use in programming
+let lowCamera = false;
 
 let centerOnLoad = false; // Initially not centered (Variable to track it only centers on load)
 let globalScale = 4; // Set this scale globally, it will affect size and positioning
@@ -148,7 +175,7 @@ function easeInOut(t) {
 let zoomStartTime = null;
 let zoomStartScale = globalScale;
 let zoomTargetScale = globalScale;
-let zoomDuration = 600; // Duration for zoom animation in milliseconds
+let zoomDuration = 500; // Duration for zoom animation in milliseconds
 let zoomProgress = 0; // Progress of zoom (0 to 1)
 
 let zoomingInProgress = false; // Flag to check if zooming is currently in progress
@@ -179,40 +206,63 @@ function animateZoom() {
   }
 }
 
+let blockTravel;
+let blockMotion;
+
+function freezeDirection(direction, motionAllowed) {
+  charDirectionHistory.push(direction);
+  updateCharDirection();
+  charDirectionHistory = [];
+  updateCharDirection();
+  blockTravel = true;
+  if (!motionAllowed) {
+    blockMotion = true;
+  }
+}
+
 window.addEventListener('openCharMenu', () => {
+  freezeDirection('down', true)
   if (zoomingInProgress && zoomTargetScale === 4) {
     // If zooming is in progress and we're zooming out, reverse the zoom direction
     zoomStartScale = globalScale;
-    zoomTargetScale = 8; // Zoom in
+    zoomTargetScale = 6; // Zoom in
     zoomStartTime = null; // Reset start time to handle the smooth reverse
+    setTimeout(() => {
+      allowMove = false;
+    }, (zoomDuration))
   } else if (!zoomingInProgress) {
     // If no zooming is in progress, start the zoom-in transition
     zoomStartScale = globalScale;
-    zoomTargetScale = 8; // Zoom in
+    zoomTargetScale = 6; // Zoom in
     zoomingInProgress = true; // Set zooming in progress
     animateZoom();
+    setTimeout(() => {
+      allowMove = false;
+    }, (0)) // Will be better once i code the character movement better with decelertation
   }
-  setTimeout(() => {
-    allowMove = false;
-  }, (150)) // Will be better once i code the character movement better with decelertation
 });
 
 window.addEventListener('closeCharMenu', () => {
-  if (zoomingInProgress && zoomTargetScale === 8) {
+  blockTravel = false;
+  blockMotion = false;
+  if (zoomingInProgress && zoomTargetScale === 6) {
     // If zooming is in progress and we're zooming in, reverse the zoom direction
     zoomStartScale = globalScale;
     zoomTargetScale = 4; // Zoom out
     zoomStartTime = null; // Reset start time to handle the smooth reverse
+    setTimeout(() => {
+      allowMove = true;
+    }, (0)) 
   } else if (!zoomingInProgress) {
     // If no zooming is in progress, start the zoom-out transition
     zoomStartScale = globalScale;
     zoomTargetScale = 4; // Zoom out
     zoomingInProgress = true; // Set zooming in progress
     animateZoom();
+    setTimeout(() => {
+      allowMove = true;
+    }, (zoomDuration))
   }
-  setTimeout(() => {
-    allowMove = true;
-  }, (zoomDuration - 150))
 });
 
 // Adjust canvas for Retina scaling and fit the viewport
@@ -248,9 +298,14 @@ function centerCamera() {
     const canvasCenterX = canvas.width / 2 / dpr;
     const canvasCenterY = canvas.height / 2 / dpr;
   
-    // Set translation such that the character is centered
-    translationX = canvasCenterX - (char.x * globalScale + charWidth / 2);
-    translationY = canvasCenterY - (char.y * globalScale + charHeight / 2);
+    if (lowCamera === true) {
+      translationX = canvasCenterX - (char.x * globalScale + charWidth / 2 + 60); // needs some variable dependant on relative direction of char to npc
+      translationY = canvasCenterY - (char.y * globalScale + charHeight / 2 - 200);
+    } else {
+      // Set translation such that the character is centered
+      translationX = canvasCenterX - (char.x * globalScale + charWidth / 2);
+      translationY = canvasCenterY - (char.y * globalScale + charHeight / 2);
+    }
 }
 
 
@@ -273,8 +328,11 @@ function draw() {
     centerCamera();
   }
 
-  // Loop through each object in objectsToDraw
-  objectsToDraw.forEach(obj => {
+  // Sort objects by zIndex (ascending order)
+  const sortedObjects = [...objectsToDraw].sort((a, b) => a.zIndex - b.zIndex);
+
+  // Loop through each object in the sorted array
+  sortedObjects.forEach(obj => {
     const { image, x, y, frameX, frameY, frameWidth, frameHeight } = obj;
 
     // Apply global scale to both size and position, considering the translation
@@ -294,43 +352,49 @@ function draw() {
   });
 }
 
-const char = objectsToDraw[2]; // The sprite character
+
 let charDirectionHistory = [];
 let keysPressed = [];
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 's' || event.key === 'ArrowDown') {
-        if (!charDirectionHistory.includes('down')) { 
-            charDirectionHistory.push('down');
-            charStep = 0;
-        }
-    } else if (event.key === 'w' || event.key === 'ArrowUp') {
-        if (!charDirectionHistory.includes('up')) { 
-            charDirectionHistory.push('up'); 
-            charStep = 0;
-        }
-    } else if (event.key === 'a' || event.key === 'ArrowLeft') {
-        if (!charDirectionHistory.includes('left')) { 
-            charDirectionHistory.push('left'); 
-            charStep = 0;
-        }
-    } else if (event.key === 'd' || event.key === 'ArrowRight') {
-        if (!charDirectionHistory.includes('right')) { 
-            charDirectionHistory.push('right'); 
-            charStep = 0;
-        }
-    } else {
-        return
-    }
+  if (blockTravel) {
+    if (!blockMotion) {cycleFrameX();}
+    return
+  }
 
-    if (!keysPressed.includes(event.key)) {
-        keysPressed.push(event.key);
-    };
+  if (event.key === 's' || event.key === 'ArrowDown') {
+      if (!charDirectionHistory.includes('down')) { 
+          charDirectionHistory.push('down');
+          charStep = 0;
+      }
+  } else if (event.key === 'w' || event.key === 'ArrowUp') {
+      if (!charDirectionHistory.includes('up')) { 
+          charDirectionHistory.push('up'); 
+          charStep = 0;
+      }
+  } else if (event.key === 'a' || event.key === 'ArrowLeft') {
+      if (!charDirectionHistory.includes('left')) { 
+          charDirectionHistory.push('left'); 
+          charStep = 0;
+      }
+  } else if (event.key === 'd' || event.key === 'ArrowRight') {
+      if (!charDirectionHistory.includes('right')) { 
+          charDirectionHistory.push('right'); 
+          charStep = 0;
+      }
+  } else {
+      return
+  }
 
-    cycleFrameX(); // Continue cycling frameX if any direction key is pressed
-    charMove()
-    updateCharDirection();
+  if (!keysPressed.includes(event.key)) {
+      keysPressed.push(event.key);
+  };
+
+  cycleFrameX(); // Continue cycling frameX if any direction key is pressed
+  charMove();
+  updateCharDirection();
 });
+
 
 // Keyup event listener
 document.addEventListener('keyup', (event) => {
@@ -378,8 +442,8 @@ function updateCharDirection() {
   
 // Set the animation speed (lower value = faster animation)
 const charAnimateSpeed = 100; // In milliseconds, adjust as needed
-let charAcceleration = 0.666666666666666;
-const charStepMax = 2;
+let charAcceleration = 0.5;
+const charStepMax = 2.5;
 let charStep = 0;
 const charStepInterval = 35;
 
@@ -395,6 +459,17 @@ function cycleFrameX() {
     char.frameX = (char.frameX + 1) % 4;
     draw(); // Redraw the image with the updated frameX
   }, charAnimateSpeed); // Use charAnimateSpeed for animation timing
+}
+
+let chickenInterval;
+function chickenAnimate() {
+  if (chickenInterval) return;
+
+  chickenInterval = setInterval(() => {
+    // Increment frameX and loop back to 0 after the last frame
+    chicken.frameX = (chicken.frameX + 1) % 2;
+    draw(); // Redraw the image with the updated frameX
+  }, 1000); // Use charAnimateSpeed for animation timing
 }
 
 let frameMoveInterval;
@@ -424,6 +499,47 @@ function charMove() {
     }, charStepInterval); // Use charAnimateSpeed for animation timing
 }
 
+let toggleNPCs = {}; // Store states for multiple NPCs
+const npcUpdateEvent = new Event('npcUpdate');
+
+function checkNPC(npc, char, distance) {
+  const distanceToNPC = proximityQuery(char, npc);
+
+  if ((distanceToNPC <= distance) && (!toggleNPCs[npc.name])) {
+    toggleNPCs[npc.name] = true;
+    window.dispatchEvent(npcUpdateEvent);
+  } 
+  if ((distanceToNPC > distance) && (toggleNPCs[npc.name])) {
+    toggleNPCs[npc.name] = false;
+    window.dispatchEvent(npcUpdateEvent);
+  }
+}
+
+function checkNPCs() {
+  let npcs = [chicken, shrooms]; // Add more NPCs here
+  let distances = [20, 20]; // Array of distances
+
+  npcs.forEach((npc, index) => {
+    let distanceToNPC = distances[index]; // Get the corresponding distance for each NPC
+    checkNPC(npc, char, distanceToNPC);
+  });
+}
+
+window.addEventListener('npcUpdate', () => {
+  const activeNPCs = Object.entries(toggleNPCs).filter(([key, value]) => value);
+  const numActive = activeNPCs.length;
+
+  if (numActive === 1) {
+    // If exactly one NPC is true, handle the exclusive case
+    const [npc] = activeNPCs;
+    console.log(`hi ${npc[0]}`); // npc[0] is the key (e.g., 'chicken' or 'shrooms')
+  } else if (numActive === 0) {
+    // If no NPCs are true
+    console.log('bai');
+  }
+});
+
+
 function moved() {
   stoppedMoving = false;
   window.stoppedMoving = stoppedMoving
@@ -433,7 +549,8 @@ function moved() {
   if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show')) && !autoCloseInProgress) {
     const autoCloseEvent = new Event('autoClose');
     window.dispatchEvent(autoCloseEvent);
-  } 
+  }
+  checkNPCs();
 }
 
 // Stop cycling frameX
@@ -470,3 +587,22 @@ function stopCyclingFrameX() {
       }, charAnimateSpeed);
     }
   }
+  
+  function proximityQuery(object1, object2) {
+    // Find the center of object1
+    const object1CenterX = object1.x + object1.frameWidth / 2;
+    const object1CenterY = object1.y + object1.frameHeight / 2;
+  
+    // Find the center of object2
+    const object2CenterX = object2.x + object2.frameWidth / 2;
+    const object2CenterY = object2.y + object2.frameHeight / 2;
+  
+    // Calculate the distance using Pythagoras' theorem
+    const dx = object2CenterX - object1CenterX;
+    const dy = object2CenterY - object1CenterY;
+  
+    // Hypotenuse (distance between centers)
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  
