@@ -458,7 +458,6 @@ span, li a {
     pointer-events: none; /* Disable interaction */
   }
   #articleWrapper {
-    transform: translateX(0);
     left: calc(((100vw - 280px) / 338) * (2.5 * 28));
     right: calc(((100vw - 280px) / 338) * (2.5 * 28));
     top: calc(((100vw - 280px) / 338) * (2.5 * 28));
