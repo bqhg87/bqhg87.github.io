@@ -221,7 +221,7 @@ function freezeDirection(direction, motionAllowed) {
 }
 
 window.addEventListener('openCharMenu', () => {
-  freezeDirection('down', true)
+  freezeDirection('down', false)
   if (zoomingInProgress && zoomTargetScale === 4) {
     // If zooming is in progress and we're zooming out, reverse the zoom direction
     zoomStartScale = globalScale;

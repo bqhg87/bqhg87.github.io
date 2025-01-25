@@ -1,5 +1,9 @@
 let meter = window.delMeter;
 
+const meterFG = document.getElementById("meterFG");
+const meterLabel = document.getElementById("meterLabel");
+const meterBG = document.getElementById("meterBG");
+
 // Sinusoidal delMeter update function
  let time = 0; // Time variable for smooth sinusoidal movement
  function updateDelMeter() {
@@ -43,10 +47,6 @@ function getHSLColor(meter, h0, s0, l0, hf, sf, lf, a) {
   // Return the interpolated HSL value
   return `hsla(${hue}, ${saturation}%, ${lightness}%, ${a})`;
 }
-
-const meterFG = document.getElementById("meterFG");
-const meterLabel = document.getElementById("meterLabel");
-const meterBG = document.getElementById("meterBG");
 
 updateMeterDisplay();
 updateDelMeter(); // Loop (for testing)

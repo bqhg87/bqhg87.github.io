@@ -1,10 +1,12 @@
-html, body {
+:root {
   --pixelScale: 2.5px;
   --c0: rgb(241, 229, 198);
   --c1: rgb(214, 186, 144);
   --c2: rgb(228, 208, 171);
   --c3: rgb(163, 123, 94);
+}
 
+html, body {
   touch-action: none; /* Disables all touch gestures, including pinch zoom */
   overflow: hidden; /* Prevents scrolling and zooming by accident */
   width: 100%;
@@ -206,7 +208,7 @@ span, li a {
 
 .sideMenu {
   display: flex;
-  width: calc(var(--pixelScale) * 122) - (var(--pixelScale) * 7);
+  width: calc(var(--pixelScale) * 122) - (var(--pixelScale) * 7); /* 115 */
   padding-right: calc(var(--pixelScale) * 2);
   height: calc(100% - 74px);
   margin: 0 calc(var(--pixelScale) * 4) 0 calc(var(--pixelScale) * 6);
@@ -240,6 +242,7 @@ span, li a {
   --pxScaleMultiplier: 2;
   height: calc(100% - (calc(var(--pixelScale) * 28 * 2.6)));
   width: calc(100% - calc(var(--pixelScale) * (122 + 21)) - calc(var(--pixelScale) * 2 * 28));
+  max-width: 1102.5px;
   opacity: 0;
   transition: opacity 0.2s ease;
   transform: translateX(1500%);
@@ -252,11 +255,21 @@ span, li a {
   transform: translateX(0); /* Adjust for the div's dimensions */
   opacity: 0.97;
 }
+@media (min-width: 1600px) {
+  #articleWrapper {
+    position: absolute;
+    left: calc((100vw - 287.5px - 70px) / 2 - (1102.5px / 2));
+  }
+}
+
 
 .article {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: auto;
+  grid-template-rows: repeat(20, auto) minmax(0, 1fr);
+  gap: calc(24.1px * 0.5);
   height: calc(100% - var(--pixelScale) * var(--pxScaleMultiplier) * 2);
   top: calc(var(--pixelScale) * 2);
   left: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 1);
@@ -406,4 +419,53 @@ span, li a {
 .fadeOut {
   transition: opacity 0.2 ease;
   opacity: 0;
+}
+
+@media (max-width: 930px) {
+  #articleWrapper {
+    top: calc(var(--pixelScale) * 28);
+    left: 50%;
+    width: calc(100% - (calc(var(--pixelScale) * 28 * 2.6)));
+  }
+  #articleWrapper.show {
+    transform: translateX(-50%);
+  }
+}
+@media (max-width: 618px) {
+  body.article-open .headButtons {
+    opacity: 0;
+    pointer-events: none; /* Disable interaction */
+  }
+  #articleWrapper {
+    transform: translateX(0);
+    left: calc(((100vw - 280px) / 338) * (2.5 * 28));
+    right: calc(((100vw - 280px) / 338) * (2.5 * 28));
+    top: calc(((100vw - 280px) / 338) * (2.5 * 28));
+    bottom: calc(((100vw - 280px) / 338) * (2.5 * 28));
+    height: auto;
+    width: auto;
+  }
+  #articleWrapper.show {
+    transform: translateX(0);
+  }
+  .article {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 320px) {
+  #sideMenuWrapper {
+    left: 15px !important;
+    right: auto;
+  }
+  #articleWrapper {
+    left: calc((48px / (618 - 320 + 48)) * (2.5 * 28));
+    right: calc((48px / (618 - 320 + 48)) * (2.5 * 28));
+    bottom: calc((48px / (618 - 320 + 48)) * (2.5 * 28));
+    top: calc((48px / (618 - 320 + 48)) * (2.5 * 28));
+    width: auto;
+    height: auto;
+  }
+  #articleWrapper.show {
+    transform: translateX(0);
+  }
 }

@@ -137,8 +137,7 @@ function handleButtonClick(buttonId) {
     });
 
     const button = document.getElementById(buttonId);
-    const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
-    setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
+    checkButtonHover(buttonId);
 
     // After fade-out, hide all elements and show buttons again
     setTimeout(() => {
@@ -264,6 +263,17 @@ function addToggleListeners() {
   });
 }
 
+// Function to check if article is open and viewport width is <= 618px
+window.updateHeadButtonsVisibility = function() {
+  const articleWrapper = document.getElementById('articleWrapper');
+
+  if (window.innerWidth <= 618 && articleWrapper.classList.contains('show')) {
+    document.body.classList.add('article-open');
+  } else {
+    document.body.classList.remove('article-open');
+  }
+};
+
 // Check if the page loads with an article and toggle menuToggle if necessary
 function handleInitialArticleLoad() {
   const params = new URLSearchParams(window.location.search);
@@ -271,8 +281,12 @@ function handleInitialArticleLoad() {
   
   if (article) {
     handleButtonClick('menuToggle'); // Automatically toggle the menuToggle button
+    checkButtonHover('menuToggle')
   }
 }
+
+// Listen to window resize events to update visibility
+window.addEventListener('resize', updateHeadButtonsVisibility);
 
 // Initialize buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
