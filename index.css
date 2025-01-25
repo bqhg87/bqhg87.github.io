@@ -181,6 +181,24 @@ span, li a {
   /* pointer-events: none; /* Disable interaction */
 }
 
+.closeMenuButton {
+  position: absolute; /* Position relative to its parent (articleWrapper) */
+  top: 0; /* Align to the top */
+  right: 0; /* Align to the right side */
+  width: calc(var(--pixelScale) * 8);  /* 8x8 sprites */
+  height: calc(var(--pixelScale) * 8); /* 8x8 sprites */
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  background-image: url('./assets/closeButtons.png');
+  padding: 0;
+  opacity: 0.9;
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  z-index: 1000;
+  margin-right: 27.5px;
+  margin-top: 27.5px;
+}
+
 #sideMenuWrapper {
   height: 100%;
   width: calc(var(--pixelScale) * 122); /* 24 to align with buttons*/
@@ -238,6 +256,39 @@ span, li a {
   background-color: rgb(137, 100, 95); /* Active state */
 }
 
+.article {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.9fr 0.1fr; /* Reserved column 4 */
+  grid-auto-rows: auto;
+  grid-template-rows: repeat(20, auto) minmax(0, 1fr);
+  gap: calc(24.1px * 0.5);
+  height: calc(100% - var(--pixelScale) * var(--pxScaleMultiplier) * 2);
+  top: calc(var(--pixelScale) * 2);
+  left: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 1);
+  width: calc(100% - var(--pixelScale) * var(--pxScaleMultiplier) * 4); /* Reduced width */
+  padding-right: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 2); /* Add padding on right */
+  z-index: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: rgb(124, 96, 82);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.reserved {
+  background-color: transparent;
+  grid-area: 1 / 4 / 2 / 5;
+}
+
+.article.fade-out {
+  opacity: 0;
+}
+.article.fade-in {
+  opacity: 1;
+}
+
+/* Adjusted styles for the #articleWrapper */
 #articleWrapper {
   --pxScaleMultiplier: 2;
   height: calc(100% - (calc(var(--pixelScale) * 28 * 2.6)));
@@ -262,36 +313,6 @@ span, li a {
   }
 }
 
-
-.article {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: auto;
-  grid-template-rows: repeat(20, auto) minmax(0, 1fr);
-  gap: calc(24.1px * 0.5);
-  height: calc(100% - var(--pixelScale) * var(--pxScaleMultiplier) * 2);
-  top: calc(var(--pixelScale) * 2);
-  left: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 1);
-  width: calc(100% - var(--pixelScale) * var(--pxScaleMultiplier) * 3);
-  padding-right: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 1);
-  z-index: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  color: rgb(124, 96, 82);
-  opacity: 1;
-  transition: opacity 0.2s ease;
-
-  /* For Firefox */
-  scrollbar-width: thin;
-  scrollbar-color: rgb(228, 208, 171) transparent; /* Red scrollbar, no background */
-}
-.article.fade-out {
-  opacity: 0;
-}
-.article.fade-in {
-  opacity: 1;
-}
 
 #meterWrapper {
   --pxScaleMultiplier: 1;
@@ -449,7 +470,11 @@ span, li a {
     transform: translateX(0);
   }
   .article {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 0.9fr 0.1fr;
+  }
+  .reserved {
+    background-color: transparent;
+    grid-area: 1 / 3 / 2 / 4;
   }
 }
 @media (max-width: 320px) {

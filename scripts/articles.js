@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fetchArticleContent = (article) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(`<p style="grid-column: span 1; height: fit-content;">${article}</p><p style="grid-column: span 2; height: fit-content;">This is content for the ${article} article.</p>`);
+        resolve(`<p style="height: fit-content;">${article}</p><p style="grid-column: span 2; height: fit-content;">This is content for the ${article} article. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam lobortis mattis tempor. Fusce quam nisi, malesuada sed sodales a, viverra sed neque. Proin ac fermentum lacus. In eu vehicula sapien, aliquam ultrices felis. Donec eget odio et turpis faucibus fermentum. Integer non ligula sed justo feugiat dignissim a quis sapien. Quisque sit amet neque at dolor sollicitudin molestie non vel odio. Suspendisse venenatis justo sed lectus aliquet tristique. Quisque sit amet ante ut nisi pharetra varius.</p><div class="reserved"></div>`);
       }, 0); // Simulate network delay
     });
   };
@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateHeadButtonsVisibility();
+    checkArticleOverflow();
   };
 
   // Redirect to the root URL if the article is invalid

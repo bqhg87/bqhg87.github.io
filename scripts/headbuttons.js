@@ -171,7 +171,7 @@ function handleButtonClick(buttonId) {
 }
 
 // Function to handle closing the article and reverting the URL
-function closeArticle() {
+window.closeArticle = function() {
   const articleWrapper = document.getElementById('articleWrapper');
   const params = new URLSearchParams(window.location.search);
 
@@ -196,7 +196,17 @@ function closeArticle() {
       { once: true }
     );
   }
+
+  // Check if menuToggle was not pressed (i.e., side menu is not visible)
+  const menuButton = document.getElementById('menuToggle');
+  const isToggled = menuButton.dataset.toggled === 'true';
+  const sideMenuWrapper = document.getElementById('sideMenuWrapper');
+  if (!sideMenuWrapper.classList.contains('show') && isToggled) {
+    // Add 'show' class to the sideMenu if it wasn't already shown
+    sideMenuWrapper.classList.add('show');
+  }
 }
+
 
 // Event listener function to handle sprite changes based on interaction
 function addButtonEventListeners(buttonId) {
