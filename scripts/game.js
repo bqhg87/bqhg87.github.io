@@ -81,7 +81,7 @@ const npcIndicatorData = {
     visible: true     // Set visibility property
   },
   shrooms: { 
-    spriteX: 0, 
+    spriteX: 2, 
     spriteY: 0,
     indicatorOffsetX: 4.5,  // Offset in X direction (left)
     indicatorOffsetY: -8,  // Offset in Y direction (above)
