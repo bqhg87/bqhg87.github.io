@@ -3,14 +3,16 @@ const c = canvas.getContext('2d');
 
 window.delMeter = 64;
 
+const charSheet = new Image();
 const paintingImage = new Image();
 const shroomsImage = new Image();
-const charSheet = new Image();
 const chickenNPC = new Image();
+const npcIndicators = new Image();
+charSheet.src = './assets/char.png';
 paintingImage.src = './assets/painting.png';
 shroomsImage.src = './assets/shrooms.png';
 chickenNPC.src = './assets/chicken.png';
-charSheet.src = './assets/char.png';
+npcIndicators.src = './assets/npcIndicators.png';
 
 // List of objects to be drawn on the canvas (Replace with JSON and caching later)
 const objectsToDraw = [
@@ -56,6 +58,42 @@ const objectsToDraw = [
 const char = objectsToDraw[0]; // Which one is the character to control?
 const chicken = objectsToDraw[3];
 const shrooms = objectsToDraw[2];
+
+// Update the loading logic to handle the new spritesheet
+let npcIndicatorsLoaded = false;
+
+npcIndicators.onload = () => {
+  npcIndicatorsLoaded = true;
+  console.log("NPC indicator spritesheet loaded");
+  draw();  // Redraw once the indicator is loaded
+};
+
+const npcIndicatorData = {
+  chicken: { 
+    spriteX: 1, 
+    spriteY: 0,
+    indicatorOffsetX: 5,  // Offset in X direction (right)
+    indicatorOffsetY: -5,  // Offset in Y direction (above)
+    animate: true,  // Enable sinusoidal animation for chicken indicator
+    sinDistance: 5, // Max movement in the y-direction (pixels)
+    sinSpeed: 4.6,    // Speed of the oscillation (higher value = faster oscillation)
+    sinOffset: 0,    // Offset for starting point of sine wave
+    visible: true     // Set visibility property
+  },
+  shrooms: { 
+    spriteX: 0, 
+    spriteY: 0,
+    indicatorOffsetX: 4.5,  // Offset in X direction (left)
+    indicatorOffsetY: -8,  // Offset in Y direction (above)
+    animate: true,  // Disable sinusoidal animation for shrooms indicator
+    sinDistance: 5.1, // Max movement in the y-direction (pixels)
+    sinSpeed: 4.4,    // Speed of the oscillation
+    sinOffset: 20,   // Offset for starting point of sine wave (e.g., starts 45° offset)
+    visible: true     // Set visibility property
+  }
+};
+
+console.log(npcIndicatorData);
 
 // Track number of loaded images
 let imagesLoaded = 0;
@@ -357,7 +395,37 @@ function draw() {
       c.drawImage(image, scaledX, scaledY, scaledWidth, scaledHeight);
     }
   });
+
+  // Draw NPC indicators with potential sinusoidal movement
+  [npcIndicators].forEach(() => {
+    [chicken, shrooms].forEach(npc => {
+      const indicatorData = npcIndicatorData[npc.name];
+
+      // Check if the indicator is visible
+      if (indicatorData.visible) {
+        const baseIndicatorX = ((npc.x + indicatorData.indicatorOffsetX) * globalScale) + translationX; // Apply X offset
+        let baseIndicatorY = ((npc.y + indicatorData.indicatorOffsetY) * globalScale) + translationY; // Apply Y offset
+
+        // If 'animate' is true, apply sinusoidal movement in the y direction
+        if (indicatorData.animate) {
+          const time = Date.now() / 1000; // Time in seconds (can be adjusted for speed)
+          
+          // Apply sinusoidal movement with custom offset
+          baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset); // Apply sinOffset
+        }
+
+        // Extract the correct sprite from the npcIndicators sprite sheet
+        const spriteX = indicatorData.spriteX * 4; // Each dot is 4px wide
+        const spriteY = indicatorData.spriteY * 4; // Assuming 1 row for now (can expand later)
+
+        // Draw the NPC indicator with the scaled size
+        c.drawImage(npcIndicators, spriteX, spriteY, 4, 4, baseIndicatorX, baseIndicatorY, 4 * globalScale, 4 * globalScale);
+      }
+    });
+  });
 }
+
+
 
 
 let charDirectionHistory = [];
@@ -512,15 +580,20 @@ const npcUpdateEvent = new Event('npcUpdate');
 function checkNPC(npc, char, distance) {
   const distanceToNPC = proximityQuery(char, npc);
 
-  if ((distanceToNPC <= distance) && (!toggleNPCs[npc.name])) {
+  if (distanceToNPC <= distance && !toggleNPCs[npc.name]) {
+    // If the NPC is close, show the indicator with spriteY = 1
     toggleNPCs[npc.name] = true;
+    npcIndicatorData[npc.name].spriteY = 1;  // Change spriteY when near
     window.dispatchEvent(npcUpdateEvent);
   } 
-  if ((distanceToNPC > distance) && (toggleNPCs[npc.name])) {
+  if (distanceToNPC > distance && toggleNPCs[npc.name]) {
+    // If the NPC is far away, revert the indicator to spriteY = 0
     toggleNPCs[npc.name] = false;
+    npcIndicatorData[npc.name].spriteY = 0;  // Revert spriteY when far
     window.dispatchEvent(npcUpdateEvent);
   }
 }
+
 
 function checkNPCs() {
   let npcs = [chicken, shrooms]; // Add more NPCs here
@@ -532,6 +605,8 @@ function checkNPCs() {
   });
 }
 
+let npcMemory;
+
 window.addEventListener('npcUpdate', () => {
   const activeNPCs = Object.entries(toggleNPCs).filter(([key, value]) => value);
   const numActive = activeNPCs.length;
@@ -539,10 +614,12 @@ window.addEventListener('npcUpdate', () => {
   if (numActive === 1) {
     // If exactly one NPC is true, handle the exclusive case
     const [npc] = activeNPCs;
+    npcMemory = npc[0];
     console.log(`hi ${npc[0]}`); // npc[0] is the key (e.g., 'chicken' or 'shrooms')
   } else if (numActive === 0) {
     // If no NPCs are true
-    console.log('bai');
+    const [npc] = activeNPCs;
+    console.log(`bye ${npcMemory}`);
   }
 });
 
