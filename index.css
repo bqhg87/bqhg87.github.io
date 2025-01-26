@@ -59,6 +59,11 @@ header {
   padding: calc(var(--pixelScale) * 4);
   z-index: 10000;
   transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+header * {
+  /* Re-enable pointer events for interactive children */
+  pointer-events: auto;
 }
 
 body {

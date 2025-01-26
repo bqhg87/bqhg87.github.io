@@ -127,22 +127,12 @@ let centerOnLoad = false; // Initially not centered (Variable to track it only c
 let globalScale = 4; // Set this scale globally, it will affect size and positioning
 const dpr = window.devicePixelRatio || 1;
 
-let isDragging = false;
-let dragStartX = 0;
-let dragStartY = 0;
 let translationX = 0;
 let translationY = 0;
 
 
 if (freeCam === true) {
     console.log('Camea type: Free');
-
-    // Check mouse position for drag start
-    canvas.addEventListener('mousedown', (event) => {
-    isDragging = true;
-    dragStartX = event.clientX;
-    dragStartY = event.clientY;
-    });
 
     // Listen for mouse movement on the entire document to continue dragging
     document.addEventListener('mousemove', (event) => {
@@ -161,16 +151,8 @@ if (freeCam === true) {
         draw(); // Redraw the canvas with new translation
         }
     });
-
-    // Stop dragging on mouse up
-    document.addEventListener('mouseup', () => {
-    isDragging = false;
-    });
 } else {
     console.log('Camea type: Fixed');
-
-    // window.addEventListener('resize', function() { centerCamera(); });
-    // window.addEventListener('gesturestart', function(event) { event.preventDefault(); }); // Disable pinch zoom gestures (for touch devices)
 }
 
 // Detect scroll events to adjust global scale and keep zoom centered
@@ -248,12 +230,12 @@ let blockTravel;
 let blockMotion;
 
 function freezeDirection(direction, motionAllowed) {
-  charDirectionHistory.push(direction);
-  updateCharDirection();
-  charDirectionHistory = [];
-  charMove();
-  stopCyclingFrameX();
-  updateCharDirection();
+  //charDirectionHistory.push(direction);
+  // updateCharDirection();
+  //charDirectionHistory = [];
+  //charMove();
+  //stopCyclingFrameX();
+  // updateCharDirection();
   blockTravel = true;
   if (!motionAllowed) {
     blockMotion = true;
@@ -307,10 +289,10 @@ window.addEventListener('closeCharMenu', () => {
 
 // Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
-  charDirectionHistory = []; // stop character moving on resize otherwise it glitches
-  charMove();
-  stopCyclingFrameX();
-  updateCharDirection();
+  //charDirectionHistory = []; // stop character moving on resize otherwise it glitches
+  //charMove();
+  //stopCyclingFrameX();
+  // updateCharDirection();
 
   // Set canvas size to match the window's inner width and height
   canvas.width = window.innerWidth * dpr;
@@ -426,153 +408,9 @@ function draw() {
 }
 
 
-
-
-let charDirectionHistory = [];
-let keysPressed = [];
-
-document.addEventListener('keydown', (event) => {
-  if (blockTravel) {
-    if (!blockMotion) {cycleFrameX();}
-    return
-  }
-
-  if (event.key === 's' || event.key === 'ArrowDown') {
-      if (!charDirectionHistory.includes('down')) { 
-          charDirectionHistory.push('down');
-          charStep = 0;
-      }
-  } else if (event.key === 'w' || event.key === 'ArrowUp') {
-      if (!charDirectionHistory.includes('up')) { 
-          charDirectionHistory.push('up'); 
-          charStep = 0;
-      }
-  } else if (event.key === 'a' || event.key === 'ArrowLeft') {
-      if (!charDirectionHistory.includes('left')) { 
-          charDirectionHistory.push('left'); 
-          charStep = 0;
-      }
-  } else if (event.key === 'd' || event.key === 'ArrowRight') {
-      if (!charDirectionHistory.includes('right')) { 
-          charDirectionHistory.push('right'); 
-          charStep = 0;
-      }
-  } else {
-      return
-  }
-
-  if (!keysPressed.includes(event.key)) {
-      keysPressed.push(event.key);
-  };
-
-  cycleFrameX(); // Continue cycling frameX if any direction key is pressed
-  charMove();
-  updateCharDirection();
-});
-
-
-// Keyup event listener
-document.addEventListener('keyup', (event) => {
-    keysPressed = keysPressed.filter(word => word !== event.key);
-
-    // Remove direction from charDirectionHistory on keyup
-    if (keysPressed.includes('s') === false && keysPressed.includes('ArrowDown') === false) {
-        charDirectionHistory = charDirectionHistory.filter(word => word !== 'down');
-    } if (keysPressed.includes('w') === false && keysPressed.includes('ArrowUp') === false) {
-        charDirectionHistory = charDirectionHistory.filter(word => word !== 'up');
-    } if (keysPressed.includes('a') === false && keysPressed.includes('ArrowLeft') === false) {
-        charDirectionHistory = charDirectionHistory.filter(word => word !== 'left');
-    } if (keysPressed.includes('d') === false && keysPressed.includes('ArrowRight') === false) {
-        charDirectionHistory = charDirectionHistory.filter(word => word !== 'right');
-    }
-
-    // Reset frameX if no direction keys are pressed
-    if (charDirectionHistory.length === 0) {
-        objectsToDraw[2].frameX = 0;
-        stopCyclingFrameX(); // Stop cycling when no keys are pressed
-    }
-
-    updateCharDirection()
-});
-
-let charDirection = '';
-
-function updateCharDirection() {
-    if (charDirectionHistory[charDirectionHistory.length - 1] === 'down') {
-        char.frameY = 0;
-        charDirection = 'down';
-    } else if (charDirectionHistory[charDirectionHistory.length - 1] === 'up') {
-        char.frameY = 1;
-        charDirection = 'up';
-    } else if (charDirectionHistory[charDirectionHistory.length - 1] === 'left') {
-        char.frameY = 2;
-        charDirection = 'left';
-    } else if (charDirectionHistory[charDirectionHistory.length - 1] === 'right') {
-        char.frameY = 3;
-        charDirection = 'right';
-    } else {
-        charDirection = '';
-    }
-}
-  
-// Set the animation speed (lower value = faster animation)
-const charAnimateSpeed = 100; // In milliseconds, adjust as needed
-let charAcceleration = 0.5;
-const charStepMax = 2.5;
-let charStep = 0;
-const charStepInterval = 35;
-
-// Function to cycle frameX based on charAnimateSpeed
-let frameCycleInterval;
-function cycleFrameX() {
-  // If cycling is already happening, do nothing
-  if (frameCycleInterval) return;
-
-  // Start cycling
-  frameCycleInterval = setInterval(() => {
-    // Increment frameX and loop back to 0 after 3
-    char.frameX = (char.frameX + 1) % 4;
-    draw(); // Redraw the image with the updated frameX
-  }, charAnimateSpeed); // Use charAnimateSpeed for animation timing
-}
-
-let chickenInterval;
-function chickenAnimate() {
-  if (chickenInterval) return;
-
-  chickenInterval = setInterval(() => {
-    // Increment frameX and loop back to 0 after the last frame
-    chicken.frameX = (chicken.frameX + 1) % 2;
-    draw(); // Redraw the image with the updated frameX
-  }, 1000); // Use charAnimateSpeed for animation timing
-}
-
-let frameMoveInterval;
-let stoppedMoving = true;
-let allowMove = true;
-
-function charMove() {
-    if (frameMoveInterval) return;
-
-    frameMoveInterval = setInterval(() => {
-
-      if (allowMove === true) {
-        if (charStep < charStepMax) {
-            charStep += charAcceleration;
-        }
-
-        if (charDirection == 'down') {char.y += charStep; moved();}
-        else if (charDirection == 'up') {char.y -= charStep; moved();}
-        else if (charDirection == 'left') {char.x -= charStep; moved();}
-        else if (charDirection == 'right') {char.x += charStep; moved();}
-        else {
-          stoppedMoving = true;
-          window.stoppedMoving = stoppedMoving;
-        }
-        draw();
-      }
-    }, charStepInterval); // Use charAnimateSpeed for animation timing
-}
+//////////
+// NPCS //
+//////////
 
 let toggleNPCs = {}; // Store states for multiple NPCs
 const npcUpdateEvent = new Event('npcUpdate');
@@ -593,7 +431,6 @@ function checkNPC(npc, char, distance) {
     window.dispatchEvent(npcUpdateEvent);
   }
 }
-
 
 function checkNPCs() {
   let npcs = [chicken, shrooms]; // Add more NPCs here
@@ -622,69 +459,197 @@ window.addEventListener('npcUpdate', () => {
     console.log(`bye ${npcMemory}`);
   }
 });
+  
+function proximityQuery(object1, object2) {
+  // Find the center of object1
+  const object1CenterX = object1.x + object1.frameWidth / 2;
+  const object1CenterY = object1.y + object1.frameHeight / 2;
 
+  // Find the center of object2
+  const object2CenterX = object2.x + object2.frameWidth / 2;
+  const object2CenterY = object2.y + object2.frameHeight / 2;
 
-function moved() {
-  stoppedMoving = false;
-  window.stoppedMoving = stoppedMoving
-  let meterWrapper = document.getElementById('meterWrapper');
-  let articleWrapper = document.getElementById('articleWrapper');
-  let autoCloseInProgress = window.autoCloseInProgress;
-  if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show')) && !autoCloseInProgress) {
-    const autoCloseEvent = new Event('autoClose');
-    window.dispatchEvent(autoCloseEvent);
+  // Calculate the distance using Pythagoras' theorem
+  const dx = object2CenterX - object1CenterX;
+  const dy = object2CenterY - object1CenterY;
+
+  // Hypotenuse (distance between centers)
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+//////////////
+// MOVEMENT //
+//////////////
+
+let speed = 0;
+let mouseRadius = 0;
+let mouseAngle = 0;
+
+let stoppedMoving = true;
+
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+
+canvas.addEventListener('mousedown', (event) => {
+  isDragging = true;
+  dragStartX = event.clientX;
+  dragStartY = event.clientY;
+});
+canvas.addEventListener('touchstart', (event) => {
+  event.preventDefault(); // Prevent default to avoid issues with scrolling or zooming
+  isDragging = true;
+  dragStartX = event.touches[0].clientX; // First touch point
+  dragStartY = event.touches[0].clientY;
+});
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+document.addEventListener('touchend', () => {
+  isDragging = false;
+});
+
+canvas.addEventListener('mousemove', (event) => {updateMouseData(event)});
+canvas.addEventListener('touchmove', (event) => {
+  event.preventDefault(); // Prevent scrolling / zooming during touchmove
+  updateMouseData(event);
+});
+
+function updateMouseData(event) {
+  let mouseXInGameCoords, mouseYInGameCoords;
+  
+  if (event.type === "mousemove") {
+    mouseXInGameCoords = (event.clientX - translationX) / globalScale;
+    mouseYInGameCoords = (event.clientY - translationY) / globalScale;
+  } else if (event.type === "touchmove" || event.type === "touchstart") {
+    mouseXInGameCoords = (event.touches[0].clientX - translationX) / globalScale;
+    mouseYInGameCoords = (event.touches[0].clientY - translationY) / globalScale;
   }
+
+  const charCenterX = char.x + 24;
+  const charCenterY = char.y + 24;
+
+  const dx = mouseXInGameCoords - charCenterX;
+  const dy = mouseYInGameCoords - charCenterY;
+ 
+  mouseRadius = Math.sqrt(dx * dx + dy * dy);
+  mouseAngle = Math.atan2(dy, dx);
+}
+
+function updateCharMovement() {
+  let maxSpeed = limitCharMovement(mouseRadius, 1.5); // Adjust the 2nd argument to change the maximum speed
+  let angle = limitAngle(mouseAngle, 6);
+  const acceleration = 0.1;
+  const deceleration = 0.2;
+
+  if (isDragging && maxSpeed >= 0.25) {
+    moving(true);
+    speed += acceleration;
+    speed = Math.min(speed, maxSpeed);
+    updateCharDirection(angle);
+    updateAimation(100, false);
+  } else {
+    moving(false);
+    speed -= deceleration;
+    speed = Math.max(speed, 0);
+    updateAimation(0, true);
+    if (isDragging) {
+      updateCharDirection(angle);
+    }
+  }
+
+  char.x += (speed * Math.cos(angle));
+  char.y += (speed * Math.sin(angle));
+
+  // Constrain position to units of 0.25
+  char.x = Math.round(char.x * 4) / 4;
+  char.y = Math.round(char.y * 4) / 4;
+
   checkNPCs();
 }
 
-// Stop cycling frameX
-function stopCyclingFrameX() {
-    if (frameCycleInterval) {
-      let keyPressDetected = false;
-  
-      // Define the event listener
-      const keyListener = (event) => {
-        const keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"];
-        if (keys.includes(event.key)) {
-          keyPressDetected = true;
-        }
-      };
-  
-      // Add the event listener
-      window.addEventListener("keydown", keyListener);
-  
-      // Delay clearing the interval by the same animation speed
-      setTimeout(() => {
-        // If a keypress was detected, exit early
-        if (keyPressDetected) {
-          window.removeEventListener("keydown", keyListener);
-          return;
-        }
-  
-        clearInterval(frameCycleInterval);
-        frameCycleInterval = null;
-        char.frameX = 0; // Reset to the first frame
-        draw(); // Redraw the image after resetting
-  
-        // Remove the event listener after completing
-        window.removeEventListener("keydown", keyListener);
-      }, charAnimateSpeed);
+function moving(isMoving) {
+  if (isMoving === true) {
+    stoppedMoving = false;
+    window.stoppedMoving = stoppedMoving;
+    let meterWrapper = document.getElementById('meterWrapper');
+    let articleWrapper = document.getElementById('articleWrapper');
+    let autoCloseInProgress = window.autoCloseInProgress;
+    if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show')) && !autoCloseInProgress) {
+      const autoCloseEvent = new Event('autoClose');
+      window.dispatchEvent(autoCloseEvent);
     }
+  } else {
+    stoppedMoving = true;
+    window.stoppedMoving = stoppedMoving;
   }
+}
+
+function limitAngle(angle, divisions) {
+  const choppedPi = Math.PI / divisions;
+  return Math.round(angle / choppedPi) * choppedPi;
+}
+
+let lastUpdate = 0;
+
+function updateAimation(speed, stop) {
+  const now = performance.now();
   
-  function proximityQuery(object1, object2) {
-    // Find the center of object1
-    const object1CenterX = object1.x + object1.frameWidth / 2;
-    const object1CenterY = object1.y + object1.frameHeight / 2;
-  
-    // Find the center of object2
-    const object2CenterX = object2.x + object2.frameWidth / 2;
-    const object2CenterY = object2.y + object2.frameHeight / 2;
-  
-    // Calculate the distance using Pythagoras' theorem
-    const dx = object2CenterX - object1CenterX;
-    const dy = object2CenterY - object1CenterY;
-  
-    // Hypotenuse (distance between centers)
-    return Math.sqrt(dx * dx + dy * dy);
+  if (stop) {
+    char.frameX = 0;
+    return
   }
+
+  if (now - lastUpdate >= speed) {
+    char.frameX = (char.frameX + 1) % 4;
+    lastUpdate = now;
+  }
+}
+
+function limitCharMovement(radius, maxSpeed) {
+  let maxRadius = 60;
+  let minRadius = 30;
+
+  const leastVPDimension = Math.min(window.innerWidth, window.innerHeight);
+  if (leastVPDimension <= 320) {
+    maxRadius = minRadius;
+  } else if (!(leastVPDimension >= 1000)) {
+    maxRadius = minRadius + (maxRadius - minRadius) * ((leastVPDimension - 320) / (1000 - 320));
+  }
+
+  let limitFactor = Math.min(radius / maxRadius, 1);
+  let limitedMaxSpeed = maxSpeed * limitFactor;
+  return limitedMaxSpeed;
+}
+
+function updateCharDirection(angle) {
+  angle = angle * (180 / Math.PI); // Convert to degrees
+  if (angle >= 45 && angle <= 135) { // Down
+    char.frameY = 0;
+  } else if (angle <= -45 && angle >= -135) { // Up
+    char.frameY = 1;
+  } else if (angle >= 135 || angle <= -135) { // Left
+    char.frameY = 2;
+  } else if (angle >= -45 && angle <= 45) { // Right
+    char.frameY = 3;
+  }
+}
+
+let chickenInterval;
+function chickenAnimate() {
+  if (chickenInterval) return;
+
+  chickenInterval = setInterval(() => {
+    // Increment frameX and loop back to 0 after the last frame
+    chicken.frameX = (chicken.frameX + 1) % 2;
+    draw(); // Redraw the image with the updated frameX
+  }, 1000);
+}
+
+window.onload = function () {
+  (function updateCharMovementLoop() {
+    updateCharMovement();
+    requestAnimationFrame(updateCharMovementLoop); // Schedule the next frame
+    draw();
+  })(); // Immediately invoke the function
+};
