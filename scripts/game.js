@@ -538,9 +538,9 @@ function updateMouseData(event) {
 
 function updateCharMovement() {
   let maxSpeed = limitCharMovement(mouseRadius, 1.5); // Adjust the 2nd argument to change the maximum speed
-  let angle = limitAngle(mouseAngle, 6);
+  let angle = limitAngle(mouseAngle, 8);
   const acceleration = 0.1;
-  const deceleration = 0.2;
+  const deceleration = 0.25;
 
   if (isDragging && maxSpeed >= 0.25) {
     moving(true);
