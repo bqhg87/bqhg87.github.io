@@ -476,7 +476,7 @@ span, li a {
   }
 }
 @media (max-width: 738px) {
-  body.meter-open header {
+  body.meter-open header * {
     opacity: 0;
     pointer-events: none;
   }
@@ -492,7 +492,7 @@ span, li a {
   }
 }
 @media (max-width: 618px) {
-  body.article-open header {
+  body.article-open header * {
     opacity: 0;
     pointer-events: none; /* Disable interaction */
   }
