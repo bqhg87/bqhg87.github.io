@@ -463,9 +463,11 @@ document.addEventListener('keyup', (event) => {
 })
 
 canvas.addEventListener('mousedown', (event) => {
-  isDragging = true;
-  dragStartX = event.clientX;
-  dragStartY = event.clientY;
+  if (event.button === 0) { // Left clicks only
+    isDragging = true;
+    dragStartX = event.clientX;
+    dragStartY = event.clientY;
+  }
 });
 canvas.addEventListener('touchstart', (event) => {
   event.preventDefault(); // Prevent default to avoid issues with scrolling or zooming
