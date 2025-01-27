@@ -516,7 +516,7 @@ let blockMouse = false;
 let charSpeed = 0;
 
 function updateCharMovement() {
-  let maxSpeed = 1.5;
+  let maxSpeed = 1.1;
   if (keysPressed.length !== 0) {
     angle = updateCharAngle();
     keyDominance = true;
