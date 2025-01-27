@@ -59,15 +59,6 @@ const char = objectsToDraw[0]; // Which one is the character to control?
 const chicken = objectsToDraw[3];
 const shrooms = objectsToDraw[2];
 
-// Update the loading logic to handle the new spritesheet
-let npcIndicatorsLoaded = false;
-
-npcIndicators.onload = () => {
-  npcIndicatorsLoaded = true;
-  console.log("NPC indicator spritesheet loaded");
-  draw();  // Redraw once the indicator is loaded
-};
-
 const npcIndicatorData = {
   chicken: { 
     spriteX: 1, 
@@ -92,8 +83,6 @@ const npcIndicatorData = {
     visible: true     // Set visibility property
   }
 };
-
-console.log(npcIndicatorData);
 
 // Track number of loaded images
 let imagesLoaded = 0;
@@ -226,31 +215,17 @@ function animateZoom() {
   }
 }
 
-let blockTravel;
 let blockMotion;
 
-function freezeDirection(direction, motionAllowed) {
-  //charDirectionHistory.push(direction);
-  // updateCharDirection();
-  //charDirectionHistory = [];
-  //charMove();
-  //stopCyclingFrameX();
-  // updateCharDirection();
-  blockTravel = true;
-  if (!motionAllowed) {
-    blockMotion = true;
-  }
-}
-
 window.addEventListener('openCharMenu', () => {
-  freezeDirection('down', false);
+  updateCharDirection(Math.PI / 2);
   if (zoomingInProgress && zoomTargetScale === 4) {
     // If zooming is in progress and we're zooming out, reverse the zoom direction
     zoomStartScale = globalScale;
     zoomTargetScale = 6; // Zoom in
     zoomStartTime = null; // Reset start time to handle the smooth reverse
     setTimeout(() => {
-      allowMove = false;
+      blockMotion = true;
     }, (zoomDuration))
   } else if (!zoomingInProgress) {
     // If no zooming is in progress, start the zoom-in transition
@@ -259,13 +234,12 @@ window.addEventListener('openCharMenu', () => {
     zoomingInProgress = true; // Set zooming in progress
     animateZoom();
     setTimeout(() => {
-      allowMove = false;
+      blockMotion = true;
     }, (0)) // Will be better once i code the character movement better with decelertation
   }
 });
 
 window.addEventListener('closeCharMenu', () => {
-  blockTravel = false;
   blockMotion = false;
   if (zoomingInProgress && zoomTargetScale === 6) {
     // If zooming is in progress and we're zooming in, reverse the zoom direction
@@ -273,7 +247,7 @@ window.addEventListener('closeCharMenu', () => {
     zoomTargetScale = 4; // Zoom out
     zoomStartTime = null; // Reset start time to handle the smooth reverse
     setTimeout(() => {
-      allowMove = true;
+      blockMotion = false;
     }, (0)) 
   } else if (!zoomingInProgress) {
     // If no zooming is in progress, start the zoom-out transition
@@ -282,17 +256,13 @@ window.addEventListener('closeCharMenu', () => {
     zoomingInProgress = true; // Set zooming in progress
     animateZoom();
     setTimeout(() => {
-      allowMove = true;
+      blockMotion = false;
     }, (zoomDuration))
   }
 });
 
 // Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
-  //charDirectionHistory = []; // stop character moving on resize otherwise it glitches
-  //charMove();
-  //stopCyclingFrameX();
-  // updateCharDirection();
 
   // Set canvas size to match the window's inner width and height
   canvas.width = window.innerWidth * dpr;
@@ -334,8 +304,6 @@ function centerCamera() {
       translationY = canvasCenterY - (char.y * globalScale + charHeight / 2);
     }
 }
-
-
 
 
 ///////////////
@@ -444,21 +412,6 @@ function checkNPCs() {
 
 let npcMemory;
 
-window.addEventListener('npcUpdate', () => {
-  const activeNPCs = Object.entries(toggleNPCs).filter(([key, value]) => value);
-  const numActive = activeNPCs.length;
-
-  if (numActive === 1) {
-    // If exactly one NPC is true, handle the exclusive case
-    const [npc] = activeNPCs;
-    npcMemory = npc[0];
-    console.log(`hi ${npc[0]}`); // npc[0] is the key (e.g., 'chicken' or 'shrooms')
-  } else if (numActive === 0) {
-    // If no NPCs are true
-    const [npc] = activeNPCs;
-    console.log(`bye ${npcMemory}`);
-  }
-});
   
 function proximityQuery(object1, object2) {
   // Find the center of object1
@@ -481,7 +434,6 @@ function proximityQuery(object1, object2) {
 // MOVEMENT //
 //////////////
 
-let speed = 0;
 let mouseRadius = 0;
 let mouseAngle = 0;
 
@@ -490,6 +442,25 @@ let stoppedMoving = true;
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
+
+let keysPressed = [];
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'w' || event.key === 'a' || event.key === 's' || event.key === 'd' || event.key === 'W' || event.key === 'A' || event.key === 'S' || event.key === 'D' || event.shiftKey && event.key === 'W' || event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 'D' || event.key === 'ArrowUp' || event.key === 'ArrowLeft' || event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+    if (!keysPressed.includes(event.key)) {
+      keysPressed.push(event.key);
+    }
+  }
+  if (event.getModifierState('CapsLock') || event.shiftKey) {
+    keysPressed = keysPressed.filter(word => !['w', 'a', 's', 'd'].includes(word));
+  } else if (!event.shiftKey) {
+    keysPressed = keysPressed.filter(word => !['W', 'A', 'S', 'D'].includes(word));
+  }
+})
+document.addEventListener('keyup', (event) => {
+  keysPressed = keysPressed.filter(word => word !== event.key);
+  updateCharAngle();
+})
 
 canvas.addEventListener('mousedown', (event) => {
   isDragging = true;
@@ -504,6 +475,7 @@ canvas.addEventListener('touchstart', (event) => {
 });
 document.addEventListener('mouseup', () => {
   isDragging = false;
+  blockMouse = false;
 });
 document.addEventListener('touchend', () => {
   isDragging = false;
@@ -536,36 +508,66 @@ function updateMouseData(event) {
   mouseAngle = Math.atan2(dy, dx);
 }
 
-function updateCharMovement() {
-  let maxSpeed = limitCharMovement(mouseRadius, 1.5); // Adjust the 2nd argument to change the maximum speed
-  let angle = limitAngle(mouseAngle, 8);
-  const acceleration = 0.1;
-  const deceleration = 0.25;
+let angle = 0;
+let keyDominance;
+let blockMouse = false;
+let charSpeed = 0;
 
-  if (isDragging && maxSpeed >= 0.25) {
+function updateCharMovement() {
+  let maxSpeed = 1.5;
+  if (keysPressed.length !== 0) {
+    angle = updateCharAngle();
+    keyDominance = true;
+  } else if (blockMouse) {
+    updateAnimation(0, true);
+    return
+  } else if (isDragging) {
+    maxSpeed = limitCharMovement(mouseRadius, maxSpeed); // Adjust the 2nd argument to change the maximum speed
+    angle = mouseAngle // limitAngle(mouseAngle, 8);
+    keyDominance = false;
+  }
+  if (keyDominance && isDragging) {
+    confirmBlockMouse(100);
+  }
+  const charAcceleration = 0.1;
+  const charDeceleration = 0.25;
+
+  if ((isDragging || keysPressed.length !== 0) && maxSpeed >= 0.25 && !blockMotion) {
     moving(true);
-    speed += acceleration;
-    speed = Math.min(speed, maxSpeed);
+    charSpeed += charAcceleration;
+    charSpeed = Math.min(charSpeed, maxSpeed);
     updateCharDirection(angle);
-    updateAimation(100, false);
+    updateAnimation(80, false);
   } else {
     moving(false);
-    speed -= deceleration;
-    speed = Math.max(speed, 0);
-    updateAimation(0, true);
+    charSpeed -= charDeceleration;
+    charSpeed = Math.max(charSpeed, 0);
+    updateAnimation(0, true);
     if (isDragging) {
       updateCharDirection(angle);
     }
   }
 
-  char.x += (speed * Math.cos(angle));
-  char.y += (speed * Math.sin(angle));
+  if (!(keyDominance && (hKeys === 0))) {
+    char.x += (charSpeed * Math.cos(angle));
+  }
+  if (!(keyDominance && (vKeys === 0))) {
+    char.y += (charSpeed * Math.sin(angle));
+  }
 
   // Constrain position to units of 0.25
   char.x = Math.round(char.x * 4) / 4;
   char.y = Math.round(char.y * 4) / 4;
 
   checkNPCs();
+}
+
+function confirmBlockMouse(time) {
+  setTimeout(() => {
+    if (keyDominance && isDragging) {
+      blockMouse = true;
+    }
+  }, time);
 }
 
 function moving(isMoving) {
@@ -592,7 +594,7 @@ function limitAngle(angle, divisions) {
 
 let lastUpdate = 0;
 
-function updateAimation(speed, stop) {
+function updateAnimation(speed, stop) {
   const now = performance.now();
   
   if (stop) {
@@ -632,6 +634,84 @@ function updateCharDirection(angle) {
     char.frameY = 2;
   } else if (angle >= -45 && angle <= 45) { // Right
     char.frameY = 3;
+  }
+}
+
+let vKeys = 0;
+let hKeys = 0;
+let angleHistory = 0;
+
+function updateCharAngle() {
+  const keyAcceleration = 0.1;
+  const keyDeceleration = 0.2;
+  let vBoth = false;
+  let hBoth = false;
+  let anyV = false;
+  let anyH = false;
+
+  if ((keysPressed.includes('w') || keysPressed.includes('W') || keysPressed.includes('ArrowUp')) && !((keysPressed.includes('s') || keysPressed.includes('S') || keysPressed.includes('ArrowDown')))) {
+    if (vKeys < 0) {
+      charSpeed = 0;
+      vKeys = 0
+    }
+    anyV = true;
+    vKeys = Math.min(vKeys + keyAcceleration, 1); // Up Exclusive
+  } else if (!(keysPressed.includes('w') || keysPressed.includes('W') || keysPressed.includes('ArrowUp')) && ((keysPressed.includes('s') || keysPressed.includes('S') || keysPressed.includes('ArrowDown')))) {
+    if (vKeys > 0) {
+      charSpeed = 0;
+      vKeys = 0
+    }
+    anyV = true
+    vKeys = Math.max(vKeys - keyAcceleration, -1); // Down Exclusive
+  } else {
+    if (vKeys > 0) {
+      vKeys = Math.max(vKeys - keyDeceleration, 0);
+    } else if (vKeys < 0) {
+      vKeys = Math.min(vKeys + keyDeceleration, 0);
+    }
+  }
+  if ((keysPressed.includes('w') || keysPressed.includes('W') || keysPressed.includes('ArrowUp')) && ((keysPressed.includes('s') || keysPressed.includes('S') || keysPressed.includes('ArrowDown')))) {
+    vBoth = true;
+    anyV = true;
+  }
+
+  if ((keysPressed.includes('d') || keysPressed.includes('D') || keysPressed.includes('ArrowRight')) && !(keysPressed.includes('a') || keysPressed.includes('A') || keysPressed.includes('ArrowLeft'))) {
+    if (hKeys < 0) {
+      charSpeed = 0;
+      hKeys = 0
+    }
+    anyH = true;
+    hKeys = Math.min(hKeys + keyAcceleration, 1); // Right Exclusive
+  } else if (!(keysPressed.includes('d') || keysPressed.includes('D') || keysPressed.includes('ArrowRight')) && (keysPressed.includes('a') || keysPressed.includes('A') || keysPressed.includes('ArrowLeft'))) {
+    if (hKeys > 0) {
+      charSpeed = 0;
+      hKeys = 0
+    }
+    anyH = true;
+    hKeys = Math.max(hKeys - keyAcceleration, -1); // Left Exclusive
+  } else {
+    if (hKeys > 0) {
+      hKeys = Math.max(hKeys - keyDeceleration, 0);
+    } else if (hKeys < 0) {
+      hKeys = Math.min(hKeys + keyDeceleration, 0);
+    }
+  }
+  if ((keysPressed.includes('d') || keysPressed.includes('D') || keysPressed.includes('ArrowRight')) && (keysPressed.includes('a') || keysPressed.includes('A') || keysPressed.includes('ArrowLeft'))) {
+    hBoth = true;
+    anyH = true;
+  }
+
+  if (keysPressed.length === 0) {
+    vKeys = 0;
+    hKeys = 0;
+  }
+
+  if ((vBoth && hBoth) || (vBoth && !anyH) || (hBoth && !anyV)) {
+    charSpeed = 0;
+    return angleHistory
+  } else {
+    angleHistory = Math.atan2(-vKeys, hKeys);
+    return angleHistory;
   }
 }
 
