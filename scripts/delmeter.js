@@ -8,7 +8,7 @@ const meterBG = document.getElementById("meterBG");
  let time = 0; // Time variable for smooth sinusoidal movement
  function updateDelMeter() {
     meter = 50 + 50 * Math.sin(time); // Oscillates between -50 and 50, then shifted to 0-100
-    // meter = window.delMeter;
+    //meter = window.delMeter;
     time += 0.05; // Increment time for the next frame
     updateMeterDisplay();
     requestAnimationFrame(updateDelMeter);
@@ -35,6 +35,24 @@ function updateMeterDisplay() {
       0 calc(var(--pixelScale) * -1 * var(--pxScaleMultiplier)) 0 ${shadowColor}, /* Top */
       0 calc(var(--pixelScale) * 1 * var(--pxScaleMultiplier)) 0 ${shadowColor} /* Bottom */
     `;
+
+    updateMeterIndicator(fgColor, shadowColor);
+}
+
+function updateMeterIndicator(bgColor, fgColor) {
+  // Get all elements with the class names .cls-b and .cls-f
+  const bgElements = document.querySelectorAll('.cls-b');
+  const fgElements = document.querySelectorAll('.cls-f');
+
+  // Update the fill color of all elements with .cls-b to bgColor
+  bgElements.forEach(element => {
+      element.style.fill = bgColor;
+  });
+
+  // Update the fill color of all elements with .cls-f to fgColor
+  fgElements.forEach(element => {
+      element.style.fill = fgColor;
+  });
 }
 
 // Function to calculate the HSL color for the gradient based on the meter value

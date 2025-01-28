@@ -39,6 +39,7 @@ canvas {
   transform: none; /* Prevent scaling by default */
 }
 
+
 main {
   display: grid;
   overflow: hidden;
@@ -187,6 +188,7 @@ span, li a {
   opacity: 0.4;
   /* pointer-events: none; /* Disable interaction */
 }
+
 
 .closeMenuButton {
   position: absolute; /* Position relative to its parent (articleWrapper) */

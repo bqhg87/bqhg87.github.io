@@ -5,7 +5,7 @@ function setButtonSprite(buttonId, spriteX, spriteY) {
   const buttonHeight = button.offsetHeight;
   
   const backgroundPositionX = -spriteX * buttonWidth; // Negative offset for X-axis
-  const backgroundPositionY = -spriteY * buttonHeight; // Negative offset for Y-axis
+  let backgroundPositionY = -spriteY * buttonHeight; // Negative offset for Y-axis
   
   button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
   button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 6}px`;  // Scale the sprite to fit the button
@@ -63,7 +63,7 @@ let prev = false;
 
 // Function to handle button click, toggle visibility, and manage state
 function handleButtonClick(buttonId) {
-  buttonClickedDuringTimeout = true
+  buttonClickedDuringTimeout = true;
 
   const buttons = document.querySelectorAll('.headButton');
   const clickedButton = document.getElementById(buttonId);
@@ -117,12 +117,17 @@ function handleButtonClick(buttonId) {
       meterWrapper.classList.add('show'); // Show the meterWrapper
       sideMenuWrapper.classList.add('fade-out');
       articleWrapper.classList.add('fade-out');
+      const indicator = document.getElementById('meterIndicator');
+      indicator.style.visibility = 'hidden';
       setTimeout(() => {
       sideMenuWrapper.classList.remove('show', 'fade-out'); // Hide the sideMenu if meterWrapper is shown
       articleWrapper.classList.remove('show', 'fade-out');
       closeArticle();
       }, 200);
-    } 
+    } else {
+      const indicator = document.getElementById('meterIndicator');
+      indicator.style.visibility = 'visible';
+    }
   } else {
     // Fade out the elements instead of removing them immediately
     if (sideMenuWrapper.classList.contains('show')) {
@@ -136,6 +141,9 @@ function handleButtonClick(buttonId) {
     if (buttonId === 'menuToggle' && articleWrapper.classList.contains('show')) {
       articleWrapper.classList.add('fade-out'); // Add fade-out class immediately
     }
+
+    const indicator = document.getElementById('meterIndicator');
+    indicator.style.visibility = 'visible';
 
     buttons.forEach(button => {
       button.classList.remove('hidden'); // Show all buttons
@@ -209,6 +217,9 @@ window.closeArticle = function() {
   }
 }
 
+let leftCheck = false;
+let downCheck = false;
+
 // Event listener function to handle sprite changes based on interaction
 function addButtonEventListeners(buttonId) {
   const button = document.getElementById(buttonId);
@@ -216,27 +227,59 @@ function addButtonEventListeners(buttonId) {
   // Track whether the button is being hovered over
   button.isHovered = false;
 
-  button.addEventListener('mouseover', () => {
-    button.isHovered = true;
-    const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
-    setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
+  button.addEventListener('mouseenter', () => {
+    checkButtonHover(buttonId);
+    if (leftCheck && downCheck) {
+      const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
+      setButtonSprite(buttonId, 2, spriteY); // Active state (spriteX = 2)
+      if (buttonId === "meterToggle") {
+        const indicator = document.getElementById('meterIndicator');
+        indicator.style.top = 3.5;
+        indicator.style.opacity = 1;
+      }
+    } else {
+      button.isHovered = true;
+      const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
+      setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
+      if (buttonId === "meterToggle") {
+        const indicator = document.getElementById('meterIndicator');
+        indicator.style.opacity = 1;
+      }
+    }
+    leftCheck = false;
   });
 
   button.addEventListener('mousedown', () => {
+    downCheck = true;
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 2, spriteY); // Active state (spriteX = 2)
+    if (buttonId === "meterToggle") {
+      const indicator = document.getElementById('meterIndicator');
+      indicator.style.top = 3.5;
+    }
   });
 
-  button.addEventListener('mouseout', () => {
+  button.addEventListener('mouseleave', () => {
+    leftCheck = true;
     button.isHovered = false;
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 0, spriteY); // Normal state (spriteX = 0)
+    const indicator = document.getElementById('meterIndicator');
+    indicator.style.top = -1.5;
+    indicator.style.opacity = 0.7;
   });
 
   button.addEventListener('mouseup', () => {
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
+    const indicator = document.getElementById('meterIndicator');
+    indicator.style.top = -1.5;
   });
+
+  document.addEventListener('mouseup', () => {
+    downCheck = false;
+    leftCheck = false;
+  })
 }
 
 // Function to check if the mouse is hovering over a specific button
@@ -247,10 +290,15 @@ function checkButtonHover(buttonId) {
     // The mouse is hovering over the button, update styles accordingly
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 1, spriteY); // Update hover state sprite
+    const indicator = document.getElementById('meterIndicator');
+    indicator.style.opacity = 1;
   } else {
     // The mouse is not hovering over the button, update to normal state
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 0, spriteY); // Normal state sprite
+    const indicator = document.getElementById('meterIndicator');
+    indicator.style.opacity = 0.7;
+    indicator.style.top = -1.5;
   }
 }
 

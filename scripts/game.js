@@ -534,7 +534,7 @@ function updateCharMovement() {
   const charAcceleration = 0.1;
   const charDeceleration = 0.25;
 
-  if ((isDragging || keysPressed.length !== 0) && maxSpeed >= 0.25 && !blockMotion) {
+  if ((isDragging || keysPressed.length !== 0) && maxSpeed >= 0.125 && !blockMotion) {
     moving(true);
     charSpeed += charAcceleration;
     charSpeed = Math.min(charSpeed, maxSpeed);
@@ -558,8 +558,8 @@ function updateCharMovement() {
   }
 
   // Constrain position to units of 0.25
-  char.x = Math.round(char.x * 4) / 4;
-  char.y = Math.round(char.y * 4) / 4;
+  char.x = Math.round(char.x * 8) / 8;
+  char.y = Math.round(char.y * 8) / 8;
 
   checkNPCs();
 }
