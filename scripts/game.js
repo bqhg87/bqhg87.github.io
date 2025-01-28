@@ -300,8 +300,8 @@ function centerCamera() {
       translationY = canvasCenterY - (char.y * globalScale + charHeight / 2 - 200);
     } else {
       // Set translation such that the character is centered
-      translationX = canvasCenterX - (char.x * globalScale + charWidth / 2);
-      translationY = canvasCenterY - (char.y * globalScale + charHeight / 2);
+      translationX = canvasCenterX - (round(char.x, 4) * globalScale + charWidth / 2);
+      translationY = canvasCenterY - (round(char.y, 4) * globalScale + charHeight / 2);
     }
 }
 
@@ -558,10 +558,14 @@ function updateCharMovement() {
   }
 
   // Constrain position to units of 0.25
-  char.x = Math.round(char.x * 8) / 8;
-  char.y = Math.round(char.y * 8) / 8;
+  char.x = round(char.x, 100);
+  char.y = round(char.y, 100);
 
   checkNPCs();
+}
+
+function round(input, div) {
+  return Math.round(input * div) / div;
 }
 
 function confirmBlockMouse(time) {

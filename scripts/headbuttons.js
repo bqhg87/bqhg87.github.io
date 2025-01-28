@@ -220,8 +220,8 @@ window.closeArticle = function() {
 let leftCheck = false;
 let downCheck = false;
 const dpr = window.devicePixelRatio || 1;
-let indicatorUp = -2 * dpr + 0.5;
-let indicatorDown = 2 * dpr + 1.5;
+let indicatorUp = -9 / 6;
+let indicatorDown = 3;
 const indicator = document.getElementById('meterIndicator');
 indicator.style.top = indicatorUp;
 
