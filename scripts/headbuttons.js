@@ -219,6 +219,11 @@ window.closeArticle = function() {
 
 let leftCheck = false;
 let downCheck = false;
+const dpr = window.devicePixelRatio || 1;
+let indicatorUp = -0.75 * dpr;
+let indicatorDown = 1.75 * dpr;
+const indicator = document.getElementById('meterIndicator');
+indicator.style.top = indicatorUp;
 
 // Event listener function to handle sprite changes based on interaction
 function addButtonEventListeners(buttonId) {
@@ -234,7 +239,7 @@ function addButtonEventListeners(buttonId) {
       setButtonSprite(buttonId, 2, spriteY); // Active state (spriteX = 2)
       if (buttonId === "meterToggle") {
         const indicator = document.getElementById('meterIndicator');
-        indicator.style.top = 3.5;
+        indicator.style.top = indicatorDown;
         indicator.style.opacity = 1;
       }
     } else {
@@ -255,7 +260,7 @@ function addButtonEventListeners(buttonId) {
     setButtonSprite(buttonId, 2, spriteY); // Active state (spriteX = 2)
     if (buttonId === "meterToggle") {
       const indicator = document.getElementById('meterIndicator');
-      indicator.style.top = 3.5;
+      indicator.style.top = indicatorDown;
     }
   });
 
@@ -265,7 +270,7 @@ function addButtonEventListeners(buttonId) {
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 0, spriteY); // Normal state (spriteX = 0)
     const indicator = document.getElementById('meterIndicator');
-    indicator.style.top = -1.5;
+    indicator.style.top = indicatorUp;
     indicator.style.opacity = 0.7;
   });
 
@@ -273,7 +278,7 @@ function addButtonEventListeners(buttonId) {
     const spriteY = button.dataset.toggled === 'true' ? 1 : button.dataset.spriteY;
     setButtonSprite(buttonId, 1, spriteY); // Hover state (spriteX = 1)
     const indicator = document.getElementById('meterIndicator');
-    indicator.style.top = -1.5;
+    indicator.style.top = indicatorUp;
   });
 
   document.addEventListener('mouseup', () => {
@@ -298,7 +303,7 @@ function checkButtonHover(buttonId) {
     setButtonSprite(buttonId, 0, spriteY); // Normal state sprite
     const indicator = document.getElementById('meterIndicator');
     indicator.style.opacity = 0.7;
-    indicator.style.top = -1.5;
+    indicator.style.top = indicatorUp;
   }
 }
 
