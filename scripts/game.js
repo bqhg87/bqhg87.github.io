@@ -24,14 +24,16 @@ const objectsToDraw = [
     frameY: 0,
     frameWidth: 48,
     frameHeight: 48,
+    feet: 16,
     zIndex: 2
   },
   {
     image: paintingImage,
     x: -22.5,
-    y: 1,
+    y: 60,
     frameWidth: 15,
     frameHeight: 7,
+    feet: 5,
     zIndex: 1
   },
   {
@@ -41,6 +43,7 @@ const objectsToDraw = [
     y: -40,
     frameWidth: 14,
     frameHeight: 11,
+    feet: 2,
     zIndex: 1
   },
   {
@@ -52,10 +55,11 @@ const objectsToDraw = [
     frameY: 0,
     frameWidth: 16,
     frameHeight: 16,
+    feet: 2,
     zIndex: 1
   }
 ];
-const char = objectsToDraw[0]; // Which one is the character to control?
+const char = objectsToDraw[0]; // this is the character
 const chicken = objectsToDraw[3];
 const shrooms = objectsToDraw[2];
 
@@ -323,8 +327,27 @@ function draw() {
     centerCamera();
   }
 
-  // Sort objects by zIndex (ascending order)
-  const sortedObjects = [...objectsToDraw].sort((a, b) => a.zIndex - b.zIndex);
+  // Sort objects by their feet position relative to the character's feet
+  const sortedObjects = [...objectsToDraw].sort((a, b) => {
+    const charFeet = char.y + char.frameHeight - char.feet; // Character's feet position
+
+    const aFeet = a.y + a.frameHeight - a.feet; // Object a's feet position
+    const bFeet = b.y + b.frameHeight - b.feet; // Object b's feet position
+    
+
+    // If character's feet are higher than object A's feet, draw A first (behind character)
+    if (charFeet < aFeet) {
+      return 1; // A should be behind the character
+    }
+
+    // If character's feet are higher than object B's feet, draw B first (behind character)
+    if (charFeet < bFeet) {
+      return -1; // B should be behind the character
+    }
+
+    // Otherwise, sort by default zIndex (as a fallback for similar feet positions)
+    return a.zIndex - b.zIndex;
+  });
 
   // Loop through each object in the sorted array
   sortedObjects.forEach(obj => {
