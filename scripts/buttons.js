@@ -94,9 +94,7 @@ function handleButtonClick(buttonId) {
   }
 
   if (buttonId === 'dialogueToggle') {
-    const nextDialoguePartEvent = new Event('nextDialoguePart');
-    window.dispatchEvent(nextDialoguePartEvent);
-    handleStartEndDialogue();
+    toggleDialogueOpen();
     return
   }
 

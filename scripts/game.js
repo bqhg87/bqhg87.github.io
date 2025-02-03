@@ -463,18 +463,37 @@ function checkNPCs() {
   npcs.forEach((npc, index) => checkNPC(npc, char, distances[index]));
 }
 
+let spaceHeld = false; // Flag to track whether Space is held
+
 function spaceDialogueToggle(event) {
-  if (event.code !== "Space") return;
+  if (event.code !== "Space" || spaceHeld) return; // Prevent repeated triggers
+
+  spaceHeld = true; // Set flag to prevent retriggering
+
   if (window.isTextAnimating) {
     skipDialogue();
-    return
-  };
+    return;
+  }
 
   loadDialogue("concept", 1, npcMemory.name); // LOAD STORY
 
   handleStartEndDialogue();
 }
+
+// Reset the flag when the key is released
+function resetSpaceHeld(event) {
+  if (event.code === "Space") {
+    spaceHeld = false;
+  }
+}
+
 window.addEventListener("keydown", spaceDialogueToggle);
+window.addEventListener("keyup", resetSpaceHeld); // Listen for key release
+
+window.toggleDialogueOpen = function () {
+  loadDialogue("concept", 1, npcMemory.name); // LOAD STORY
+  handleStartEndDialogue();
+}
 
 function clickDialogueToggle() {
   if (!dialogueToggled) {return}
