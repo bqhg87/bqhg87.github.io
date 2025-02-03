@@ -671,7 +671,7 @@ span, li a {
 }
 @media (max-width: 500px) {
   #dialogue {
-    max-width: calc(100vw - var(--pixelScale) * (12 + 6));
+    max-width: calc(100vw - var(--pixelScale) * (12 + 8));
   }
 }
 @media (max-width: 408px) {
@@ -710,12 +710,10 @@ span, li a {
     width: calc(100% - var(--pixelScale) * (27));
   }
   #dialogueWrapper {
-    left: calc(var(--pixelScale) * (3));
-    transform: translateX(0);
     max-width: fit-content;
   }
   #dialogue {
-    min-width: calc(320px - var(--pixelScale) * (12 + 6));
+    min-width: calc(320px - var(--pixelScale) * (12 + 8));
   }
   footer {
     left: 0;
