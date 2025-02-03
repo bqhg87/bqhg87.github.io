@@ -378,6 +378,7 @@ span, li a {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
+  min-width: fit-content;
   display: flex;
   flex-direction: row-reverse;
   gap: calc(var(--pixelScale) * 4);
@@ -411,6 +412,7 @@ span, li a {
   --pxScaleMultiplier: 1;
   height: fit-content;
   width: fit-content;
+  min-width: fit-content;
   opacity: 0;
   gap: calc(var(--pixelScale) * 4);
   transition: opacity 0.2s ease;
@@ -714,5 +716,10 @@ span, li a {
   }
   #dialogue {
     min-width: calc(320px - var(--pixelScale) * (12 + 6));
+  }
+  footer {
+    left: 0;
+    width: 320px;
+    transform: translateX(0);
   }
 }
