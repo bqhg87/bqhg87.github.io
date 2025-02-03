@@ -39,7 +39,6 @@ canvas {
   transform: none; /* Prevent scaling by default */
 }
 
-
 main {
   display: grid;
   overflow: hidden;
@@ -63,6 +62,27 @@ header {
   pointer-events: none;
 }
 header * {
+  /* Re-enable pointer events for interactive children */
+  pointer-events: auto;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  min-width: 320px;
+  height: calc(var(--pixelScale) * 20);
+  display: flex;
+  justify-content: space-between;
+  opacity: 1;
+  align-items: center; 
+  padding: calc(var(--pixelScale) * 4);
+  z-index: 10000;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+footer * {
   /* Re-enable pointer events for interactive children */
   pointer-events: auto;
 }
@@ -189,7 +209,6 @@ span, li a {
   /* pointer-events: none; /* Disable interaction */
 }
 
-
 .closeMenuButton {
   position: absolute; /* Position relative to its parent (articleWrapper) */
   top: 0; /* Align to the top */
@@ -226,7 +245,7 @@ span, li a {
   transform: translateX(1500%);
   opacity: 0;
   transition: opacity 0.2s ease;
-  z-index: 1000;
+  z-index: 1100;
   box-shadow: calc(var(--pixelScale) * -4) 0 0 var(--c0), calc( var(--pixelScale) * -6) 0 0 rgb(163, 123, 94);
 }
 #sideMenuWrapper.show {
@@ -317,6 +336,7 @@ span, li a {
   top: calc(var(--pixelScale) * 28);
   left: calc(var(--pixelScale) * 28);
   padding: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 4);
+  z-index: 1002;
 }
 #articleWrapper.show {
   transform: translateX(0); /* Adjust for the div's dimensions */
@@ -346,13 +366,130 @@ span, li a {
   opacity: 0.97;
   z-index: 20000;
 }
-
-#meterWrapper .corner, #articleWrapper .corner {
+#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner {
   background-image: url('./assets/uiCorners3.png');
 }
-#meterWrapper .pxDivBG, #articleWrapper .pxDivBG {
+#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
+}
+
+#dialogueContextWrapper {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row-reverse;
+  gap: calc(var(--pixelScale) * 4);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+#dialogueContextWrapper.hidden {
+  opacity: 0;
+}
+
+.footButton {
+  width: calc(var(--pixelScale) * 18);  /* 18x20 sprites */
+  height: calc(var(--pixelScale) * 20); /* 18x20 sprites */
+  margin: 0;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  background-image: url('./assets/headButtons.png');
+  padding: 0;
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  transition: opacity 0.2s ease;
+  opacity: 0; /* Initially visible */
+  pointer-events: none; /* Disable interaction */
+}
+.footButton.show {
+  opacity: 0.9;
+  pointer-events: visible; /* Disable interaction */
+}
+
+#bottomLabelWrapper {
+  --pxScaleMultiplier: 1;
+  height: fit-content;
+  width: fit-content;
+  opacity: 0;
+  gap: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+  position: relative; /* Position relative to the viewport */
+  top: calc(var(--pixelScale) * 2.5);
+  pointer-events: none;
+}
+#bottomLabelWrapper.show {
+  opacity: 0.9;
+}
+
+
+#bottomLabel {
+  position: relative;
+  left: calc(var(--pixelScale) * 6);
+  top: calc(var(--pixelScale) * 3);
+  min-width: calc(var(--pixelScale) * (6));
+  max-width: calc(var(--pixelScale) * (182));
+  padding-right: calc(var(--pixelScale) * 12);
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+  padding-bottom: 16px;
+}
+
+#dialogueWrapper {
+  --pxScaleMultiplier: 1;
+  height: fit-content;
+  width: fit-content;
+  opacity: 0;
+  gap: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+  position: fixed; /* Position relative to the viewport */
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+#dialogueWrapper.show {
+  opacity: 0.9;
+  pointer-events: visible;
+}
+
+#dialogue {
+  position: relative;
+  left: calc(var(--pixelScale) * 6);
+  top: calc(var(--pixelScale) * 6);
+  min-width: calc(var(--pixelScale) * (6));
+  max-width: calc(var(--pixelScale) * (182));
+  padding-right: calc(var(--pixelScale) * 12);
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+  padding-bottom: 30px;
+}
+
+.dropdown {
+  position: absolute;
+  background-image: url('./assets/uiDialogue.png');
+  background-size: calc(var(--pixelScale) * var(--pxScaleMultiplier) * 4 * 3) calc(var(--pixelScale) * var(--pxScaleMultiplier) * 4 * 2);
+  padding: 0;
+  border: none;
+  opacity: 1;
+  bottom: calc(var(--pixelScale) * -5);
+  left: calc(var(--pixelScale) * 20);
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  width: calc(var(--pixelScale) * 12 * var(--pxScaleMultiplier)); /* 4px * 4px */
+  height: calc(var(--pixelScale) * 8 * var(--pxScaleMultiplier));
+  z-index: 10000;
 }
 
 #sideMenuWrapper.fade-out, #meterWrapper.fade-out, #articleWrapper.fade-out {
@@ -393,6 +530,13 @@ span, li a {
   pointer-events: none;
   color: rgb(97, 70, 60);
   z-index: 1001;
+}
+
+#meterIndicator {
+  height: 15px;
+  position: relative;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .pxDivWrapper {
@@ -459,6 +603,12 @@ span, li a {
   opacity: 0;
 }
 
+
+
+
+
+
+
 @media (max-width: 930px) {
   #articleWrapper {
     top: calc(var(--pixelScale) * 28);
@@ -517,6 +667,11 @@ span, li a {
     grid-area: 1 / 3 / 2 / 4;
   }
 }
+@media (max-width: 500px) {
+  #dialogue {
+    max-width: calc(100vw - var(--pixelScale) * (12 + 6));
+  }
+}
 @media (max-width: 408px) {
   #meterBG {
     width: calc(100% - var(--pixelScale) * (27));
@@ -551,5 +706,13 @@ span, li a {
   }
   #meterBG {
     width: calc(100% - var(--pixelScale) * (27));
+  }
+  #dialogueWrapper {
+    left: calc(var(--pixelScale) * (3));
+    transform: translateX(0);
+    max-width: fit-content;
+  }
+  #dialogue {
+    min-width: calc(320px - var(--pixelScale) * (12 + 6));
   }
 }

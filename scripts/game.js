@@ -1,7 +1,7 @@
 const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
-
 window.delMeter = 64;
+window.gamemode = "restore";
 
 const charSheet = new Image();
 const paintingImage = new Image();
@@ -39,6 +39,7 @@ const objectsToDraw = [
   {
     image: shroomsImage,
     name: 'shrooms',
+    properName: 'Mr. Lvndquist',
     x: 14,
     y: -40,
     frameWidth: 14,
@@ -49,6 +50,7 @@ const objectsToDraw = [
   {
     image: chickenNPC,
     name: 'chicken',
+    properName: 'Chicken',
     x: 120,
     y: -14,
     frameX: 0,
@@ -65,7 +67,7 @@ const shrooms = objectsToDraw[2];
 
 const npcIndicatorData = {
   chicken: { 
-    spriteX: 1, 
+    spriteX: 0, 
     spriteY: 0,
     indicatorOffsetX: 5,  // Offset in X direction (right)
     indicatorOffsetY: -5,  // Offset in Y direction (above)
@@ -76,7 +78,7 @@ const npcIndicatorData = {
     visible: true     // Set visibility property
   },
   shrooms: { 
-    spriteX: 2, 
+    spriteX: 0, 
     spriteY: 0,
     indicatorOffsetX: 4.5,  // Offset in X direction (left)
     indicatorOffsetY: -8,  // Offset in Y direction (above)
@@ -109,11 +111,10 @@ chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
 
 
-/////////////////////
-// CAMERA SETTINGS //
-/////////////////////
+////////////
+// CAMERA //
+////////////
 
-let freeCam = false; // freeCam is mostly for use in programming
 let lowCamera = false;
 
 let centerOnLoad = false; // Initially not centered (Variable to track it only centers on load)
@@ -122,31 +123,6 @@ const dpr = window.devicePixelRatio || 1;
 
 let translationX = 0;
 let translationY = 0;
-
-
-if (freeCam === true) {
-    console.log('Camea type: Free');
-
-    // Listen for mouse movement on the entire document to continue dragging
-    document.addEventListener('mousemove', (event) => {
-        if (isDragging) {
-        const dx = event.clientX - dragStartX;
-        const dy = event.clientY - dragStartY;
-    
-        // Update the translation based on mouse movement
-        translationX += dx;
-        translationY += dy;
-    
-        // Update the start position for the next move
-        dragStartX = event.clientX;
-        dragStartY = event.clientY;
-    
-        draw(); // Redraw the canvas with new translation
-        }
-    });
-} else {
-    console.log('Camea type: Fixed');
-}
 
 // Detect scroll events to adjust global scale and keep zoom centered
 canvas.addEventListener('wheel', (event) => {
@@ -207,6 +183,7 @@ function animateZoom() {
 
   // Update the global scale based on the easing progress
   globalScale = zoomStartScale + (zoomTargetScale - zoomStartScale) * easedProgress;
+  lerpLowCamera = lowCameraOffsetHistory + (lowCameraOffset - lowCameraOffsetHistory) * easedProgress;
 
   draw(); // Redraw the canvas with the updated scale
 
@@ -216,12 +193,16 @@ function animateZoom() {
   } else {
     zoomingInProgress = false; // Animation is complete
     zoomStartTime = null; // Reset start time for the next animation
+    lowCameraOffsetHistory = lowCameraOffset;
   }
 }
 
 let blockMotion;
+let blockDirectionUpdate = false;
 
 window.addEventListener('openCharMenu', () => {
+  lowCamera = false;
+  updateLowCamera();
   updateCharDirection(Math.PI / 2);
   if (zoomingInProgress && zoomTargetScale === 4) {
     // If zooming is in progress and we're zooming out, reverse the zoom direction
@@ -230,6 +211,9 @@ window.addEventListener('openCharMenu', () => {
     zoomStartTime = null; // Reset start time to handle the smooth reverse
     setTimeout(() => {
       blockMotion = true;
+      blockDirectionUpdate = true;
+      bottomLabelWrapper.classList.remove('show');
+      dialogueToggle.classList.remove('show');
     }, (zoomDuration))
   } else if (!zoomingInProgress) {
     // If no zooming is in progress, start the zoom-in transition
@@ -239,11 +223,16 @@ window.addEventListener('openCharMenu', () => {
     animateZoom();
     setTimeout(() => {
       blockMotion = true;
+      blockDirectionUpdate = true;
+      bottomLabelWrapper.classList.remove('show');
+      dialogueToggle.classList.remove('show');
     }, (0)) // Will be better once i code the character movement better with decelertation
   }
 });
 
 window.addEventListener('closeCharMenu', () => {
+  refreshCheckNPC();
+  checkNPCs();
   blockMotion = false;
   if (zoomingInProgress && zoomTargetScale === 6) {
     // If zooming is in progress and we're zooming in, reverse the zoom direction
@@ -252,6 +241,7 @@ window.addEventListener('closeCharMenu', () => {
     zoomStartTime = null; // Reset start time to handle the smooth reverse
     setTimeout(() => {
       blockMotion = false;
+      blockDirectionUpdate = false;
     }, (0)) 
   } else if (!zoomingInProgress) {
     // If no zooming is in progress, start the zoom-out transition
@@ -261,6 +251,7 @@ window.addEventListener('closeCharMenu', () => {
     animateZoom();
     setTimeout(() => {
       blockMotion = false;
+      blockDirectionUpdate = false;
     }, (zoomDuration))
   }
 });
@@ -290,6 +281,10 @@ function adjustForRetina() {
   draw();  // Redraw images after resizing
 }
 
+let lerpLowCamera = 0;
+let lowCameraOffset = 0;
+let lowCameraOffsetHistory = 0;
+
 function centerCamera() {
     // Ensure the character is always centered by adjusting translation
     const charWidth = char.frameWidth * globalScale;
@@ -299,15 +294,39 @@ function centerCamera() {
     const canvasCenterX = canvas.width / 2 / dpr;
     const canvasCenterY = canvas.height / 2 / dpr;
   
-    if (lowCamera === true) {
-      translationX = canvasCenterX - (char.x * globalScale + charWidth / 2 + 60); // needs some variable dependant on relative direction of char to npc
-      translationY = canvasCenterY - (char.y * globalScale + charHeight / 2 - 200);
-    } else {
-      // Set translation such that the character is centered
-      translationX = canvasCenterX - (round(char.x, 4) * globalScale + charWidth / 2);
-      translationY = canvasCenterY - (round(char.y, 4) * globalScale + charHeight / 2);
+    translationX = canvasCenterX - (round(char.x, 4) * globalScale + charWidth / 2);
+    if (!zoomingInProgress) {
+      lerpLowCamera = lowCameraOffset
     }
+    translationY = canvasCenterY - (round(char.y, 4) * globalScale + charHeight / 2 - lerpLowCamera);
 }
+
+function updateLowCamera() {
+  const dialogueHeight = dialogueWrapper.offsetHeight; // Get the height of the dialogue element
+  const windowHeight = window.innerHeight;
+
+  const lowAngleAdjust = window.lowAngleAdjust;
+  const wholeHeight = 100.5 - lowAngleAdjust * 4 * 2.5;
+
+  if (!lowCamera) {
+    lowCameraOffset = 0;
+  } else if ((dialogueHeight + wholeHeight) >= (windowHeight * 0.3)) {
+    lowCameraOffset = (dialogueHeight + wholeHeight - 38) / 2;
+  } else {
+    lowCameraOffset = (wholeHeight + 56) / 2;
+  }
+
+  window.lowCameraOffset = lowCameraOffset;
+  centerCamera();
+}
+
+function handleLowCameraResize() {
+
+}
+
+window.addEventListener('resize', updateLowCamera);
+window.addEventListener('typeLetter', updateLowCamera);
+window.addEventListener('dialogueLoaded', updateLowCamera);
 
 
 ///////////////
@@ -321,11 +340,7 @@ window.addEventListener('resize', adjustForRetina);
 function draw() {
   // Clear the canvas
   c.clearRect(0, 0, canvas.width, canvas.height);
-
-  // When freeCam is false, center the camera on the character
-  if (!freeCam) {
-    centerCamera();
-  }
+  centerCamera();
 
   // Sort objects by their feet position relative to the character's feet
   const sortedObjects = [...objectsToDraw].sort((a, b) => {
@@ -405,53 +420,230 @@ function draw() {
 
 let toggleNPCs = {}; // Store states for multiple NPCs
 const npcUpdateEvent = new Event('npcUpdate');
+let dialogueToggled = false;
+window.dialogueToggled = dialogueToggled;
+const distances = [20, 20]; // Add more NPCs' distances here
+const npcs = [chicken, shrooms]; // Add more NPCs here
+
+const bottomLabel = document.getElementById('bottomLabel');
+const bottomLabelWrapper = document.getElementById('bottomLabelWrapper');
+const dialogueToggle = document.getElementById('dialogueToggle');
 
 function checkNPC(npc, char, distance) {
   const distanceToNPC = proximityQuery(char, npc);
+  const isNear = distanceToNPC <= distance;
+  const wasNear = toggleNPCs[npc.name];
 
-  if (distanceToNPC <= distance && !toggleNPCs[npc.name]) {
-    // If the NPC is close, show the indicator with spriteY = 1
+  if (isNear && !wasNear) {
     toggleNPCs[npc.name] = true;
     npcIndicatorData[npc.name].spriteY = 1;  // Change spriteY when near
-    window.dispatchEvent(npcUpdateEvent);
-  } 
-  if (distanceToNPC > distance && toggleNPCs[npc.name]) {
-    // If the NPC is far away, revert the indicator to spriteY = 0
+    bottomLabel.textContent = `Talk to ${npc.properName}`;
+    bottomLabelWrapper.classList.add('show');
+    dialogueToggle.classList.add('show');
+    npcMemory = npc;
+  } else if (!isNear && wasNear) {
     toggleNPCs[npc.name] = false;
     npcIndicatorData[npc.name].spriteY = 0;  // Revert spriteY when far
+    bottomLabelWrapper.classList.remove('show');
+    dialogueToggle.classList.remove('show');
+  }
+
+  if (isNear !== wasNear) {
     window.dispatchEvent(npcUpdateEvent);
   }
 }
 
-function checkNPCs() {
-  let npcs = [chicken, shrooms]; // Add more NPCs here
-  let distances = [20, 20]; // Array of distances
-
-  npcs.forEach((npc, index) => {
-    let distanceToNPC = distances[index]; // Get the corresponding distance for each NPC
-    checkNPC(npc, char, distanceToNPC);
-  });
+function refreshCheckNPC() {
+  if (!npcMemory) {return}
+  const npc = npcMemory;
+  toggleNPCs[npc.name] = false;
 }
 
-let npcMemory;
+function checkNPCs() {
+  npcs.forEach((npc, index) => checkNPC(npc, char, distances[index]));
+}
 
+function spaceDialogueToggle(event) {
+  if (event.code !== "Space") return;
+  if (window.isTextAnimating) {
+    skipDialogue();
+    return
+  };
+
+  loadDialogue("concept", 1, npcMemory.name); // LOAD STORY
+
+  handleStartEndDialogue();
+}
+window.addEventListener("keydown", spaceDialogueToggle);
+
+function clickDialogueToggle() {
+  if (!dialogueToggled) {return}
+  if (window.isTextAnimating) {
+    skipDialogue();
+    return
+  };
+
+  loadDialogue("concept", 1, npcMemory.name); // LOAD STORY
+
+  for (let npcName in toggleNPCs) {
+    if (toggleNPCs[npcName]) {
+      if (window.finalPart === true) {
+        window.finalPart = false;
+        window.currentPart = 1;
+        endDialogue(npcName);
+      }
+      break;
+    }
+  }
+}
+canvas.addEventListener("click", clickDialogueToggle);
+
+window.handleStartEndDialogue = function() {
+  for (let npcName in toggleNPCs) {
+    if (toggleNPCs[npcName]) {
+      if (window.finalPart === false) {
+        startDialogue(npcName);
+      } else {
+        window.finalPart = false;
+        window.currentPart = 1;
+        endDialogue(npcName);
+      }
+      break;
+    }
+  }
+}
+
+let npcMemory = false;
+
+function startDialogue(npcName) {
+  const npc = objectsToDraw.find(obj => obj.name === npcName);
+  npcMemory = npc;
+  const dialogueWrapper = document.getElementById('dialogueWrapper');
+  bottomLabelWrapper.classList.remove('show');
+  dialogueToggle.classList.remove('show');
+  dialogueWrapper.classList.add('show');
+  npcIndicatorData[npc.name].spriteX = -1;
+  //loadDialogue("concept", 1, npcName);
+  lowCameraOffsetHistory = lowCameraOffset;
+  const direction = snapToValidDirection(directionQuery(char, npc));
+  window.npcRelativeDirection = direction;
+  teleportToNPC(npc, direction);
+  blockDirectionUpdate = true;
+  handleZoom(5);
+  dialogueEnding = false;
+  window.dialogueEnding = dialogueEnding;
+  dialogueToggled = true;
+  window.dialogueToggled = dialogueToggled;
+  if (lowCamera === false) {
+    lowCamera = true;
+  }
+}
+
+let dialogueEnding = false;
+window.dialogueEnding = dialogueEnding;
+
+function endDialogue(npcName) {
+  window.currentPart = 1;
+  const npc = objectsToDraw.find(obj => obj.name === npcName);
+  const dialogueWrapper = document.getElementById('dialogueWrapper');
+  bottomLabelWrapper.classList.add('show');
+  dialogueToggle.classList.add('show');
+  dialogueWrapper.classList.remove('show');
+  npcIndicatorData[npc.name].spriteX = 2;
+  blockDirectionUpdate = false;
+  lowCameraOffsetHistory = lowCameraOffset;
+  handleZoom(4);
+  lowCamera = false;
+  dialogueEnding = true;
+  window.dialogueEnding = dialogueEnding;
+  dialogueToggled = false;
+  window.dialogueToggled = dialogueToggled;
+}
+
+window.breakDialogue = function() {
+  window.currentPart = 1;
+  const npc = npcMemory;
+  npcIndicatorData[npc.name].spriteX = 2;
+  const dialogueWrapper = document.getElementById('dialogueWrapper');
+  bottomLabelWrapper.classList.add('show');
+  dialogueToggle.classList.add('show');
+  dialogueWrapper.classList.remove('show');
+  lowCamera = false;
+  blockDirectionUpdate = false;
+  lowCameraOffsetHistory = lowCameraOffset;
+  dialogueEnding = true;
+  window.dialogueEnding = dialogueEnding;
+  dialogueToggled = false;
+  window.dialogueToggled = dialogueToggled;
+}
+
+function handleZoom(targetScale) {
+  if (zoomingInProgress) {
+    zoomTargetScale = targetScale;
+    zoomStartScale = globalScale;
+    zoomStartTime = null;
+  } else {
+    zoomStartScale = globalScale;
+    zoomTargetScale = targetScale;
+    zoomingInProgress = true;
+    animateZoom();
+  }
+
+  setTimeout(() => blockMotion = (targetScale === 5), zoomDuration);
+}
+
+function teleportToNPC(npc, direction) {
+  const teleportDistance = 3.5;
+  const angleRad = direction * (Math.PI / 180);
+  char.x = (npc.x + npc.frameWidth / 2) + Math.cos(angleRad) * teleportDistance * 5 - char.frameWidth / 2;
+  char.y = (npc.y + npc.frameHeight / 2) - Math.sin(angleRad) * teleportDistance * 5 - char.frameHeight / 2;
+  updateCharDirection(Math.PI / 2); // Look down
+  draw();
+}
+
+function snapToValidDirection(direction) {
+  const validRanges = [
+    { min: 150, max: 180 },
+    { min: -180, max: -150 },
+    { min: -30, max: 30 }
+  ];
+
+  // Check if direction is already in a valid range
+  for (const range of validRanges) {
+    if (direction >= range.min && direction <= range.max) {
+      return direction; // Keep it as is
+    }
+  }
+
+  // If not in a valid range, snap to the closest boundary
+  let closestAngle = direction;
+  let minDiff = Infinity;
+
+  for (const range of validRanges) {
+    for (const boundary of [range.min, range.max]) {
+      const diff = Math.abs(direction - boundary);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestAngle = boundary;
+      }
+    }
+  }
   
+  return closestAngle;
+}
+
 function proximityQuery(object1, object2) {
-  // Find the center of object1
-  const object1CenterX = object1.x + object1.frameWidth / 2;
-  const object1CenterY = object1.y + object1.frameHeight / 2;
-
-  // Find the center of object2
-  const object2CenterX = object2.x + object2.frameWidth / 2;
-  const object2CenterY = object2.y + object2.frameHeight / 2;
-
-  // Calculate the distance using Pythagoras' theorem
-  const dx = object2CenterX - object1CenterX;
-  const dy = object2CenterY - object1CenterY;
-
-  // Hypotenuse (distance between centers)
+  const dx = object2.x + object2.frameWidth / 2 - (object1.x + object1.frameWidth / 2);
+  const dy = object2.y + object2.frameHeight / 2 - (object1.y + object1.frameHeight / 2);
   return Math.sqrt(dx * dx + dy * dy);
 }
+
+function directionQuery(object1, object2) {
+  const dx = object2.x + object2.frameWidth / 2 - (object1.x + object1.frameWidth / 2);
+  const dy = object2.y + object2.frameHeight / 2 - (object1.y + object1.frameHeight / 2);
+  return Math.atan2(dy, -dx) * (180 / Math.PI); // Convert to degrees
+}
+
 
 //////////////
 // MOVEMENT //
@@ -539,6 +731,11 @@ let blockMouse = false;
 let charSpeed = 0;
 
 function updateCharMovement() {
+  if (blockDirectionUpdate) {
+    char.frameX = 0;
+    updateCharDirection(Math.PI / 2); // Look down
+    return;
+  }
   let maxSpeed = 1.1;
   if (keysPressed.length !== 0) {
     angle = updateCharAngle();

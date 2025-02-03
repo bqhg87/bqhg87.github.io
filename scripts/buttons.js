@@ -70,6 +70,7 @@ function handleButtonClick(buttonId) {
   const sideMenuWrapper = document.getElementById('sideMenuWrapper'); // Get the sideMenuWrapper element
   const meterWrapper = document.getElementById('meterWrapper'); // Get the meterWrapper element
   const articleWrapper = document.getElementById('articleWrapper'); // Get the articleWrapper element
+  const dialogueContextWrapper = document.getElementById('dialogueContextWrapper');
 
   const openCharMenuEvent = new Event('openCharMenu');
   const closeCharMenuEvent = new Event('closeCharMenu');
@@ -86,6 +87,17 @@ function handleButtonClick(buttonId) {
   } else if (buttonId === 'charToggle') {
     prev = false;
     window.dispatchEvent(closeCharMenuEvent);
+  }
+
+  if (buttonId === 'charToggle' & window.dialogueToggled) {
+    breakDialogue();
+  }
+
+  if (buttonId === 'dialogueToggle') {
+    const nextDialoguePartEvent = new Event('nextDialoguePart');
+    window.dispatchEvent(nextDialoguePartEvent);
+    handleStartEndDialogue();
+    return
   }
 
   // If the clicked button is already toggled, untoggle it and hide all menus
@@ -107,10 +119,13 @@ function handleButtonClick(buttonId) {
     // Handle menuToggle logic for sideMenuWrapper
     if (buttonId === 'menuToggle') {
       sideMenuWrapper.classList.add('show'); // Show the side menu
+      dialogueContextWrapper.classList.add('hidden');
       meterWrapper.classList.add('fade-out');
       setTimeout(() => {
         meterWrapper.classList.remove('show', 'fade-out'); // Hide the meterWrapper if sideMenu is shown
       }, 200);
+    } else {
+      dialogueContextWrapper.classList.remove('hidden');
     }
     
     if (buttonId === 'meterToggle') {
@@ -148,6 +163,8 @@ function handleButtonClick(buttonId) {
     buttons.forEach(button => {
       button.classList.remove('hidden'); // Show all buttons
     });
+
+    dialogueContextWrapper.classList.remove('hidden');
 
     const button = document.getElementById(buttonId);
     checkButtonHover(buttonId);
@@ -309,7 +326,7 @@ function checkButtonHover(buttonId) {
 
 // Initialize sprites for each button and add the click event listener
 function initializeButtons() {
-  const buttons = document.querySelectorAll('.headButton');
+  const buttons = document.querySelectorAll('.headButton, .footButton');
   
   buttons.forEach(button => {
     button.dataset.toggled = 'false'; // Set initial toggled state to false
@@ -321,7 +338,7 @@ function initializeButtons() {
 
 // Event listener for the "menuToggle", "meterToggle", and other buttons to handle toggle action
 function addToggleListeners() {
-  const buttons = document.querySelectorAll('.headButton');
+  const buttons = document.querySelectorAll('.headButton, .footButton');
   buttons.forEach(button => {
     button.addEventListener('click', () => handleButtonClick(button.id)); // Toggle state on click
   });
