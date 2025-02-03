@@ -199,9 +199,11 @@ function animateZoom() {
 
 let blockMotion;
 let blockDirectionUpdate = false;
+let blockSpaceDialogueToggle = false;
 
 window.addEventListener('openCharMenu', () => {
   lowCamera = false;
+  blockSpaceDialogueToggle = true;
   updateLowCamera();
   updateCharDirection(Math.PI / 2);
   if (zoomingInProgress && zoomTargetScale === 4) {
@@ -234,6 +236,7 @@ window.addEventListener('closeCharMenu', () => {
   refreshCheckNPC();
   checkNPCs();
   blockMotion = false;
+  blockSpaceDialogueToggle = false;
   if (zoomingInProgress && zoomTargetScale === 6) {
     // If zooming is in progress and we're zooming in, reverse the zoom direction
     zoomStartScale = globalScale;
@@ -466,7 +469,7 @@ function checkNPCs() {
 let spaceHeld = false; // Flag to track whether Space is held
 
 function spaceDialogueToggle(event) {
-  if (event.code !== "Space" || spaceHeld) return; // Prevent repeated triggers
+  if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle) return; // Prevent repeated triggers
 
   spaceHeld = true; // Set flag to prevent retriggering
 
@@ -515,7 +518,7 @@ function clickDialogueToggle() {
     }
   }
 }
-canvas.addEventListener("click", clickDialogueToggle);
+canvas.addEventListener("mousedown", clickDialogueToggle);
 canvas.addEventListener("touchstart", clickDialogueToggle);
 
 window.handleStartEndDialogue = function() {

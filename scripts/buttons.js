@@ -27,10 +27,10 @@ window.addEventListener('autoClose', () => {
   }
 });
 
-function autoClose(time) {
+window.autoClose = function(time) {
   autoCloseInProgress = true;
   setTimeout(() => {
-    if (buttonClickedDuringTimeout || stoppedMoving) {
+    if ((buttonClickedDuringTimeout || stoppedMoving) && !window.bypassMovementCheck) {
       autoCloseInProgress = false;
       window.autoCloseInProgress = autoCloseInProgress;
       return;
@@ -47,6 +47,7 @@ function autoClose(time) {
       }
       setTimeout(() => {
         autoCloseInProgress = false;
+        window.bypassMovementCheck = false;
         window.autoCloseInProgress = autoCloseInProgress;
       }, 200);
     }

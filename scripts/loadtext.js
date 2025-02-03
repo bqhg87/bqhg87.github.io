@@ -80,11 +80,15 @@ window.skipDialogue = function() {
   }
 }
 
+window.bypassMovementCheck = false;
+
 // Function to load the next part
 window.loadDialogue = function(story, chapter, npc) {
   currentPart = window.currentPart;
   const gamemode = window.gamemode;
 
+  autoClose(2000);
+  window.bypassMovementCheck = true;
   loadDialoguePart(story, gamemode, chapter, npc, currentPart);
   
   currentPart++;
