@@ -516,6 +516,7 @@ function clickDialogueToggle() {
   }
 }
 canvas.addEventListener("click", clickDialogueToggle);
+canvas.addEventListener("touchstart", clickDialogueToggle);
 
 window.handleStartEndDialogue = function() {
   for (let npcName in toggleNPCs) {
