@@ -18,8 +18,8 @@ mapGuide.src = './assets/mapGuide.jpg';
 const objectsToDraw = [
   {
     image: charSheet,
-    x: -1428,
-    y: -864,
+    x: -24,
+    y: -24,
     frameX: 0,
     frameY: 0,
     frameWidth: 48,
@@ -56,7 +56,7 @@ const objectsToDraw = [
     x: -800,
     y: -687,
     scale: 2,
-    opacity: 0.1,
+    opacity: 0,
     zIndex: -1000
   },
 ];
@@ -114,37 +114,18 @@ mapGuide.onload = onImageLoad;
 // GROUND SETTINGS //
 /////////////////////
 
-function logVisibleGameArea() {
-  // Convert canvas translation and scale to visible game coordinates
-  const visibleLeft = (-translationX) / globalScale;
-  const visibleRight = (window.innerWidth - translationX) / globalScale;
-  const visibleTop = (-translationY) / globalScale;
-  const visibleBottom = (window.innerHeight - translationY) / globalScale;
-
-  console.log('Visible game coordinates:');
-  console.log(`X: ${visibleLeft.toFixed(1)} to ${visibleRight.toFixed(1)}`);
-  console.log(`Y: ${visibleTop.toFixed(1)} to ${visibleBottom.toFixed(1)}`);
-}
-window.addEventListener("resize", logVisibleGameArea);
-
 const grassTextures = {
   grass1: new Image(),
-  grass2: new Image(),
-  grass3: new Image(),
 };
 
 grassTextures.grass1.src = './assets/ground/grass1.png';
-grassTextures.grass2.src = './assets/ground/grass2.png';
-grassTextures.grass3.src = './assets/ground/grass3.png';
 
 const textureProperties = {
   grass1: { width: 33, height: 21, frameX: 0 },
-  grass2: { width: 28, height: 20, frameX: 0 },
-  grass3: { width: 24, height: 10, frameX: 0 },
 };
 
 const tiles = [
-  { texture: 'grass1', x: -1340, y: -900, zIndex: 1 },
+  { texture: 'grass1', x: -1297, y: -816, zIndex: 1 },
 ];
 
 // Track number of loaded images
@@ -160,8 +141,6 @@ function onTextureLoad() {
 }
 
 grassTextures.grass1.onload = onTextureLoad;
-grassTextures.grass2.onload = onTextureLoad;
-grassTextures.grass3.onload = onTextureLoad;
 
 ///////////////
 // RENDERING //
