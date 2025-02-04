@@ -4,15 +4,15 @@ window.delMeter = 64;
 window.gamemode = "restore";
 
 const charSheet = new Image();
-const paintingImage = new Image();
 const shroomsImage = new Image();
 const chickenNPC = new Image();
 const npcIndicators = new Image();
+const mapGuide = new Image();
 charSheet.src = './assets/char.png';
-paintingImage.src = './assets/painting.png';
 shroomsImage.src = './assets/shrooms.png';
 chickenNPC.src = './assets/chicken.png';
 npcIndicators.src = './assets/npcIndicators.png';
+mapGuide.src = './assets/mapGuide.jpg';
 
 // List of objects to be drawn on the canvas (Replace with JSON and caching later)
 const objectsToDraw = [
@@ -26,15 +26,6 @@ const objectsToDraw = [
     frameHeight: 48,
     feet: 16,
     zIndex: 2
-  },
-  {
-    image: paintingImage,
-    x: -22.5,
-    y: 60,
-    frameWidth: 15,
-    frameHeight: 7,
-    feet: 5,
-    zIndex: 1
   },
   {
     image: shroomsImage,
@@ -60,10 +51,18 @@ const objectsToDraw = [
     feet: 2,
     zIndex: 1
   },
+  {
+    image: mapGuide,
+    x: -800,
+    y: -687,
+    scale: 2,
+    opacity: 0.15,
+    zIndex: -1000
+  },
 ];
 const char = objectsToDraw[0]; // this is the character
-const chicken = objectsToDraw[3];
-const shrooms = objectsToDraw[2];
+const shrooms = objectsToDraw[1];
+const chicken = objectsToDraw[2];
 
 const npcIndicatorData = {
   chicken: { 
@@ -105,113 +104,72 @@ function onImageLoad() {
   }
 }
 
-paintingImage.onload = onImageLoad;
 shroomsImage.onload = onImageLoad;
 chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
-
+mapGuide.onload = onImageLoad;
 
 
 /////////////////////
 // GROUND SETTINGS //
 /////////////////////
 
-const mapImage = new Image();
-mapImage.src = './assets/textureMap.png';
+function logVisibleGameArea() {
+  // Convert canvas translation and scale to visible game coordinates
+  const visibleLeft = (-translationX) / globalScale;
+  const visibleRight = (window.innerWidth - translationX) / globalScale;
+  const visibleTop = (-translationY) / globalScale;
+  const visibleBottom = (window.innerHeight - translationY) / globalScale;
 
-const groundMaps = [
-  {
-    image: mapImage,
-    x: -10,
-    y: -2,
-    zIndex: -100,
-    opacity: 0,
-    scale: 1
-  }
-];
-
-const dirtTexture = new Image();
-const rockTexture = new Image();
-dirtTexture.src = './assets/dirt.png';
-rockTexture.src = './assets/rock.png';
-
-const textures = [
-  {
-    image: dirtTexture,
-    width: 2,
-    height: 2,
-    opacity: 0.5,
-    scale: 1
-  },
-  {
-    image: rockTexture,
-    width: 2,
-    height: 2,
-    opacity: 0.5,
-    scale: 1
-  }
-];
-
-mapImage.onload = onImageLoad;
-dirtTexture.onload = onImageLoad;
-rockTexture.onload = onImageLoad;
-
-function processTextureMap() {
-  const offscreenCanvas = document.createElement("canvas");
-  const offscreenCtx = offscreenCanvas.getContext("2d");
-
-  // Set the canvas size to match the texture map
-  offscreenCanvas.width = mapImage.width;
-  offscreenCanvas.height = mapImage.height;
-
-  // Draw the map image onto the offscreen canvas
-  offscreenCtx.drawImage(mapImage, 0, 0);
-
-  // Get pixel data
-  const imageData = offscreenCtx.getImageData(0, 0, mapImage.width, mapImage.height);
-  const pixels = imageData.data;
-
-  // Define tile size for placing textures
-  const tileSize = 10; // Adjust based on your texture size
-  
-  // Loop through each pixel
-  for (let y = 0; y < mapImage.height; y++) {
-    for (let x = 0; x < mapImage.width; x++) {
-      const index = (y * mapImage.width + x) * 4; // Each pixel has 4 values (RGBA)
-      const r = pixels[index];   // Red channel
-      const g = pixels[index+1]; // Green channel (not used here)
-      const b = pixels[index+2]; // Blue channel
-
-      let texture = null;
-
-      if (r > 200 && b < 100) { 
-        texture = dirtTexture;  // Red -> Dirt
-      } else if (b > 200 && r < 100) {
-        texture = rockTexture;  // Blue -> Rock
-      }
-
-      if (texture) {
-        groundMaps.push({
-          image: texture,
-          x: x * tileSize - 100,
-          y: y * tileSize - 100,
-          zIndex: -99, // Below objects
-          opacity: 1,
-          scale: 1
-        });
-      }
-    }
-  }
-
-  draw(); // Re-render with new textures
+  console.log('Visible game coordinates:');
+  console.log(`X: ${visibleLeft.toFixed(1)} to ${visibleRight.toFixed(1)}`);
+  console.log(`Y: ${visibleTop.toFixed(1)} to ${visibleBottom.toFixed(1)}`);
 }
+window.addEventListener("resize", logVisibleGameArea);
 
-// Ensure the function runs when the texture map is fully loaded
-mapImage.onload = function() {
-  onImageLoad();
-  processTextureMap();
+const grassTextures = {
+  grass1: new Image(),
+  grass2: new Image(),
+  grass3: new Image(),
 };
 
+grassTextures.grass1.src = './assets/ground/grass1.png';
+grassTextures.grass2.src = './assets/ground/grass2.png';
+grassTextures.grass3.src = './assets/ground/grass3.png';
+
+const textureProperties = {
+  grass1: { width: 33, height: 21, frameX: 0 },
+  grass2: { width: 28, height: 20, frameX: 0 },
+  grass3: { width: 24, height: 10, frameX: 0 },
+};
+
+const tiles = [
+  { texture: 'grass1', x: -50, y: 20, zIndex: 1 },
+  { texture: 'grass1', x: -70, y: -10, zIndex: 2 },
+  { texture: 'grass2', x: 44, y: -5, zIndex: 3 },
+  { texture: 'grass3', x: 0, y: 5, zIndex: 4 },
+  { texture: 'grass3', x: -20, y: 6, zIndex: 5 },
+  { texture: 'grass3', x: 9, y: -40, zIndex: 6 },
+  { texture: 'grass1', x: -1340, y: -900, zIndex: 1 },
+  { texture: 'grass2', x: -1240, y: -920, zIndex: 1 },
+  { texture: 'grass3', x: -1310, y: -840, zIndex: 1 },
+];
+
+// Track number of loaded images
+let texturesLoaded = 0;
+const totalTextures = Object.keys(grassTextures).length;
+
+function onTextureLoad() {
+  texturesLoaded++;
+  if (texturesLoaded === totalTextures) {
+    console.log("All textures loaded");
+    draw();  // Draw the textures once they're all loaded
+  }
+}
+
+grassTextures.grass1.onload = onTextureLoad;
+grassTextures.grass2.onload = onTextureLoad;
+grassTextures.grass3.onload = onTextureLoad;
 
 ///////////////
 // RENDERING //
@@ -220,108 +178,117 @@ mapImage.onload = function() {
 // Resize canvas on window resize
 window.addEventListener('resize', adjustForRetina);
 
+function drawTiles() {
+  const visibleLeft = (-translationX) / globalScale;
+  const visibleRight = (window.innerWidth - translationX) / globalScale;
+  const visibleTop = (-translationY) / globalScale;
+  const visibleBottom = (window.innerHeight - translationY) / globalScale;
+
+  tiles.forEach(tile => {
+    const texture = grassTextures[tile.texture];
+    const props = textureProperties[tile.texture];
+    const tileCenterX = tile.x + props.width / 2;
+    const tileCenterY = tile.y + props.height / 2;
+
+    if (
+      tileCenterX + props.width / 2 > visibleLeft &&
+      tileCenterX - props.width / 2 < visibleRight &&
+      tileCenterY + props.height / 2 > visibleTop &&
+      tileCenterY - props.height / 2 < visibleBottom
+    ) {
+      const scaledX = (tile.x * globalScale) + translationX;
+      const scaledY = (tile.y * globalScale) + translationY;
+      const scaledWidth = props.width * globalScale;
+      const scaledHeight = props.height * globalScale;
+
+      // Use frameX to select the frame from the texture spritesheet
+      c.drawImage(
+        texture,
+        props.frameX * props.width, // Source X
+        0,                          // Source Y (assuming single row)
+        props.width,                // Source width
+        props.height,               // Source height
+        scaledX,                    // Destination X
+        scaledY,                    // Destination Y
+        scaledWidth,                // Destination width
+        scaledHeight                // Destination height
+      );
+    }
+  });
+}
+
 // Draw all objects
 function draw() {
   // Clear the canvas
   c.clearRect(0, 0, canvas.width, canvas.height);
   centerCamera();
 
-  // Draw ground maps first
-  groundMaps.forEach(ground => {
-    const { image, x, y, opacity = 1, scale = 1 } = ground;
+  //console.log(`x= ${char.x} and y= ${char.y}`)
 
-    // Apply global scale to both size and position
-    const scaledX = (x * scale * globalScale) + translationX;
-    const scaledY = (y * scale * globalScale) + translationY;
-    const scaledWidth = image.width * scale * globalScale;
-    const scaledHeight = image.height * scale * globalScale;
+  drawTiles();
 
-    c.globalAlpha = opacity; // Apply opacity
-    c.drawImage(image, scaledX, scaledY, scaledWidth, scaledHeight);
-    c.globalAlpha = 1; // Reset opacity
-  });
-  
-  // Sort objects by their feet position relative to the character's feet
+  // Continue drawing other objects (like character, shrooms, chicken, etc.)
   const sortedObjects = [...objectsToDraw].sort((a, b) => {
     const charFeet = char.y + char.frameHeight - char.feet; // Character's feet position
 
     const aFeet = a.y + a.frameHeight - a.feet; // Object a's feet position
     const bFeet = b.y + b.frameHeight - b.feet; // Object b's feet position
 
-    // If character's feet are higher than object A's feet, draw A first (behind character)
     if (charFeet < aFeet) {
       return 1; // A should be behind the character
     }
 
-    // If character's feet are higher than object B's feet, draw B first (behind character)
     if (charFeet < bFeet) {
       return -1; // B should be behind the character
     }
 
-    // Otherwise, sort by default zIndex (as a fallback for similar feet positions)
     return a.zIndex - b.zIndex;
   });
 
-  // Loop through each object in the sorted array
   sortedObjects.forEach(obj => {
     const { image, x, y, frameX, frameY, frameWidth, frameHeight, opacity = 1, scale = 1 } = obj;
 
-    // Apply global scale to both size and position, considering the translation
     const scaledX = (x * scale * globalScale) + translationX;
     const scaledY = (y * scale * globalScale) + translationY;
-
-    // Calculate the scaled width and height
     const scaledWidth = frameWidth * scale * globalScale;
     const scaledHeight = frameHeight * scale * globalScale;
 
-    // Set opacity for the current object (default is 1 if not specified)
     c.globalAlpha = opacity;
 
-    // If this object is the sprite frame, draw only the specific frame
     if (frameX !== undefined && frameY !== undefined) {
       c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
                   scaledX, scaledY, scaledWidth, scaledHeight);
     } else {
-      // Otherwise, draw the full image (like the paintings and shrooms)
       const scaledImgWidth = image.width * scale * globalScale;
       const scaledImgHeight = image.height * scale * globalScale;
       c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
     }
 
-    // Reset opacity back to 1 for other objects
     c.globalAlpha = 1;
   });
 
-  // Draw NPC indicators with potential sinusoidal movement
+  // Draw NPC indicators
   [npcIndicators].forEach(() => {
     [chicken, shrooms].forEach(npc => {
       const indicatorData = npcIndicatorData[npc.name];
 
-      // Check if the indicator is visible
       if (indicatorData.visible) {
-        const baseIndicatorX = ((npc.x + indicatorData.indicatorOffsetX) * globalScale) + translationX; // Apply X offset
-        let baseIndicatorY = ((npc.y + indicatorData.indicatorOffsetY) * globalScale) + translationY; // Apply Y offset
+        const baseIndicatorX = ((npc.x + indicatorData.indicatorOffsetX) * globalScale) + translationX;
+        let baseIndicatorY = ((npc.y + indicatorData.indicatorOffsetY) * globalScale) + translationY;
 
-        // If 'animate' is true, apply sinusoidal movement in the y direction
         if (indicatorData.animate) {
-          const time = Date.now() / 1000; // Time in seconds (can be adjusted for speed)
-          
-          // Apply sinusoidal movement with custom offset
-          baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset); // Apply sinOffset
+          const time = Date.now() / 1000;
+          baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset);
         }
 
-        // Extract the correct sprite from the npcIndicators sprite sheet
-        const spriteX = indicatorData.spriteX * 4; // Each dot is 4px wide
-        const spriteY = indicatorData.spriteY * 4; // Assuming 1 row for now (can expand later)
+        const spriteX = indicatorData.spriteX * 4;
+        const spriteY = indicatorData.spriteY * 4;
 
-        // Draw the NPC indicator with the scaled size
         c.drawImage(npcIndicators, spriteX, spriteY, 4, 4, baseIndicatorX, baseIndicatorY, 4 * globalScale, 4 * globalScale);
       }
     });
   });
 }
-
-
 
 ////////////
 // CAMERA //
@@ -335,40 +302,6 @@ const dpr = window.devicePixelRatio || 1;
 
 let translationX = 0;
 let translationY = 0;
-
-// Detect scroll events to adjust global scale and keep zoom centered
-canvas.addEventListener('wheel', (event) => {
-    event.preventDefault(); // Prevent page scrolling
-
-    // Determine the zoom direction (up or down)
-    let newScale = globalScale;
-    if (event.deltaY < 0) {
-    // Zoom in
-    newScale = Math.min(globalScale + 1, globalScale); // Previously: newScale = Math.min(globalScale + 1, maxScale); 
-    } else if (event.deltaY > 0) {
-    // Zoom out
-    newScale = Math.max(globalScale - 1, globalScale); // Previously: newScale = Math.max(globalScale - 1, minScale);
-    }
-
-    if (newScale !== globalScale) {
-    // Calculate the zoom factor
-    const zoomFactor = newScale / globalScale;
-
-    // Find the current center of the canvas in the unscaled coordinate system
-    const centerX = (event.clientX - translationX) / globalScale;
-    const centerY = (event.clientY - translationY) / globalScale;
-
-    // Update the global scale
-    globalScale = newScale;
-
-    // Calculate the new translation to keep the zoom centered
-    translationX = event.clientX - centerX * globalScale;
-    translationY = event.clientY - centerY * globalScale;
-
-    // Redraw the canvas with new scale and translation
-    draw();
-    }
-});
 
 function easeInOut(t) {
   return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
