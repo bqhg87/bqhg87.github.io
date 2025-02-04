@@ -59,7 +59,7 @@ const objectsToDraw = [
     frameHeight: 16,
     feet: 2,
     zIndex: 1
-  }
+  },
 ];
 const char = objectsToDraw[0]; // this is the character
 const chicken = objectsToDraw[3];
@@ -109,6 +109,218 @@ paintingImage.onload = onImageLoad;
 shroomsImage.onload = onImageLoad;
 chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
+
+
+
+/////////////////////
+// GROUND SETTINGS //
+/////////////////////
+
+const mapImage = new Image();
+mapImage.src = './assets/textureMap.png';
+
+const groundMaps = [
+  {
+    image: mapImage,
+    x: -10,
+    y: -2,
+    zIndex: -100,
+    opacity: 0,
+    scale: 1
+  }
+];
+
+const dirtTexture = new Image();
+const rockTexture = new Image();
+dirtTexture.src = './assets/dirt.png';
+rockTexture.src = './assets/rock.png';
+
+const textures = [
+  {
+    image: dirtTexture,
+    width: 2,
+    height: 2,
+    opacity: 0.5,
+    scale: 1
+  },
+  {
+    image: rockTexture,
+    width: 2,
+    height: 2,
+    opacity: 0.5,
+    scale: 1
+  }
+];
+
+mapImage.onload = onImageLoad;
+dirtTexture.onload = onImageLoad;
+rockTexture.onload = onImageLoad;
+
+function processTextureMap() {
+  const offscreenCanvas = document.createElement("canvas");
+  const offscreenCtx = offscreenCanvas.getContext("2d");
+
+  // Set the canvas size to match the texture map
+  offscreenCanvas.width = mapImage.width;
+  offscreenCanvas.height = mapImage.height;
+
+  // Draw the map image onto the offscreen canvas
+  offscreenCtx.drawImage(mapImage, 0, 0);
+
+  // Get pixel data
+  const imageData = offscreenCtx.getImageData(0, 0, mapImage.width, mapImage.height);
+  const pixels = imageData.data;
+
+  // Define tile size for placing textures
+  const tileSize = 10; // Adjust based on your texture size
+  
+  // Loop through each pixel
+  for (let y = 0; y < mapImage.height; y++) {
+    for (let x = 0; x < mapImage.width; x++) {
+      const index = (y * mapImage.width + x) * 4; // Each pixel has 4 values (RGBA)
+      const r = pixels[index];   // Red channel
+      const g = pixels[index+1]; // Green channel (not used here)
+      const b = pixels[index+2]; // Blue channel
+
+      let texture = null;
+
+      if (r > 200 && b < 100) { 
+        texture = dirtTexture;  // Red -> Dirt
+      } else if (b > 200 && r < 100) {
+        texture = rockTexture;  // Blue -> Rock
+      }
+
+      if (texture) {
+        groundMaps.push({
+          image: texture,
+          x: x * tileSize - 100,
+          y: y * tileSize - 100,
+          zIndex: -99, // Below objects
+          opacity: 1,
+          scale: 1
+        });
+      }
+    }
+  }
+
+  draw(); // Re-render with new textures
+}
+
+// Ensure the function runs when the texture map is fully loaded
+mapImage.onload = function() {
+  onImageLoad();
+  processTextureMap();
+};
+
+
+///////////////
+// RENDERING //
+///////////////
+
+// Resize canvas on window resize
+window.addEventListener('resize', adjustForRetina);
+
+// Draw all objects
+function draw() {
+  // Clear the canvas
+  c.clearRect(0, 0, canvas.width, canvas.height);
+  centerCamera();
+
+  // Draw ground maps first
+  groundMaps.forEach(ground => {
+    const { image, x, y, opacity = 1, scale = 1 } = ground;
+
+    // Apply global scale to both size and position
+    const scaledX = (x * scale * globalScale) + translationX;
+    const scaledY = (y * scale * globalScale) + translationY;
+    const scaledWidth = image.width * scale * globalScale;
+    const scaledHeight = image.height * scale * globalScale;
+
+    c.globalAlpha = opacity; // Apply opacity
+    c.drawImage(image, scaledX, scaledY, scaledWidth, scaledHeight);
+    c.globalAlpha = 1; // Reset opacity
+  });
+  
+  // Sort objects by their feet position relative to the character's feet
+  const sortedObjects = [...objectsToDraw].sort((a, b) => {
+    const charFeet = char.y + char.frameHeight - char.feet; // Character's feet position
+
+    const aFeet = a.y + a.frameHeight - a.feet; // Object a's feet position
+    const bFeet = b.y + b.frameHeight - b.feet; // Object b's feet position
+
+    // If character's feet are higher than object A's feet, draw A first (behind character)
+    if (charFeet < aFeet) {
+      return 1; // A should be behind the character
+    }
+
+    // If character's feet are higher than object B's feet, draw B first (behind character)
+    if (charFeet < bFeet) {
+      return -1; // B should be behind the character
+    }
+
+    // Otherwise, sort by default zIndex (as a fallback for similar feet positions)
+    return a.zIndex - b.zIndex;
+  });
+
+  // Loop through each object in the sorted array
+  sortedObjects.forEach(obj => {
+    const { image, x, y, frameX, frameY, frameWidth, frameHeight, opacity = 1, scale = 1 } = obj;
+
+    // Apply global scale to both size and position, considering the translation
+    const scaledX = (x * scale * globalScale) + translationX;
+    const scaledY = (y * scale * globalScale) + translationY;
+
+    // Calculate the scaled width and height
+    const scaledWidth = frameWidth * scale * globalScale;
+    const scaledHeight = frameHeight * scale * globalScale;
+
+    // Set opacity for the current object (default is 1 if not specified)
+    c.globalAlpha = opacity;
+
+    // If this object is the sprite frame, draw only the specific frame
+    if (frameX !== undefined && frameY !== undefined) {
+      c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
+                  scaledX, scaledY, scaledWidth, scaledHeight);
+    } else {
+      // Otherwise, draw the full image (like the paintings and shrooms)
+      const scaledImgWidth = image.width * scale * globalScale;
+      const scaledImgHeight = image.height * scale * globalScale;
+      c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
+    }
+
+    // Reset opacity back to 1 for other objects
+    c.globalAlpha = 1;
+  });
+
+  // Draw NPC indicators with potential sinusoidal movement
+  [npcIndicators].forEach(() => {
+    [chicken, shrooms].forEach(npc => {
+      const indicatorData = npcIndicatorData[npc.name];
+
+      // Check if the indicator is visible
+      if (indicatorData.visible) {
+        const baseIndicatorX = ((npc.x + indicatorData.indicatorOffsetX) * globalScale) + translationX; // Apply X offset
+        let baseIndicatorY = ((npc.y + indicatorData.indicatorOffsetY) * globalScale) + translationY; // Apply Y offset
+
+        // If 'animate' is true, apply sinusoidal movement in the y direction
+        if (indicatorData.animate) {
+          const time = Date.now() / 1000; // Time in seconds (can be adjusted for speed)
+          
+          // Apply sinusoidal movement with custom offset
+          baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset); // Apply sinOffset
+        }
+
+        // Extract the correct sprite from the npcIndicators sprite sheet
+        const spriteX = indicatorData.spriteX * 4; // Each dot is 4px wide
+        const spriteY = indicatorData.spriteY * 4; // Assuming 1 row for now (can expand later)
+
+        // Draw the NPC indicator with the scaled size
+        c.drawImage(npcIndicators, spriteX, spriteY, 4, 4, baseIndicatorX, baseIndicatorY, 4 * globalScale, 4 * globalScale);
+      }
+    });
+  });
+}
+
 
 
 ////////////
@@ -330,91 +542,6 @@ function handleLowCameraResize() {
 window.addEventListener('resize', updateLowCamera);
 window.addEventListener('typeLetter', updateLowCamera);
 window.addEventListener('dialogueLoaded', updateLowCamera);
-
-
-///////////////
-// RENDERING //
-///////////////
-
-// Resize canvas on window resize
-window.addEventListener('resize', adjustForRetina);
-
-// Draw all objects
-function draw() {
-  // Clear the canvas
-  c.clearRect(0, 0, canvas.width, canvas.height);
-  centerCamera();
-
-  // Sort objects by their feet position relative to the character's feet
-  const sortedObjects = [...objectsToDraw].sort((a, b) => {
-    const charFeet = char.y + char.frameHeight - char.feet; // Character's feet position
-
-    const aFeet = a.y + a.frameHeight - a.feet; // Object a's feet position
-    const bFeet = b.y + b.frameHeight - b.feet; // Object b's feet position
-    
-
-    // If character's feet are higher than object A's feet, draw A first (behind character)
-    if (charFeet < aFeet) {
-      return 1; // A should be behind the character
-    }
-
-    // If character's feet are higher than object B's feet, draw B first (behind character)
-    if (charFeet < bFeet) {
-      return -1; // B should be behind the character
-    }
-
-    // Otherwise, sort by default zIndex (as a fallback for similar feet positions)
-    return a.zIndex - b.zIndex;
-  });
-
-  // Loop through each object in the sorted array
-  sortedObjects.forEach(obj => {
-    const { image, x, y, frameX, frameY, frameWidth, frameHeight } = obj;
-
-    // Apply global scale to both size and position, considering the translation
-    const scaledX = (x * globalScale) + translationX;
-    const scaledY = (y * globalScale) + translationY;
-
-    // If this object is the sprite frame, draw only the specific frame
-    if (frameX !== undefined && frameY !== undefined) {
-      c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
-                  scaledX, scaledY, frameWidth * globalScale, frameHeight * globalScale);
-    } else {
-      // Otherwise, draw the full image (like the paintings and shrooms)
-      const scaledWidth = image.width * globalScale;
-      const scaledHeight = image.height * globalScale;
-      c.drawImage(image, scaledX, scaledY, scaledWidth, scaledHeight);
-    }
-  });
-
-  // Draw NPC indicators with potential sinusoidal movement
-  [npcIndicators].forEach(() => {
-    [chicken, shrooms].forEach(npc => {
-      const indicatorData = npcIndicatorData[npc.name];
-
-      // Check if the indicator is visible
-      if (indicatorData.visible) {
-        const baseIndicatorX = ((npc.x + indicatorData.indicatorOffsetX) * globalScale) + translationX; // Apply X offset
-        let baseIndicatorY = ((npc.y + indicatorData.indicatorOffsetY) * globalScale) + translationY; // Apply Y offset
-
-        // If 'animate' is true, apply sinusoidal movement in the y direction
-        if (indicatorData.animate) {
-          const time = Date.now() / 1000; // Time in seconds (can be adjusted for speed)
-          
-          // Apply sinusoidal movement with custom offset
-          baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset); // Apply sinOffset
-        }
-
-        // Extract the correct sprite from the npcIndicators sprite sheet
-        const spriteX = indicatorData.spriteX * 4; // Each dot is 4px wide
-        const spriteY = indicatorData.spriteY * 4; // Assuming 1 row for now (can expand later)
-
-        // Draw the NPC indicator with the scaled size
-        c.drawImage(npcIndicators, spriteX, spriteY, 4, 4, baseIndicatorX, baseIndicatorY, 4 * globalScale, 4 * globalScale);
-      }
-    });
-  });
-}
 
 
 //////////
