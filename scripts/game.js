@@ -18,8 +18,8 @@ mapGuide.src = './assets/mapGuide.jpg';
 const objectsToDraw = [
   {
     image: charSheet,
-    x: -24,
-    y: -24,
+    x: -1428,
+    y: -864,
     frameX: 0,
     frameY: 0,
     frameWidth: 48,
@@ -56,7 +56,7 @@ const objectsToDraw = [
     x: -800,
     y: -687,
     scale: 2,
-    opacity: 0.15,
+    opacity: 0.1,
     zIndex: -1000
   },
 ];
@@ -144,15 +144,7 @@ const textureProperties = {
 };
 
 const tiles = [
-  { texture: 'grass1', x: -50, y: 20, zIndex: 1 },
-  { texture: 'grass1', x: -70, y: -10, zIndex: 2 },
-  { texture: 'grass2', x: 44, y: -5, zIndex: 3 },
-  { texture: 'grass3', x: 0, y: 5, zIndex: 4 },
-  { texture: 'grass3', x: -20, y: 6, zIndex: 5 },
-  { texture: 'grass3', x: 9, y: -40, zIndex: 6 },
   { texture: 'grass1', x: -1340, y: -900, zIndex: 1 },
-  { texture: 'grass2', x: -1240, y: -920, zIndex: 1 },
-  { texture: 'grass3', x: -1310, y: -840, zIndex: 1 },
 ];
 
 // Track number of loaded images
