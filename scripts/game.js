@@ -56,7 +56,7 @@ const objectsToDraw = [
     x: -800,
     y: -687,
     scale: 2,
-    opacity: 0,
+    opacity: 0.2,
     zIndex: -1000
   },
 ];

@@ -404,7 +404,7 @@ span, li a {
   pointer-events: none; /* Disable interaction */
 }
 .footButton.show {
-  opacity: 0.97;
+  opacity: 0.9;
   pointer-events: visible; /* Disable interaction */
 }
 
@@ -421,7 +421,7 @@ span, li a {
   pointer-events: none;
 }
 #bottomLabelWrapper.show {
-  opacity: 0.97;
+  opacity: 0.9;
 }
 
 
@@ -457,7 +457,7 @@ span, li a {
   pointer-events: none;
 }
 #dialogueWrapper.show {
-  opacity: 0.97;
+  opacity: 0.9;
   pointer-events: visible;
 }
 

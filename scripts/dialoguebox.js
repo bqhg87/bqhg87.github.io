@@ -27,7 +27,6 @@ window.addEventListener('dialogueLoaded', updateTopPosition);
 
 
 function updateDropdownPosition() {
-    const dialogue = document.getElementById('dialogue');
     const dropdown = document.querySelector('.dropdown');
     const direction = window.npcRelativeDirection;
     let polarity = -1;
