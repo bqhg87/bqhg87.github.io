@@ -12,7 +12,6 @@ charSheet.src = './assets/char.png';
 shroomsImage.src = './assets/shrooms.png';
 chickenNPC.src = './assets/chicken.png';
 npcIndicators.src = './assets/npcIndicators.png';
-mapGuide.src = './assets/mapGuide.jpg';
 
 // List of objects to be drawn on the canvas (Replace with JSON and caching later)
 const objectsToDraw = [
@@ -51,14 +50,6 @@ const objectsToDraw = [
     feet: 2,
     zIndex: 1
   },
-  {
-    image: mapGuide,
-    x: -800,
-    y: -687,
-    scale: 2,
-    opacity: 0.2,
-    zIndex: -1000
-  },
 ];
 const char = objectsToDraw[0]; // this is the character
 const shrooms = objectsToDraw[1];
@@ -96,6 +87,7 @@ const totalImages = objectsToDraw.length; // Update to include charSheet
 // Check if the images load correctly
 function onImageLoad() {
   imagesLoaded++;
+  console.log(imagesLoaded);
   if (imagesLoaded === totalImages) {
     console.log("All sprites loaded");
     adjustForRetina();  // Adjust for retina display and set canvas size
@@ -107,40 +99,6 @@ function onImageLoad() {
 shroomsImage.onload = onImageLoad;
 chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
-mapGuide.onload = onImageLoad;
-
-
-/////////////////////
-// GROUND SETTINGS //
-/////////////////////
-
-const grassTextures = {
-  grass1: new Image(),
-};
-
-grassTextures.grass1.src = './assets/ground/grass1.png';
-
-const textureProperties = {
-  grass1: { width: 33, height: 21, frameX: 0 },
-};
-
-const tiles = [
-  { texture: 'grass1', x: -1297, y: -816, zIndex: 1 },
-];
-
-// Track number of loaded images
-let texturesLoaded = 0;
-const totalTextures = Object.keys(grassTextures).length;
-
-function onTextureLoad() {
-  texturesLoaded++;
-  if (texturesLoaded === totalTextures) {
-    console.log("All textures loaded");
-    draw();  // Draw the textures once they're all loaded
-  }
-}
-
-grassTextures.grass1.onload = onTextureLoad;
 
 ///////////////
 // RENDERING //
@@ -149,45 +107,6 @@ grassTextures.grass1.onload = onTextureLoad;
 // Resize canvas on window resize
 window.addEventListener('resize', adjustForRetina);
 
-function drawTiles() {
-  const visibleLeft = (-translationX) / globalScale;
-  const visibleRight = (window.innerWidth - translationX) / globalScale;
-  const visibleTop = (-translationY) / globalScale;
-  const visibleBottom = (window.innerHeight - translationY) / globalScale;
-
-  tiles.forEach(tile => {
-    const texture = grassTextures[tile.texture];
-    const props = textureProperties[tile.texture];
-    const tileCenterX = tile.x + props.width / 2;
-    const tileCenterY = tile.y + props.height / 2;
-
-    if (
-      tileCenterX + props.width / 2 > visibleLeft &&
-      tileCenterX - props.width / 2 < visibleRight &&
-      tileCenterY + props.height / 2 > visibleTop &&
-      tileCenterY - props.height / 2 < visibleBottom
-    ) {
-      const scaledX = (tile.x * globalScale) + translationX;
-      const scaledY = (tile.y * globalScale) + translationY;
-      const scaledWidth = props.width * globalScale;
-      const scaledHeight = props.height * globalScale;
-
-      // Use frameX to select the frame from the texture spritesheet
-      c.drawImage(
-        texture,
-        props.frameX * props.width, // Source X
-        0,                          // Source Y (assuming single row)
-        props.width,                // Source width
-        props.height,               // Source height
-        scaledX,                    // Destination X
-        scaledY,                    // Destination Y
-        scaledWidth,                // Destination width
-        scaledHeight                // Destination height
-      );
-    }
-  });
-}
-
 // Draw all objects
 function draw() {
   // Clear the canvas
@@ -195,8 +114,6 @@ function draw() {
   centerCamera();
 
   //console.log(`x= ${char.x} and y= ${char.y}`)
-
-  drawTiles();
 
   // Continue drawing other objects (like character, shrooms, chicken, etc.)
   const sortedObjects = [...objectsToDraw].sort((a, b) => {
@@ -825,10 +742,14 @@ function updateCharMovement() {
   }
 
   if (!(keyDominance && (hKeys === 0))) {
-    char.x += (charSpeed * Math.cos(angle));
+    if ( !(((char.x <= -1700) && ((charSpeed * Math.cos(angle)) <= 0)) || (((char.x >= 1700) && ((charSpeed * Math.cos(angle)) >= 0)))) ) {
+      char.x += (charSpeed * Math.cos(angle));
+    }
   }
   if (!(keyDominance && (vKeys === 0))) {
-    char.y += (charSpeed * Math.sin(angle));
+    if ( !(((char.y <= -1400) && ((charSpeed * Math.sin(angle)) <= 0)) || (((char.y >= 1500) && ((charSpeed * Math.sin(angle)) >= 0)))) ) {
+      char.y += (charSpeed * Math.sin(angle));
+    }
   }
 
   // Constrain position to units of 0.25
