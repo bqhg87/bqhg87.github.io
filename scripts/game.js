@@ -8,10 +8,12 @@ const shroomsImage = new Image();
 const chickenNPC = new Image();
 const npcIndicators = new Image();
 const mapGuide = new Image();
+const groundImage = new Image();
 charSheet.src = './assets/char.png';
 shroomsImage.src = './assets/shrooms.png';
 chickenNPC.src = './assets/chicken.png';
 npcIndicators.src = './assets/npcIndicators.png';
+groundImage.src = './assets/ground.png';
 
 // List of objects to be drawn on the canvas (Replace with JSON and caching later)
 const objectsToDraw = [
@@ -49,6 +51,12 @@ const objectsToDraw = [
     frameHeight: 16,
     feet: 2,
     zIndex: 1
+  },
+  {
+    image: groundImage,
+    x: -1144,
+    y: -1064,
+    zIndex: -1000
   },
 ];
 const char = objectsToDraw[0]; // this is the character
@@ -99,6 +107,13 @@ function onImageLoad() {
 shroomsImage.onload = onImageLoad;
 chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
+groundImage.onload = onImageLoad;
+
+////////////////
+// GROUND MAP //
+////////////////
+
+
 
 ///////////////
 // RENDERING //
