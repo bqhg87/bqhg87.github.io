@@ -9,7 +9,7 @@ const chickenNPC = new Image();
 const npcIndicators = new Image();
 const mapGuide = new Image();
 const groundImage = new Image();
-charSheet.src = './assets/char.png';
+charSheet.src = './assets/char/base.png';
 shroomsImage.src = './assets/shrooms.png';
 chickenNPC.src = './assets/chicken.png';
 npcIndicators.src = './assets/npcIndicators.png';
@@ -23,9 +23,9 @@ const objectsToDraw = [
     y: -24,
     frameX: 0,
     frameY: 0,
-    frameWidth: 48,
-    frameHeight: 48,
-    feet: 16,
+    frameWidth: 32,
+    frameHeight: 32,
+    feet: 0,
     zIndex: 2
   },
   {
@@ -338,18 +338,18 @@ let lowCameraOffsetHistory = 0;
 
 function centerCamera() {
     // Ensure the character is always centered by adjusting translation
-    const charWidth = char.frameWidth * globalScale;
-    const charHeight = char.frameHeight * globalScale;
+    const charWidth = (char.frameWidth) * globalScale;
+    const charHeight = (char.frameHeight) * globalScale;
   
     // Calculate the center of the canvas in world coordinates
     const canvasCenterX = canvas.width / 2 / dpr;
     const canvasCenterY = canvas.height / 2 / dpr;
   
-    translationX = canvasCenterX - (round(char.x, 4) * globalScale + charWidth / 2);
+    translationX = canvasCenterX - (round(char.x, 8) * globalScale + charWidth / 2) + 4;
     if (!zoomingInProgress) {
       lerpLowCamera = lowCameraOffset
     }
-    translationY = canvasCenterY - (round(char.y, 4) * globalScale + charHeight / 2 - lerpLowCamera);
+    translationY = canvasCenterY - (round(char.y, 8) * globalScale + charHeight / 2 - lerpLowCamera);
 }
 
 function updateLowCamera() {
@@ -701,14 +701,16 @@ function updateMouseData(event) {
     mouseYInGameCoords = (event.touches[0].clientY - translationY) / globalScale;
   }
 
-  const charCenterX = char.x + 24;
-  const charCenterY = char.y + 24;
+  const charCenterX = char.x + 15.5;
+  const charCenterY = char.y + 26;
 
   const dx = mouseXInGameCoords - charCenterX;
   const dy = mouseYInGameCoords - charCenterY;
  
   mouseRadius = Math.sqrt(dx * dx + dy * dy);
   mouseAngle = Math.atan2(dy, dx);
+
+  console.log(mouseRadius)
 }
 
 let angle = 0;
@@ -727,7 +729,7 @@ function updateCharMovement() {
     angle = updateCharAngle();
     keyDominance = true;
   } else if (blockMouse) {
-    updateAnimation(0, true);
+    updateAnimation(80, true);
     return
   } else if (isDragging) {
     maxSpeed = limitCharMovement(mouseRadius, maxSpeed); // Adjust the 2nd argument to change the maximum speed
@@ -740,17 +742,19 @@ function updateCharMovement() {
   const charAcceleration = 0.1;
   const charDeceleration = 0.25;
 
+  let animationSpeed = 80 / (Math.max(0.6, maxSpeed) / 1.1)
+
   if ((isDragging || keysPressed.length !== 0) && maxSpeed >= 0.125 && !blockMotion) {
     moving(true);
     charSpeed += charAcceleration;
     charSpeed = Math.min(charSpeed, maxSpeed);
     updateCharDirection(angle);
-    updateAnimation(80, false);
+    updateAnimation(animationSpeed, false);
   } else {
     moving(false);
     charSpeed -= charDeceleration;
     charSpeed = Math.max(charSpeed, 0);
-    updateAnimation(0, true);
+    updateAnimation(animationSpeed, true);
     if (isDragging) {
       updateCharDirection(angle);
     }
@@ -812,14 +816,22 @@ let lastUpdate = 0;
 
 function updateAnimation(speed, stop) {
   const now = performance.now();
-  
-  if (stop) {
-    char.frameX = 0;
-    return
-  }
 
   if (now - lastUpdate >= speed) {
-    char.frameX = (char.frameX + 1) % 4;
+    if (stop) {
+      if (char.frameX === 0 || char.frameX === 1 || char.frameX === 4 || char.frameX === 5) {
+        char.frameX = 0; // Instantly reset to 0
+      } else {
+        char.frameX = (char.frameX + 1) % 8; // Continue animating
+        if (char.frameX === 0 || char.frameX === 4) {
+          char.frameX = 0; // Stop once we reach 0 or 4
+          return;
+        }
+      }
+    } else {
+      // Normal animation loop
+      char.frameX = (char.frameX + 1) % 8;
+    }
     lastUpdate = now;
   }
 }
@@ -842,14 +854,18 @@ function limitCharMovement(radius, maxSpeed) {
 
 function updateCharDirection(angle) {
   angle = angle * (180 / Math.PI); // Convert to degrees
-  if (angle >= 45 && angle <= 135) { // Down
-    char.frameY = 0;
-  } else if (angle <= -45 && angle >= -135) { // Up
+  if (angle <= -45 && angle >= -135) { // N
     char.frameY = 1;
-  } else if (angle >= 135 || angle <= -135) { // Left
-    char.frameY = 2;
-  } else if (angle >= -45 && angle <= 45) { // Right
+  } else if (angle >= 157.5 || angle <= -135) { // W
+    char.frameY = 5;
+  } else if (angle >= -45 && angle <= 22.5) { // E
+    char.frameY = 4;
+  } else if (angle >= 22.5 && angle <= 67.5) { // SE
     char.frameY = 3;
+  } else if (angle >= 67.5 && angle <= 112.5) { // S
+    char.frameY = 0;
+  } else if (angle >= 112.5 && angle <= 157.5) { // SW
+    char.frameY = 2;
   }
 }
 
