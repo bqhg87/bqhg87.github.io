@@ -25,7 +25,7 @@ const objectsToDraw = [
     frameY: 0,
     frameWidth: 32,
     frameHeight: 32,
-    feet: 0,
+    feet: 6,
     zIndex: 2
   },
   {
@@ -702,7 +702,7 @@ function updateMouseData(event) {
   }
 
   const charCenterX = char.x + 15.5;
-  const charCenterY = char.y + 26;
+  const charCenterY = char.y + 19;
 
   const dx = mouseXInGameCoords - charCenterX;
   const dy = mouseYInGameCoords - charCenterY;
