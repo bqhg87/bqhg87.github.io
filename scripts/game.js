@@ -1,3 +1,5 @@
+window.console.info("Booting HarmOS...");
+
 const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
 window.delMeter = 64;
@@ -95,9 +97,7 @@ const totalImages = objectsToDraw.length; // Update to include charSheet
 // Check if the images load correctly
 function onImageLoad() {
   imagesLoaded++;
-  console.log(imagesLoaded);
   if (imagesLoaded === totalImages) {
-    console.log("All sprites loaded");
     adjustForRetina();  // Adjust for retina display and set canvas size
     chickenAnimate();
     draw();  // Draw the images once they're all loaded
