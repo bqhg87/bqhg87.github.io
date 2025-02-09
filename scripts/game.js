@@ -17,7 +17,6 @@ chickenNPC.src = './assets/chicken.png';
 npcIndicators.src = './assets/npcIndicators.png';
 groundImage.src = './assets/ground.png';
 
-// List of objects to be drawn on the canvas (Replace with JSON and caching later)
 const objectsToDraw = [
   {
     image: charSheet,
@@ -28,7 +27,14 @@ const objectsToDraw = [
     frameWidth: 32,
     frameHeight: 32,
     feet: 6,
-    zIndex: 2
+    zIndex: 2,
+
+    skinTone: 1, // (0-7)
+    hair: 'bob',
+    hairType: 4, // (0-13)
+    clothingTop: 'floral',
+    topType: 5, // (0-9)
+    clothingBottom: 'none',
   },
   {
     image: shroomsImage,
@@ -109,9 +115,21 @@ chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
 groundImage.onload = onImageLoad;
 
-////////////////
-// GROUND MAP //
-////////////////
+///////////////////
+// CHAR SETTINGS //
+///////////////////
+
+let tops = {
+  floral: new Image(),
+  basic: new Image(),
+};
+tops.floral.src = './assets/char/floral.png';
+tops.basic.src = './assets/char/basic.png';
+
+let hair = {
+  bob: new Image(),
+};
+hair.bob.src = './assets/char/bob.png';
 
 
 
@@ -122,15 +140,40 @@ groundImage.onload = onImageLoad;
 // Resize canvas on window resize
 window.addEventListener('resize', adjustForRetina);
 
+function drawCharacterWithClothing() {
+  const { x, y, frameWidth, frameHeight, scale = 1 } = char;
+
+  const scaledX = (x * scale * globalScale) + translationX;
+  const scaledY = (y * scale * globalScale) + translationY;
+  const scaledWidth = frameWidth * scale * globalScale;
+  const scaledHeight = frameHeight * scale * globalScale;
+
+  const skinToneOffsetX = char.skinTone * 8;
+  const topOffsetX = char.topType * 8;
+  const hairOffsetX = char.hairType * 8;
+
+  // Draw base character
+  c.drawImage(charSheet, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+
+  let selectedTop = tops[char.clothingTop]; // Get the top image
+  if (selectedTop) {
+      c.drawImage(selectedTop, (char.frameX + topOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight
+    );
+  }
+
+  let selectedHair = hair[char.hair]; // Get the top image
+  if (selectedHair) {
+      c.drawImage(selectedHair, (char.frameX + hairOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight
+    );
+  }
+}
 // Draw all objects
 function draw() {
   // Clear the canvas
   c.clearRect(0, 0, canvas.width, canvas.height);
   centerCamera();
 
-  //console.log(`x= ${char.x} and y= ${char.y}`)
-
-  // Continue drawing other objects (like character, shrooms, chicken, etc.)
+  // Continue drawing other objects (like shrooms, chicken, etc.)
   const sortedObjects = [...objectsToDraw].sort((a, b) => {
     const charFeet = char.y + char.frameHeight - char.feet; // Character's feet position
 
@@ -149,25 +192,29 @@ function draw() {
   });
 
   sortedObjects.forEach(obj => {
-    const { image, x, y, frameX, frameY, frameWidth, frameHeight, opacity = 1, scale = 1 } = obj;
-
-    const scaledX = (x * scale * globalScale) + translationX;
-    const scaledY = (y * scale * globalScale) + translationY;
-    const scaledWidth = frameWidth * scale * globalScale;
-    const scaledHeight = frameHeight * scale * globalScale;
-
-    c.globalAlpha = opacity;
-
-    if (frameX !== undefined && frameY !== undefined) {
-      c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
-                  scaledX, scaledY, scaledWidth, scaledHeight);
+    if (obj === char) {
+      drawCharacterWithClothing(); // Draw the character with clothing
     } else {
-      const scaledImgWidth = image.width * scale * globalScale;
-      const scaledImgHeight = image.height * scale * globalScale;
-      c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
-    }
+      const { image, x, y, frameX, frameY, frameWidth, frameHeight, opacity = 1, scale = 1 } = obj;
 
-    c.globalAlpha = 1;
+      const scaledX = (x * scale * globalScale) + translationX;
+      const scaledY = (y * scale * globalScale) + translationY;
+      const scaledWidth = frameWidth * scale * globalScale;
+      const scaledHeight = frameHeight * scale * globalScale;
+
+      c.globalAlpha = opacity;
+
+      if (frameX !== undefined && frameY !== undefined) {
+        c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
+                    scaledX, scaledY, scaledWidth, scaledHeight);
+      } else {
+        const scaledImgWidth = image.width * scale * globalScale;
+        const scaledImgHeight = image.height * scale * globalScale;
+        c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
+      }
+
+      c.globalAlpha = 1;
+    }
   });
 
   // Draw NPC indicators
