@@ -11,9 +11,9 @@
     <header>
       <div class="logo"></div>
       <div class="headButtons">
-        <button class="headButton" id="menuToggle" data-sprite-y="0"></button>
-        <button class="headButton" id="charToggle" data-sprite-y="2"></button>
-        <button class="headButton" id="meterToggle" data-sprite-y="4">
+        <button class="headButton" id="menuToggle" aria-label="Main Menu" data-sprite-y="0"></button>
+        <button class="headButton" id="charToggle" aria-label="Character Settings" data-sprite-y="2"></button>
+        <button class="headButton" id="meterToggle" aria-label="Delusion Meter" data-sprite-y="4">
           <svg id="meterIndicator" viewBox="0 0 6 6">
             <rect class="cls-b" x="1" y="1" width="4" height="4"/>
             <rect class="cls-f" y="1" width="1" height="4"/>
@@ -48,14 +48,14 @@
         </div>
       </aside>
       <aside class="pxDivWrapper" id="meterWrapper">
-        <button class="closeMenuButton" id="closeMeter"></button>
+        <button class="closeMenuButton" id="closeMeter" aria-label="Close Delusion Meter"></button>
         <div id="meterBG">
           <div id="meterFG"></div>
         </div>
         <p id="meterLabel">Delusion Meter (%)</p>
       </aside>
       <aside class="pxDivWrapper" id="articleWrapper">
-        <button class="closeMenuButton" id="closeArticle"></button>
+        <button class="closeMenuButton" id="closeArticle" aria-label="Close Article"></button>
         <div class="article"></div>
       </aside>
       <aside class="pxDivWrapper" id="dialogueWrapper">
@@ -66,7 +66,7 @@
     </main>
     <footer>
       <aside id="dialogueContextWrapper">
-        <button class="footButton" id="dialogueToggle" data-sprite-y="3"></button>
+        <button class="footButton" id="dialogueToggle" aria-label="Start Dialogue" data-sprite-y="3"></button>
         <div class="pxDivWrapper" id="bottomLabelWrapper">
           <p id="bottomLabel">Talk to Shrooms</p>
         </div>

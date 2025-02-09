@@ -852,11 +852,15 @@ function limitCharMovement(radius, maxSpeed) {
 
 function updateCharDirection(angle) {
   angle = angle * (180 / Math.PI); // Convert to degrees
-  if (angle <= -45 && angle >= -135) { // N
+  if (angle <= -67.5 && angle >= -112.5) { // N
     char.frameY = 1;
-  } else if (angle >= 157.5 || angle <= -135) { // W
+  } else if (angle >= -157.5 && angle <= -112.5) { // NW
+    char.frameY = 7;
+  } else if (angle >= -67.5 && angle <= -22.5) { // NE
+    char.frameY = 6;
+  } else if (angle >= 157.5 || angle <= -157.5) { // W
     char.frameY = 5;
-  } else if (angle >= -45 && angle <= 22.5) { // E
+  } else if (angle >= -22.5 && angle <= 22.5) { // E
     char.frameY = 4;
   } else if (angle >= 22.5 && angle <= 67.5) { // SE
     char.frameY = 3;
