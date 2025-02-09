@@ -709,8 +709,6 @@ function updateMouseData(event) {
  
   mouseRadius = Math.sqrt(dx * dx + dy * dy);
   mouseAngle = Math.atan2(dy, dx);
-
-  console.log(mouseRadius)
 }
 
 let angle = 0;
