@@ -938,8 +938,10 @@ function updateCharAngle() {
 
   if ((vBoth && hBoth) || (vBoth && !anyH) || (hBoth && !anyV)) {
     charSpeed = 0;
+    blockMotion = true;
     return angleHistory
   } else {
+    blockMotion = false;
     angleHistory = Math.atan2(-vKeys, hKeys);
     return angleHistory;
   }
