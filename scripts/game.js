@@ -29,12 +29,14 @@ const objectsToDraw = [
     feet: 6,
     zIndex: 2,
 
-    skinTone: 1, // (0-7)
+    skinTone: 0, // (0-7)
+    blush: false,
     hair: 'bob',
-    hairType: 4, // (0-13)
+    hairType: 10, // (0-13)
     clothingTop: 'floral',
-    topType: 5, // (0-9)
+    topType: 6, // (0-9)
     clothingBottom: 'none',
+    shadow: false,
   },
   {
     image: shroomsImage,
@@ -119,6 +121,11 @@ groundImage.onload = onImageLoad;
 // CHAR SETTINGS //
 ///////////////////
 
+const shadow = new Image();
+shadow.src = './assets/char/shadow.png';
+const blush = new Image();
+blush.src = './assets/char/blush.png';
+
 let tops = {
   floral: new Image(),
   basic: new Image(),
@@ -152,8 +159,16 @@ function drawCharacterWithClothing() {
   const topOffsetX = char.topType * 8;
   const hairOffsetX = char.hairType * 8;
 
+  // Draw character shadow
+  if (char.shadow) {
+    c.drawImage(shadow, 0, 0, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  }
+
   // Draw base character
   c.drawImage(charSheet, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  if (char.blush) {
+    c.drawImage(blush, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  }
 
   let selectedTop = tops[char.clothingTop]; // Get the top image
   if (selectedTop) {
