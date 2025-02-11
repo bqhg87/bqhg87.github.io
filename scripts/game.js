@@ -26,16 +26,17 @@ const objectsToDraw = [
     frameY: 0,
     frameWidth: 32,
     frameHeight: 32,
-    feet: 6,
+    feet: 5,
     zIndex: 2,
 
     skinTone: 0, // (0-7)
     blush: false,
     hair: 'braids',
-    hairType: 12, // (0-13)
-    clothingTop: 'floral',
-    topType: 6, // (0-9)
-    clothingBottom: 'none',
+    hairType: 3, // (0-13)
+    clothingTop: 'skull',
+    topType: 9, // (0-9)
+    clothingBottom: 'skirt',
+    bottomType: 9, // (0-9)
     shadow: false,
   },
   {
@@ -73,7 +74,7 @@ const char = objectsToDraw[0]; // this is the character
 const shrooms = objectsToDraw[1];
 const chicken = objectsToDraw[2];
 
-const npcIndicatorData = {
+const npcIndicatorData = { 
   chicken: { 
     spriteX: 0, 
     spriteY: 0,
@@ -129,9 +130,18 @@ blush.src = './assets/char/blush.png';
 let tops = {
   floral: new Image(),
   basic: new Image(),
+  skull: new Image(),
 };
 tops.floral.src = './assets/char/floral.png';
 tops.basic.src = './assets/char/basic.png';
+tops.skull.src = './assets/char/skull.png';
+
+let bottoms = {
+  trousers: new Image(),
+  skirt: new Image(),
+};
+bottoms.trousers.src = './assets/char/trousers.png';
+bottoms.skirt.src = './assets/char/skirt.png';
 
 let hair = {
   bob: new Image(),
@@ -161,6 +171,7 @@ function drawCharacterWithClothing() {
 
   const skinToneOffsetX = char.skinTone * 8;
   const topOffsetX = char.topType * 8;
+  const bottomOffsetX = char.bottomType * 8;
   const hairOffsetX = char.hairType * 8;
 
   // Draw character shadow
@@ -177,6 +188,12 @@ function drawCharacterWithClothing() {
   let selectedTop = tops[char.clothingTop]; // Get the top image
   if (selectedTop) {
       c.drawImage(selectedTop, (char.frameX + topOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight
+    );
+  }
+
+  let selectedBottom = bottoms[char.clothingBottom]; // Get the top image
+  if (selectedBottom) {
+      c.drawImage(selectedBottom, (char.frameX + bottomOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight
     );
   }
 

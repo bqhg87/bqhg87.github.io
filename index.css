@@ -369,7 +369,7 @@ span, li a {
 #meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner {
   background-image: url('./assets/uiCorners3.png');
 }
-#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG {
+#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
 }
@@ -387,6 +387,56 @@ span, li a {
 }
 #dialogueContextWrapper.hidden {
   opacity: 0;
+}
+
+#charSettingsWrapper {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: fit-content;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: calc(var(--pixelScale) * 4);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+#charSettingsWrapper.hidden {
+  opacity: 0;
+}
+
+#charSettingsTitleWrapper {
+  --pxScaleMultiplier: 1;
+  height: fit-content;
+  width: fit-content;
+  min-width: fit-content;
+  opacity: 0;
+  gap: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+  position: relative; /* Position relative to the viewport */
+  top: calc(var(--pixelScale) * 2.5);
+  pointer-events: none;
+}
+#charSettingsTitleWrapper.show {
+  opacity: 0.9;
+}
+
+
+#charSettingsTitle {
+  position: relative;
+  left: calc(var(--pixelScale) * 6);
+  top: calc(var(--pixelScale) * 3);
+  min-width: calc(var(--pixelScale) * (6));
+  max-width: calc(var(--pixelScale) * (182));
+  padding-right: calc(var(--pixelScale) * 12);
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+  padding-bottom: 16px;
 }
 
 .footButton {
