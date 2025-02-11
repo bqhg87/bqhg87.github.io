@@ -31,8 +31,8 @@ const objectsToDraw = [
 
     skinTone: 0, // (0-7)
     blush: false,
-    hair: 'bob',
-    hairType: 10, // (0-13)
+    hair: 'braids',
+    hairType: 12, // (0-13)
     clothingTop: 'floral',
     topType: 6, // (0-9)
     clothingBottom: 'none',
@@ -135,8 +135,12 @@ tops.basic.src = './assets/char/basic.png';
 
 let hair = {
   bob: new Image(),
+  braids: new Image(),
+  buzzcut: new Image(),
 };
 hair.bob.src = './assets/char/bob.png';
+hair.braids.src = './assets/char/braids.png';
+hair.buzzcut.src = './assets/char/buzzcut.png';
 
 
 
