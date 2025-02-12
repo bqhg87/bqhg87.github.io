@@ -389,6 +389,7 @@ span, li a {
 }
 #dialogueContextWrapper.hidden {
   opacity: 0;
+  pointer-events: none;
 }
 
 #charSettingsWrapper {
