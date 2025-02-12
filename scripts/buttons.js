@@ -21,18 +21,20 @@ let autoCloseInProgress = false
 let buttonClickedDuringTimeout = true
 window.autoCloseInProgress = autoCloseInProgress
 
-updateRandomizeButton(false);
+updateRandomiseButton(false);
 
-window.addEventListener("resize", () => {
+window.addEventListener("resize", () => {checkRandomiseButton});
+
+function checkRandomiseButton() {
   if (window.innerWidth < 500) {
-    updateRandomizeButton(true);
+    updateRandomiseButton(true);
   } else {
-    updateRandomizeButton(false);
+    updateRandomiseButton(false);
   }
   checkButtonHover("randomiseCharToggle");
-});
+}
 
-function updateRandomizeButton(makeSmall = false) {
+function updateRandomiseButton(makeSmall = false) {
   const button = document.getElementById("randomiseCharToggle");
   if (makeSmall && button)  {
     smallRandomiseButton = true;
@@ -419,6 +421,7 @@ window.addEventListener('toggleCharMenu', () => {
 // Initialize buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
   initializeButtons();  // Initialize all buttons with sprites
+  checkRandomiseButton(); // If window is too narrow, will update the size of the randomise button
   addToggleListeners();  // Add toggle event to each button
   handleInitialArticleLoad(); // Automatically toggle menu if an article is present in the URL
 });
