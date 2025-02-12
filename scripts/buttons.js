@@ -3,17 +3,49 @@ function setButtonSprite(buttonId, spriteX, spriteY) {
   const button = document.getElementById(buttonId);
   const buttonWidth = button.offsetWidth;
   const buttonHeight = button.offsetHeight;
-  
+
   const backgroundPositionX = -spriteX * buttonWidth; // Negative offset for X-axis
-  let backgroundPositionY = -spriteY * buttonHeight; // Negative offset for Y-axis
-  
-  button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
-  button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 6}px`;  // Scale the sprite to fit the button
+  const backgroundPositionY = -spriteY * buttonHeight; // Negative offset for Y-axis
+
+  if (buttonId === 'randomiseCharToggle' && smallRandomiseButton) {
+    button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
+    button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 1}px`;  // Scale the sprite to fit the button
+  } else {
+    button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
+    button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 7}px`;  // Scale the sprite to fit the button
+  }
 }
 
+let smallRandomiseButton = false;
 let autoCloseInProgress = false
 let buttonClickedDuringTimeout = true
 window.autoCloseInProgress = autoCloseInProgress
+
+updateRandomizeButton(false);
+
+window.addEventListener("resize", () => {
+  if (window.innerWidth < 500) {
+    updateRandomizeButton(true);
+  } else {
+    updateRandomizeButton(false);
+  }
+  checkButtonHover("randomiseCharToggle");
+});
+
+function updateRandomizeButton(makeSmall = false) {
+  const button = document.getElementById("randomiseCharToggle");
+  if (makeSmall && button)  {
+    smallRandomiseButton = true;
+    button.style.width = `${2.5 * 16}px`;
+    button.style.height = `${2.5 * 16}px`;
+    button.style.backgroundImage = "url('./assets/smallSquareButtons.png')";
+  } else if (!makeSmall && button) {
+    smallRandomiseButton = false;
+    button.style.width = `${2.5 * 18}px`;
+    button.style.height = `${2.5 * 20}px`;
+    button.style.backgroundImage = "url('./assets/headButtons.png')";
+  }
+}
 
 window.addEventListener('autoClose', () => {
   window.autoCloseInProgress = autoCloseInProgress
@@ -35,7 +67,7 @@ window.autoClose = function(time) {
       window.autoCloseInProgress = autoCloseInProgress;
       return;
     } else {
-      console.log('Menus closed due to movement');
+      //console.log('Menus closed due to movement');
       let meterWrapper = document.getElementById('meterWrapper');
       let articleWrapper = document.getElementById('articleWrapper');
       if (meterWrapper.classList.contains('show')) {
@@ -65,6 +97,11 @@ let prev = false;
 // Function to handle button click, toggle visibility, and manage state
 function handleButtonClick(buttonId) {
   buttonClickedDuringTimeout = true;
+
+  if (buttonId === "randomiseCharToggle") {
+    randomizeCharAppearance();
+    return
+  }
 
   const buttons = document.querySelectorAll('.headButton');
   const clickedButton = document.getElementById(buttonId);
@@ -374,6 +411,10 @@ function handleInitialArticleLoad() {
 
 // Listen to window resize events to update visibility
 window.addEventListener('resize', updateHeadButtonsVisibility);
+
+window.addEventListener('toggleCharMenu', () => {
+  handleButtonClick('charToggle');
+});
 
 // Initialize buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {

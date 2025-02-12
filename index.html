@@ -72,13 +72,22 @@
         </div>
       </aside>
       <aside id="charSettingsWrapper">
-        <div class="pxDivWrapper" id="charSettingsTitleWrapper">
-          <p id="charSettingsTitle">Snus Addiction</p>
+        <div id="charSettingsTitleWrapper">
+          <button class="charSettingsSelector" id="charSettingsTitleLeft" aria-label="Character Settings Menu Left" data-sprite-y="0"></button>
+          <div class="pxDivWrapper" id="charSettingsTitleWrapper">
+            <p id="charSettingsTitle"></p>
+          </div>
+          <button class="charSettingsSelector" id="charSettingsTitleRight" aria-label="Character Settings Menu Right" data-sprite-y="1"></button>
         </div>
+        <div id="charSettingsOptionsWrapper">
+        </div>
+      </aside>
+      <button class="footButton" id="randomiseCharToggle" aria-label="Randomise Character" data-sprite-y="6"></button>
     </footer>
     <script type="module" src="/scripts/game.js"></script>
     <script type="module" src="/scripts/buttons.js"></script>
     <script type="module" src="scripts/closemenubutton.js"></script>
+    <script type="module" src="scripts/charsettings.js"></script>
     <script type="module" src="/scripts/pxdiv.js"></script>
     <script type="module" src="/scripts/delmeter.js"></script>
     <script type="module" src="/scripts/articles.js"></script>

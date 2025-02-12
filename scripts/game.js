@@ -28,16 +28,6 @@ const objectsToDraw = [
     frameHeight: 32,
     feet: 5,
     zIndex: 2,
-
-    skinTone: 0, // (0-7)
-    blush: false,
-    hair: 'braids',
-    hairType: 3, // (0-13)
-    clothingTop: 'skull',
-    topType: 9, // (0-9)
-    clothingBottom: 'skirt',
-    bottomType: 9, // (0-9)
-    shadow: false,
   },
   {
     image: shroomsImage,
@@ -122,6 +112,54 @@ groundImage.onload = onImageLoad;
 // CHAR SETTINGS //
 ///////////////////
 
+// Character appearance properties with defaults
+let charAppearance = {
+  skinTone: 0,
+  blush: false,
+  hair: 'bob',
+  hairType: 10,
+  clothingTop: 'skull',
+  topType: 0,
+  clothingBottom: 'skirt',
+  bottomType: 9,
+  shadow: false,
+};
+
+// Load from cache or set defaults
+const cachedAppearance = JSON.parse(localStorage.getItem('charAppearance'));
+if (cachedAppearance) {
+  charAppearance = cachedAppearance;
+}
+
+// Function to update character appearance and save to cache
+function updateCharAppearance(newProperties) {
+  Object.assign(charAppearance, newProperties); // Merge new properties
+  localStorage.setItem('charAppearance', JSON.stringify(charAppearance));
+  draw(); // Redraw the character
+}
+
+// Function to randomize character appearance (except shadow)
+window.randomizeCharAppearance = function() {
+  const skinTones = 8; // Number of skin tones
+  const hairTypes = 14; // Number of hair types (0-13)
+  const topTypes = 10; // Number of top types (0-9)
+  const bottomTypes = 10; // Number of bottom types (0-9)
+  const hairs = Object.keys(hair);
+  const topsNames = Object.keys(tops);
+  const bottomsNames = Object.keys(bottoms);
+
+  updateCharAppearance({
+    skinTone: Math.floor(Math.random() * skinTones),
+    blush: Math.random() < 0.5, // 50% chance of blush
+    hair: hairs[Math.floor(Math.random() * hairs.length)],
+    hairType: Math.floor(Math.random() * hairTypes),
+    clothingTop: topsNames[Math.floor(Math.random() * topsNames.length)],
+    topType: Math.floor(Math.random() * topTypes),
+    clothingBottom: bottomsNames[Math.floor(Math.random() * bottomsNames.length)],
+    bottomType: Math.floor(Math.random() * bottomTypes),
+  });
+}
+
 const shadow = new Image();
 shadow.src = './assets/char/shadow.png';
 const blush = new Image();
@@ -169,40 +207,38 @@ function drawCharacterWithClothing() {
   const scaledWidth = frameWidth * scale * globalScale;
   const scaledHeight = frameHeight * scale * globalScale;
 
-  const skinToneOffsetX = char.skinTone * 8;
-  const topOffsetX = char.topType * 8;
-  const bottomOffsetX = char.bottomType * 8;
-  const hairOffsetX = char.hairType * 8;
+  const skinToneOffsetX = charAppearance.skinTone * 8;
+  const topOffsetX = charAppearance.topType * 8;
+  const bottomOffsetX = charAppearance.bottomType * 8;
+  const hairOffsetX = charAppearance.hairType * 8;
 
   // Draw character shadow
-  if (char.shadow) {
+  if (charAppearance.shadow) {
     c.drawImage(shadow, 0, 0, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
   // Draw base character
   c.drawImage(charSheet, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
-  if (char.blush) {
+  if (charAppearance.blush) {
     c.drawImage(blush, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
-  let selectedTop = tops[char.clothingTop]; // Get the top image
+  let selectedTop = tops[charAppearance.clothingTop];
   if (selectedTop) {
-      c.drawImage(selectedTop, (char.frameX + topOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight
-    );
+    c.drawImage(selectedTop, (char.frameX + topOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
-  let selectedBottom = bottoms[char.clothingBottom]; // Get the top image
+  let selectedBottom = bottoms[charAppearance.clothingBottom];
   if (selectedBottom) {
-      c.drawImage(selectedBottom, (char.frameX + bottomOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight
-    );
+    c.drawImage(selectedBottom, (char.frameX + bottomOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
-  let selectedHair = hair[char.hair]; // Get the top image
+  let selectedHair = hair[charAppearance.hair];
   if (selectedHair) {
-      c.drawImage(selectedHair, (char.frameX + hairOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight
-    );
+    c.drawImage(selectedHair, (char.frameX + hairOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 }
+
 // Draw all objects
 function draw() {
   // Clear the canvas
@@ -331,8 +367,14 @@ function animateZoom() {
 let blockMotion;
 let blockDirectionUpdate = false;
 let blockSpaceDialogueToggle = false;
+let charMenuOpen = false;
+
+const charSettingsWrapper = document.getElementById('charSettingsWrapper');
+const randomiseCharButton = document.getElementById('randomiseCharToggle');
 
 window.addEventListener('openCharMenu', () => {
+  charSettingsWrapper.classList.add('show');
+  randomiseCharButton.classList.add('show');
   lowCamera = false;
   blockSpaceDialogueToggle = true;
   updateLowCamera();
@@ -361,13 +403,19 @@ window.addEventListener('openCharMenu', () => {
       dialogueToggle.classList.remove('show');
     }, (0)) // Will be better once i code the character movement better with decelertation
   }
+  setTimeout(() => {
+    charMenuOpen = true;
+  }, (zoomDuration))
 });
 
 window.addEventListener('closeCharMenu', () => {
+  charSettingsWrapper.classList.remove('show');
+  randomiseCharButton.classList.remove('show');
   refreshCheckNPC();
   checkNPCs();
   blockMotion = false;
   blockSpaceDialogueToggle = false;
+  charMenuOpen = false;
   if (zoomingInProgress && zoomTargetScale === 6) {
     // If zooming is in progress and we're zooming in, reverse the zoom direction
     zoomStartScale = globalScale;
@@ -800,6 +848,10 @@ let blockMouse = false;
 let charSpeed = 0;
 
 function updateCharMovement() {
+  if (keysPressed.length !== 0 && charMenuOpen) {
+    const toggleCharMenuEvent = new Event('toggleCharMenu');
+    window.dispatchEvent(toggleCharMenuEvent);
+  }
   if (blockDirectionUpdate) {
     char.frameX = 0;
     updateCharDirection(Math.PI / 2); // Look down
