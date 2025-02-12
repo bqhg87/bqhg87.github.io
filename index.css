@@ -402,6 +402,7 @@ span, li a {
   align-items: center;
   bottom: calc(var(--pixelScale) * 4);
   gap: calc(var(--pixelScale) * 4);
+  padding-right: calc(var(--pixelScale) * 1); /* Due to offset of left button */
   opacity: 0;
   transition: opacity 0.2s ease;
   pointer-events: none;
@@ -447,10 +448,16 @@ span, li a {
 }
 
 #charSettingsOptionsWrapper {
-  display: grid;
   opacity: 0.97;
   height: calc(var(--pixelScale) * 30);
   width: 500px;
+}
+
+#charBodySettingsWrapper {
+  display: grid;
+  height: calc(var(--pixelScale) * 30);
+  width: 500px;
+  background-color: aqua;
 }
 
 #charSettingsTitle {
@@ -490,10 +497,14 @@ span, li a {
   opacity: 0.9;
   pointer-events: visible; /* Disable interaction */
 }
+.footButton.small {
+  width: calc(var(--pixelScale) * 16);  /* 18x20 sprites */
+  height: calc(var(--pixelScale) * 16);
+  background-image: url('./assets/smallSquareButtons.png');
+}
 
 #randomiseCharToggle {
-  position: fixed;
-  right: calc(var(--pixelScale) * 4);
+  position: relative;
 }
 
 #bottomLabelWrapper {
@@ -641,6 +652,12 @@ span, li a {
   z-index: 1000;
 }
 
+.pxDivSelector {
+  height: 20px;
+  width: 200px;
+  opacity: 1;
+}
+
 .pxDivBG {
   height: calc(100% - (calc(var(--pixelScale) * 8 * var(--pxScaleMultiplier))));
   width: calc(100% - (calc(var(--pixelScale) * 8 * var(--pxScaleMultiplier))));
@@ -767,20 +784,6 @@ span, li a {
   #dialogue {
     max-width: calc(100vw - var(--pixelScale) * (12 + 8));
   }
-  #randomiseCharToggle {
-    bottom: calc(var(--pixelScale) * 38);
-  }
-}
-@media (max-width: 420px) {
-  #randomiseCharToggle {
-    left: calc(50% + var(--pixelScale) * (64 - 11));
-  }
-  #charSettingsWrapper {
-    left: calc(50% - var(--pixelScale) * (11));
-  }
-  #charSettingsTitleWrapper {
-    gap: calc(var(--pixelScale) * (2));
-  }
 }
 @media (max-width: 490px) {
   body.article-open header, body.meter-open header {
@@ -793,16 +796,6 @@ span, li a {
   }
   #meterWrapper {
     width: calc(100vw - var(--pixelScale) * 8);
-  }
-}
-@media (max-width: 360px) {
-  #randomiseCharToggle {
-    left: calc(var(--pixelScale) * (125));
-  }
-  #charSettingsWrapper {
-    left: calc(var(--pixelScale) * (2));
-    transform: translateX(0);
-    align-items: start;
   }
 }
 @media (max-width: 320px) {

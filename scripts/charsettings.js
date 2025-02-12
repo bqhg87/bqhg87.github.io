@@ -1,5 +1,5 @@
 let currentCharMenuTitle = 'Body Settings';
-const charMenuTitles = ['Body Settings', 'Wardrobe', 'Pets'];
+const charMenuTitles = ['Body Settings', 'Wardrobe', 'Hats', 'Pets'];
 
 function setCharMenuButtonSprite(buttonId, spriteX) {
     const button = document.getElementById(buttonId);

@@ -7,7 +7,7 @@ function setButtonSprite(buttonId, spriteX, spriteY) {
   const backgroundPositionX = -spriteX * buttonWidth; // Negative offset for X-axis
   const backgroundPositionY = -spriteY * buttonHeight; // Negative offset for Y-axis
 
-  if (buttonId === 'randomiseCharToggle' && smallRandomiseButton) {
+  if (buttonId === 'randomiseCharToggle') {
     button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
     button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 1}px`;  // Scale the sprite to fit the button
   } else {
@@ -16,38 +16,9 @@ function setButtonSprite(buttonId, spriteX, spriteY) {
   }
 }
 
-let smallRandomiseButton = false;
 let autoCloseInProgress = false
 let buttonClickedDuringTimeout = true
 window.autoCloseInProgress = autoCloseInProgress
-
-updateRandomiseButton(false);
-
-window.addEventListener("resize", checkRandomiseButton);
-
-function checkRandomiseButton() {
-  if (window.innerWidth < 500) {
-    updateRandomiseButton(true);
-  } else {
-    updateRandomiseButton(false);
-  }
-  checkButtonHover("randomiseCharToggle");
-}
-
-function updateRandomiseButton(makeSmall = false) {
-  const button = document.getElementById("randomiseCharToggle");
-  if (makeSmall && button)  {
-    smallRandomiseButton = true;
-    button.style.width = `${2.5 * 16}px`;
-    button.style.height = `${2.5 * 16}px`;
-    button.style.backgroundImage = "url('./assets/smallSquareButtons.png')";
-  } else if (!makeSmall && button) {
-    smallRandomiseButton = false;
-    button.style.width = `${2.5 * 18}px`;
-    button.style.height = `${2.5 * 20}px`;
-    button.style.backgroundImage = "url('./assets/headButtons.png')";
-  }
-}
 
 window.addEventListener('autoClose', () => {
   window.autoCloseInProgress = autoCloseInProgress
@@ -421,7 +392,6 @@ window.addEventListener('toggleCharMenu', () => {
 // Initialize buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
   initializeButtons();  // Initialize all buttons with sprites
-  checkRandomiseButton(); // If window is too narrow, will update the size of the randomise button
   addToggleListeners();  // Add toggle event to each button
   handleInitialArticleLoad(); // Automatically toggle menu if an article is present in the URL
 });
