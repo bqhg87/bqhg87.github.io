@@ -119,9 +119,9 @@ let charAppearance = {
   hair: 'bob',
   hairType: 10,
   clothingTop: 'skull',
-  topType: 0,
-  clothingBottom: 'skirt',
-  bottomType: 9,
+  topType: 3,
+  clothingBottom: 'trousers',
+  bottomType: 8,
   shadow: false,
 };
 

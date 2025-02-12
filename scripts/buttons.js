@@ -23,7 +23,7 @@ window.autoCloseInProgress = autoCloseInProgress
 
 updateRandomiseButton(false);
 
-window.addEventListener("resize", () => {checkRandomiseButton});
+window.addEventListener("resize", checkRandomiseButton);
 
 function checkRandomiseButton() {
   if (window.innerWidth < 500) {
