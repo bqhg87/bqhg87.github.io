@@ -368,10 +368,10 @@ span, li a {
   opacity: 0.97;
   z-index: 20000;
 }
-#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner {
+#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner {
   background-image: url('./assets/uiCorners3.png');
 }
-#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG {
+#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
 }
@@ -449,15 +449,22 @@ span, li a {
 
 #charSettingsOptionsWrapper {
   opacity: 0.97;
-  height: calc(var(--pixelScale) * 30);
-  width: 500px;
+  height: calc(var(--pixelScale) * 33);
+  width: fit-content;
 }
 
-#charBodySettingsWrapper {
+.charSettingsWrapper {
   display: grid;
-  height: calc(var(--pixelScale) * 30);
-  width: 500px;
-  background-color: aqua;
+  gap: calc(var(--pixelScale) * 1);
+  grid-template-columns: repeat(20, 1fr);
+  grid-template-rows: 1fr 1fr;
+  height: calc(var(--pixelScale) * 33);
+  width: calc(var(--pixelScale) * 172); /* can make responsive for vw */
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+.charSettingsWrapper.hidden {
+  opacity: 0;
 }
 
 #charSettingsTitle {
@@ -477,6 +484,140 @@ span, li a {
   color: rgb(97, 70, 60);
   z-index: 1001;
   padding-bottom: 16px;
+}
+
+.pxSelector {
+  display: flex;
+  grid-column: span 1;
+  position: relative;
+  height: auto;
+  width: auto;
+  --pxScaleMultiplier: 1;
+  opacity: 1;
+  pointer-events: none;
+  cursor: default;
+}
+
+.pxSelectorLabel {
+  position: relative;
+  left: calc(var(--pixelScale) * 6);
+  top: calc(var(--pixelScale) * 3);
+  width: calc(100% - var(--pixelScale) * 11);
+  padding-right: calc(var(--pixelScale) * 10);
+  text-align: left;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+  padding-bottom: calc(var(--pixelScale) * 6);
+}
+
+.pxSelectorToggle {
+  all: unset;
+  margin-top: calc(var(--pixelScale) * 4);
+  height: calc(var(--pixelScale) * 8);
+  pointer-events: visible;
+  cursor: pointer;
+  margin-right: calc(var(--pixelScale) * 4.5);
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  z-index: 1005;
+}
+
+#skinToneToggleWrapper {
+  flex-direction: column;
+}
+
+#skinToneLabel {
+  top: calc(var(--pixelScale) * 4);
+}
+
+#skinTonePalette {
+  background-image: url(./assets/skinTonePalette.png);
+  background-size: calc(var(--pixelScale) * 54) calc(var(--pixelScale) * 12 * 9);
+  image-rendering: pixelated;
+  height: calc(var(--pixelScale) * 12);
+  width: calc(var(--pixelScale) * 54);
+  margin-left: calc(var(--pixelScale) * 6);
+  z-index: 1005;
+}
+
+#skinToneSelectorsWrapper{
+  display: flex;
+  gap: calc(var(--pixelScale) * 1);
+  position: absolute;
+  bottom: calc(var(--pixelScale) * 5.4);
+  margin-left: calc(var(--pixelScale) * 5.5);
+}
+
+.skinToneSelector {
+  all: unset;
+  position: relative;
+  z-index: 1010;
+  background-image: url(./assets/skinToneSelector.png);
+  background-size: calc(var(--pixelScale) * 6) calc(var(--pixelScale) * 12);
+  image-rendering: pixelated;
+  height: calc(var(--pixelScale) * 12);
+  width: calc(var(--pixelScale) * 6);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.skinToneSelector.show {
+  opacity: 1;
+}
+
+.basicToggle {
+  all: unset;
+  margin-top: calc(var(--pixelScale) * 4);
+  margin-right: calc(var(--pixelScale) * 4.5);
+  height: calc(var(--pixelScale) * 8);
+  min-width: calc(var(--pixelScale) * 8);
+  background-image: url(./assets/charSettingsButtons.png);
+  image-rendering: pixelated;
+  opacity: 1;
+  pointer-events: visible;
+  cursor: pointer;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  z-index: 1005;
+}
+
+.colorToggle {
+  height: calc(var(--pixelScale) * 8);
+  position: relative;
+  opacity: 1;
+}
+
+#skinToneToggleWrapper {
+  grid-column: span 8;
+  grid-row: span 2;
+}
+#hairColorToggleWrapper {
+  grid-column: span 5;
+  grid-row: span 1;
+}
+#eyeColorToggleWrapper {
+  grid-column: span 5;
+  grid-row: span 1;
+}
+#blushToggleWrapper {
+  grid-column: span 7;
+  grid-row: span 1;
+}
+#glassesToggleWrapper {
+  grid-column: span 7;
+  grid-row: span 1;
 }
 
 .footButton {
@@ -522,7 +663,6 @@ span, li a {
 #bottomLabelWrapper.show {
   opacity: 0.9;
 }
-
 
 #bottomLabel {
   position: relative;
@@ -650,12 +790,6 @@ span, li a {
   min-width: calc(var(--pixelScale) * 10 * var(--pxScaleMultiplier));
   min-height: calc(var(--pixelScale) * 10 * var(--pxScaleMultiplier));
   z-index: 1000;
-}
-
-.pxDivSelector {
-  height: 20px;
-  width: 200px;
-  opacity: 1;
 }
 
 .pxDivBG {

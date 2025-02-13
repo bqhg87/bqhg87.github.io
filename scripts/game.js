@@ -116,6 +116,7 @@ groundImage.onload = onImageLoad;
 let charAppearance = {
   skinTone: 0,
   blush: false,
+  glasses: false,
   hair: 'bob',
   hairType: 10,
   clothingTop: 'skull',
@@ -132,9 +133,10 @@ if (cachedAppearance) {
 }
 
 // Function to update character appearance and save to cache
-function updateCharAppearance(newProperties) {
+window.updateCharAppearance = function(newProperties) {
   Object.assign(charAppearance, newProperties); // Merge new properties
   localStorage.setItem('charAppearance', JSON.stringify(charAppearance));
+  updateDisplayedCharSettings();
   draw(); // Redraw the character
 }
 
@@ -151,6 +153,7 @@ window.randomizeCharAppearance = function() {
   updateCharAppearance({
     skinTone: Math.floor(Math.random() * skinTones),
     blush: Math.random() < 0.5, // 50% chance of blush
+    glasses: Math.random() < 0.5, // 50% chance of glasses
     hair: hairs[Math.floor(Math.random() * hairs.length)],
     hairType: Math.floor(Math.random() * hairTypes),
     clothingTop: topsNames[Math.floor(Math.random() * topsNames.length)],

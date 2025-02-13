@@ -81,8 +81,57 @@
           <button class="footButton small show" id="randomiseCharToggle" aria-label="Randomise Character" data-sprite-y="6"></button>
         </div>
         <div id="charSettingsOptionsWrapper">
-          <div id="charBodySettingsWrapper">
-            <div class="pxDivWrapper pxSelector"></div>
+          <div class="charSettingsWrapper" id="charBodySettings">
+            <div class="pxDivWrapper pxSelector" id="skinToneToggleWrapper">
+              <p class="pxSelectorLabel" id="skinToneLabel">Skin Tone</p>
+              <div id="skinTonePalette"></div>
+              <div id="skinToneSelectorsWrapper">
+                <button class="skinToneSelector" data-tone="0"></button>
+                <button class="skinToneSelector" data-tone="1"></button>
+                <button class="skinToneSelector" data-tone="2"></button>
+                <button class="skinToneSelector" data-tone="3"></button>
+                <button class="skinToneSelector" data-tone="4"></button>
+                <button class="skinToneSelector" data-tone="5"></button>
+                <button class="skinToneSelector" data-tone="6"></button>
+                <button class="skinToneSelector" data-tone="7"></button>
+              </div>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="hairColorToggleWrapper">
+              <p class="pxSelectorLabel">Hair</p>
+              <button class="pxSelectorToggle">
+                <svg class="colorToggle" viewBox="0 0 8 8">
+                  <rect class="cls-b" x="1" y="1" width="6" height="6"/>
+                  <rect class="cls-f" y="1" width="1" height="6"/>
+                  <rect class="cls-f" x="7" y="1" width="1" height="6"/>
+                  <rect class="cls-f" x="1" y="7" width="6" height="1"/>
+                  <rect class="cls-f" x="1" width="6" height="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="glassesToggleWrapper">
+              <p class="pxSelectorLabel">Glasses?</p>
+              <button class="basicToggle" id="glassesToggle">
+              </button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="eyeColorToggleWrapper">
+              <p class="pxSelectorLabel">Eyes</p>
+              <button class="pxSelectorToggle">
+                <svg class="colorToggle" viewBox="0 0 8 8">
+                  <rect class="cls-b" x="1" y="1" width="6" height="6"/>
+                  <rect class="cls-f" y="1" width="1" height="6"/>
+                  <rect class="cls-f" x="7" y="1" width="1" height="6"/>
+                  <rect class="cls-f" x="1" y="7" width="6" height="1"/>
+                  <rect class="cls-f" x="1" width="6" height="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="blushToggleWrapper">
+              <p class="pxSelectorLabel">Blush?</p>
+              <button class="basicToggle" id="blushToggle">
+              </button>
+            </div>
+          </div>
+          <div class="charSettingsWrapper" id="charWardrobeSettings">
           </div>
         </div>
       </aside>
