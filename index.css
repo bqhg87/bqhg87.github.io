@@ -274,21 +274,22 @@ span, li a {
   scrollbar-color: rgb(228, 208, 171) transparent; /* Red scrollbar, no background */
 }
 /* Webkit-based browsers */
-.sideMenu::-webkit-scrollbar, .article::-webkit-scrollbar {
+.sideMenu::-webkit-scrollbar, .article::-webkit-scrollbar, #charSettingsOptionsWrapper::-webkit-scrollbar {
   width: calc(var(--pixelScale) * 2); /* Width of the scrollbar */
+  height: calc(var(--pixelScale) * 2); /* Width of the scrollbar */
 }
-.sideMenu::-webkit-scrollbar-track, .article::-webkit-scrollbar-track {
+.sideMenu::-webkit-scrollbar-track, .article::-webkit-scrollbar-track, #charSettingsOptionsWrapper::-webkit-scrollbar-track {
   background: transparent; /* Removes scrollbar background */
   margin: var(--pixelScale); /* Adds space around the scrollbar */
 }
-.sideMenu::-webkit-scrollbar-thumb, .article::-webkit-scrollbar-thumb {
+.sideMenu::-webkit-scrollbar-thumb, .article::-webkit-scrollbar-thumb, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb {
   background-color: rgb(176, 143, 119); /* Default scrollbar color */
   border: calc(var(--pixelScale) / 2) solid transparent; /* Space around the thumb */
 }
-.sideMenu::-webkit-scrollbar-thumb:hover, .article::-webkit-scrollbar-thumb:hover {
+.sideMenu::-webkit-scrollbar-thumb:hover, .article::-webkit-scrollbar-thumb:hover, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb:hover {
   background-color: rgb(163, 123, 94); /* Hover state */
 }
-.sideMenu::-webkit-scrollbar-thumb:active, .article::-webkit-scrollbar-thumb:hover {
+.sideMenu::-webkit-scrollbar-thumb:active, .article::-webkit-scrollbar-thumb:hover, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb:hover {
   background-color: rgb(137, 100, 95); /* Active state */
 }
 
@@ -400,7 +401,7 @@ span, li a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  bottom: calc(var(--pixelScale) * 4);
+  bottom: calc(var(--pixelScale) * 1); /* replaced by padding for the scrollbar */
   gap: calc(var(--pixelScale) * 4);
   padding-right: calc(var(--pixelScale) * 1); /* Due to offset of left button */
   opacity: 0;
@@ -408,7 +409,7 @@ span, li a {
   pointer-events: none;
 }
 #charSettingsWrapper.show {
-  opacity: 1;
+  opacity: 0.97;
 }
 #charSettingsWrapper * {
   pointer-events: none;
@@ -452,6 +453,11 @@ span, li a {
   height: calc(var(--pixelScale) * 33);
   width: fit-content;
   max-width: 100vw;
+  padding-bottom: calc(var(--pixelScale) * 4);
+  overflow-y: hidden;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
 }
 
 .charSettingsWrapper {
@@ -463,11 +469,16 @@ span, li a {
   width: calc(var(--pixelScale) * 172); /* can make responsive for vw */
   opacity: 1;
   transition: opacity 0.2s ease;
-  margin-left: calc(var(--pixelScale) * 1);
-  margin-right: calc(var(--pixelScale) * 1);
+  padding-left: calc(var(--pixelScale) * 2);
+  padding-right: calc(var(--pixelScale) * 2);
+  pointer-events: auto;
 }
 .charSettingsWrapper.hidden {
   opacity: 0;
+  pointer-events: none !important;
+}
+.charSettingsWrapper.hidden * {
+  pointer-events: none !important;
 }
 
 #charSettingsTitle {
@@ -543,6 +554,8 @@ span, li a {
 }
 
 #skinTonePalette {
+  position: absolute;
+  bottom: calc(var(--pixelScale) * 5.5);
   background-image: url(./assets/skinTonePalette.png);
   background-size: calc(var(--pixelScale) * 54) calc(var(--pixelScale) * 12 * 9);
   image-rendering: pixelated;
@@ -556,7 +569,7 @@ span, li a {
   display: flex;
   gap: calc(var(--pixelScale) * 1);
   position: absolute;
-  bottom: calc(var(--pixelScale) * 5.4);
+  bottom: calc(var(--pixelScale) * 5.5);
   margin-left: calc(var(--pixelScale) * 5.5);
 }
 
@@ -596,31 +609,99 @@ span, li a {
   z-index: 1005;
 }
 
+#autoEyesToggle {
+  position: absolute;
+  top: calc(var(--pixelScale) * 4);
+  margin-top: calc(var(--pixelScale) * 0);
+  right: calc(var(--pixelScale) * 4.5);
+  height: calc(var(--pixelScale) * 8);
+  min-width: calc(var(--pixelScale) * 8);
+  background-image: url(./assets/charSettingsButtons.png);
+  background-size: 60px 60px;
+  background-position: 0 -40px;
+  image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: visible;
+  cursor: pointer;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  z-index: 1050;
+}
+#autoEyesToggle.show {
+  opacity: 1;
+}
+#eyesColorToggle {
+  position: absolute;
+  top: calc(var(--pixelScale) * 4);
+  right: calc(var(--pixelScale) * 4.5);
+  z-index: -1000;
+}
+
+
 .colorToggle {
   height: calc(var(--pixelScale) * 8);
   position: relative;
   opacity: 1;
+  transition: opacity 0.2s ease;
+}
+.colorToggle.hidden {
+  opacity: 0;
+}
+
+.cls-b-hair, .cls-f-hair,
+.cls-b-eyes, .cls-f-eyes {
+    transition: fill 0.2s ease;
 }
 
 #skinToneToggleWrapper {
-  grid-column: span 8;
-  grid-row: span 2;
+  grid-area: 1/1/span 2/span 8;
 }
 #hairColorToggleWrapper {
-  grid-column: span 5;
-  grid-row: span 1;
+  grid-area: 1/9/span 1/span 5;
 }
 #eyeColorToggleWrapper {
-  grid-column: span 5;
-  grid-row: span 1;
+  grid-area: 2/9/span 1/span 5;
 }
 #blushToggleWrapper {
-  grid-column: span 7;
-  grid-row: span 1;
+  grid-area: 1/14/span 1/span 7;
 }
-#glassesToggleWrapper {
-  grid-column: span 7;
-  grid-row: span 1;
+#beardToggleWrapper {
+  grid-area: 2/14/span 1/span 7;
+}
+
+#charSelectorArrowsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pixelScale) * 8);
+  align-items: center;
+  height: fit-content;
+  width: calc(var(--pixelScale) * 100);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.charSelectorArrowsPairWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+#charPairArrowsHair {
+  margin-top: calc(var(--pixelScale) * -6);
+}
+.charSelectorArrow {
+  all: unset;
+  width: calc(var(--pixelScale) * 5 * 1.5);  /* 5x8 sprites */
+  height: calc(var(--pixelScale) * 8 * 1.5);  /* 5x8 sprites */
+  background-image: url('./assets/charSelectorArrows.png');
+  background-size: calc(var(--pixelScale) * 5 * 3 * 1.5) calc(var(--pixelScale) * 8 * 2 * 1.5);
+  image-rendering: pixelated;
 }
 
 .footButton {
@@ -945,9 +1026,6 @@ span, li a {
     transform: translateX(0);
     align-items: left;
   }
-  #charSettingsOptionsWrapper {
-    max-width: 100vw;
-  }
   .charSettingsWrapper {
     position: fixed;
     left: 0;
@@ -979,5 +1057,15 @@ span, li a {
     left: 0;
     width: 320px;
     transform: translateX(0);
+  }
+}
+
+
+@media (max-height: 320px) {
+  #charSettingsWrapper {
+    bottom: calc(var(--pixelScale) * 4); /* give enough space for iphone in landscape */
+  }
+  #dialogueContextWrapper {
+    margin-bottom: calc(var(--pixelScale) * 4);
   }
 }

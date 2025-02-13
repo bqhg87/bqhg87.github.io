@@ -72,7 +72,7 @@ function handleButtonClick(buttonId) {
   buttonClickedDuringTimeout = true;
 
   if (buttonId === "randomiseCharToggle") {
-    randomizeCharAppearance();
+    randomiseCharAppearance();
     return
   }
 

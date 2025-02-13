@@ -115,7 +115,9 @@ groundImage.onload = onImageLoad;
 // Character appearance properties with defaults
 let charAppearance = {
   skinTone: 0,
+  eyes: 8, // (auto)
   blush: false,
+  beard: false,
   glasses: false,
   hair: 'bob',
   hairType: 10,
@@ -130,6 +132,8 @@ let charAppearance = {
 const cachedAppearance = JSON.parse(localStorage.getItem('charAppearance'));
 if (cachedAppearance) {
   charAppearance = cachedAppearance;
+} else {
+  localStorage.setItem('charAppearance', JSON.stringify(charAppearance));
 }
 
 // Function to update character appearance and save to cache
@@ -140,8 +144,8 @@ window.updateCharAppearance = function(newProperties) {
   draw(); // Redraw the character
 }
 
-// Function to randomize character appearance (except shadow)
-window.randomizeCharAppearance = function() {
+// Function to randomise character appearance (except shadow)
+window.randomiseCharAppearance = function() {
   const skinTones = 8; // Number of skin tones
   const hairTypes = 14; // Number of hair types (0-13)
   const topTypes = 10; // Number of top types (0-9)
@@ -150,9 +154,19 @@ window.randomizeCharAppearance = function() {
   const topsNames = Object.keys(tops);
   const bottomsNames = Object.keys(bottoms);
 
+  let newEyes;
+
+  if (charAppearance.eyes === 8) {
+    newEyes = 8 // stays auto if already auto
+  } else {
+    newEyes = Math.floor(Math.random() * 8); // random except won't set to auto
+  }
+
   updateCharAppearance({
     skinTone: Math.floor(Math.random() * skinTones),
+    eyes: newEyes, // (keep auto when randomising)
     blush: Math.random() < 0.5, // 50% chance of blush
+    beard: Math.random() < 0.5, // 50% chance of beard
     glasses: Math.random() < 0.5, // 50% chance of glasses
     hair: hairs[Math.floor(Math.random() * hairs.length)],
     hairType: Math.floor(Math.random() * hairTypes),
@@ -167,6 +181,8 @@ const shadow = new Image();
 shadow.src = './assets/char/shadow.png';
 const blush = new Image();
 blush.src = './assets/char/blush.png';
+const eyes = new Image();
+eyes.src = './assets/char/eyes.png';
 
 let tops = {
   floral: new Image(),
@@ -214,6 +230,7 @@ function drawCharacterWithClothing() {
   const topOffsetX = charAppearance.topType * 8;
   const bottomOffsetX = charAppearance.bottomType * 8;
   const hairOffsetX = charAppearance.hairType * 8;
+  const eyesOffsetX = charAppearance.eyes * 8;
 
   // Draw character shadow
   if (charAppearance.shadow) {
@@ -222,6 +239,7 @@ function drawCharacterWithClothing() {
 
   // Draw base character
   c.drawImage(charSheet, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  c.drawImage(eyes, (char.frameX + eyesOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   if (charAppearance.blush) {
     c.drawImage(blush, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }

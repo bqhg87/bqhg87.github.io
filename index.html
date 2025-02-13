@@ -62,6 +62,12 @@
         <p id="dialogue"></p>
         <div class="dropdown"></div>
       </aside>
+      <!--<aside id="charSelectorArrowsWrapper">
+        <div class="charSelectorArrowsPairWrapper" id="charPairArrowsHair">
+          <button class="charSelectorArrow"></button>
+          <button class="charSelectorArrow"></button>
+        </div>
+      </aside>-->
       <canvas id="game"></canvas>
     </main>
     <footer>
@@ -98,36 +104,36 @@
             </div>
             <div class="pxDivWrapper pxSelector" id="hairColorToggleWrapper">
               <p class="pxSelectorLabel">Hair</p>
-              <button class="pxSelectorToggle">
+              <button class="pxSelectorToggle" id="hairToggle">
                 <svg class="colorToggle" viewBox="0 0 8 8">
-                  <rect class="cls-b" x="1" y="1" width="6" height="6"/>
-                  <rect class="cls-f" y="1" width="1" height="6"/>
-                  <rect class="cls-f" x="7" y="1" width="1" height="6"/>
-                  <rect class="cls-f" x="1" y="7" width="6" height="1"/>
-                  <rect class="cls-f" x="1" width="6" height="1"/>
+                  <rect class="cls-b-hair" x="1" y="1" width="6" height="6"/>
+                  <rect class="cls-f-hair" y="1" width="1" height="6"/>
+                  <rect class="cls-f-hair" x="7" y="1" width="1" height="6"/>
+                  <rect class="cls-f-hair" x="1" y="7" width="6" height="1"/>
+                  <rect class="cls-f-hair" x="1" width="6" height="1"/>
                 </svg>
               </button>
             </div>
-            <div class="pxDivWrapper pxSelector" id="glassesToggleWrapper">
-              <p class="pxSelectorLabel">Glasses?</p>
-              <button class="basicToggle" id="glassesToggle"></button>
+            <div class="pxDivWrapper pxSelector" id="beardToggleWrapper">
+              <p class="pxSelectorLabel">Beard?</p>
+              <button class="basicToggle" id="beardToggle"></button>
             </div>
             <div class="pxDivWrapper pxSelector" id="eyeColorToggleWrapper">
               <p class="pxSelectorLabel">Eyes</p>
-              <button class="pxSelectorToggle">
-                <svg class="colorToggle" viewBox="0 0 8 8">
-                  <rect class="cls-b" x="1" y="1" width="6" height="6"/>
-                  <rect class="cls-f" y="1" width="1" height="6"/>
-                  <rect class="cls-f" x="7" y="1" width="1" height="6"/>
-                  <rect class="cls-f" x="1" y="7" width="6" height="1"/>
-                  <rect class="cls-f" x="1" width="6" height="1"/>
+              <button class="pxSelectorToggle" id="eyesToggle">
+                <div id="autoEyesToggle" data-sprite-y="2"></div>
+                <svg class="colorToggle" viewBox="0 0 8 8" id="eyesColorToggle">
+                  <rect class="cls-b-eyes" x="1" y="1" width="6" height="6"/>
+                  <rect class="cls-f-eyes" y="1" width="1" height="6"/>
+                  <rect class="cls-f-eyes" x="7" y="1" width="1" height="6"/>
+                  <rect class="cls-f-eyes" x="1" y="7" width="6" height="1"/>
+                  <rect class="cls-f-eyes" x="1" width="6" height="1"/>
                 </svg>
               </button>
             </div>
             <div class="pxDivWrapper pxSelector" id="blushToggleWrapper">
               <p class="pxSelectorLabel">Blush?</p>
-              <button class="basicToggle" id="blushToggle">
-              </button>
+              <button class="basicToggle" id="blushToggle"></button>
             </div>
           </div>
           <div class="charSettingsWrapper" id="charWardrobeSettings">
