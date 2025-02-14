@@ -16,6 +16,10 @@ shroomsImage.src = './assets/shrooms.png';
 chickenNPC.src = './assets/chicken.png';
 npcIndicators.src = './assets/npcIndicators.png';
 groundImage.src = './assets/ground.png';
+const collisionMap = new Image();
+collisionMap.src = './assets/collisionMap.png';
+const exampleHouse = new Image();
+exampleHouse.src = './assets/buildings/hsst1a.png';
 
 const objectsToDraw = [
   {
@@ -59,10 +63,26 @@ const objectsToDraw = [
     y: -1064,
     zIndex: -1000
   },
+  {
+    image: collisionMap,
+    x: -1144,
+    y: -1064,
+    zIndex: -900
+  },
+  {
+    image: exampleHouse,
+    x: -106,
+    y: -56,
+    frameWidth: 38,
+    frameHeight: 38,
+    feet: 1,
+    zIndex: 1
+  }
 ];
 const char = objectsToDraw[0]; // this is the character
 const shrooms = objectsToDraw[1];
 const chicken = objectsToDraw[2];
+const collisionMapOffset = objectsToDraw[4];
 
 const npcIndicatorData = { 
   chicken: { 
@@ -103,6 +123,8 @@ function onImageLoad() {
   }
 }
 
+exampleHouse.onload = onImageLoad;
+collisionMap.onload = onImageLoad;
 shroomsImage.onload = onImageLoad;
 chickenNPC.onload = onImageLoad;
 charSheet.onload = onImageLoad;
@@ -209,8 +231,6 @@ hair.bob.src = './assets/char/bob.png';
 hair.braids.src = './assets/char/braids.png';
 hair.buzzcut.src = './assets/char/buzzcut.png';
 
-
-
 ///////////////
 // RENDERING //
 ///////////////
@@ -287,6 +307,8 @@ function draw() {
   sortedObjects.forEach(obj => {
     if (obj === char) {
       drawCharacterWithClothing(); // Draw the character with clothing
+    } else if (obj === collisionMapOffset) {
+
     } else {
       const { image, x, y, frameX, frameY, frameWidth, frameHeight, opacity = 1, scale = 1 } = obj;
 
@@ -783,6 +805,118 @@ function directionQuery(object1, object2) {
 }
 
 
+
+////////////////
+// COLLISIONS //
+////////////////
+
+const collisionMapCanvas = document.createElement('canvas');
+const c2 = collisionMapCanvas.getContext('2d');
+
+function checkCollisions() {
+  collisionMapCanvas.width = collisionMap.width;
+  collisionMapCanvas.height = collisionMap.height;
+  c2.drawImage(collisionMap, 0, 0);
+  const collisionMapData = c2.getImageData(0, 0, collisionMap.width, collisionMap.height).data;
+
+  const charMapX = Math.floor((char.x + 16) - collisionMapOffset.x);
+  const charMapY = Math.floor((char.y + 26) - collisionMapOffset.y);
+
+  const requiredConsistency = 0.5; // Adjust as needed (higher = more precise?)
+
+  let collidingSides = {
+      top: false,
+      bottom: false,
+      left: false,
+      right: false,
+  };
+
+  for (const side in collidingSides) {
+      let collisionCount = 0;
+      let totalChecks = 0;
+
+      let startX = charMapX - 4; // Start from left of the check area
+      let startY = charMapY - 2; // Start from top of the check area
+      let endX = charMapX + 4;   // End at right of the check area
+      let endY = charMapY + 2;   // End at bottom of the check area
+
+      switch (side) {
+          case "top":
+              endY = charMapY;        // Check only the top edge
+              break;
+          case "bottom":
+              startY = charMapY;        // Check only the bottom edge
+              break;
+          case "left":
+              endX = charMapX;        // Check only the left edge
+              break;
+          case "right":
+              startX = charMapX;        // Check only the right edge
+              break;
+      }
+
+      for (let y = startY; y < endY; y++) { // Correct loop bounds
+          for (let x = startX; x < endX; x++) { // Correct loop bounds
+              if (x >= 0 && x < collisionMap.width && y >= 0 && y < collisionMap.height) {
+                  const pixelIndex = (y * collisionMap.width + x) * 4;
+                  const a = collisionMapData[pixelIndex + 3];
+
+                  if (a > 0) {
+                      collisionCount++;
+                  }
+                  totalChecks++;
+              }
+          }
+      }
+
+      if (totalChecks > 0 && collisionCount / totalChecks >= requiredConsistency) {
+          collidingSides[side] = true;
+      }
+  }
+
+  const collidingSidesArray = Object.entries(collidingSides).filter(([side, isColliding]) => isColliding);
+
+  if (collidingSidesArray.length > 2) {
+      collidingSidesArray.sort(([sideA], [sideB]) => {
+          const distA = getSideDistance(sideA, charMapX, charMapY); // Pass offset
+          const distB = getSideDistance(sideB, charMapX, charMapY); // Pass offset
+          return distA - distB;
+      });
+
+      for (let i = 2; i < collidingSidesArray.length; i++) {
+          collidingSides[collidingSidesArray[i][0]] = false;
+      }
+  }
+
+
+  if (collidingSides.top || collidingSides.bottom || collidingSides.left || collidingSides.right) {
+      let collisionMessage = "Character is colliding on: ";
+      for (const side in collidingSides) {
+          if (collidingSides[side]) {
+              collisionMessage += side + " ";
+          }
+      }
+  }
+
+  return collidingSides;
+}
+
+function getSideDistance(side, charMapX, charMapY) {
+  switch (side) {
+      case "top":
+          return charMapY; // Distance to top edge (relative to offset)
+      case "bottom":
+          return collisionMap.height - charMapY; // Distance to bottom
+      case "left":
+          return charMapX; // Distance to left edge
+      case "right":
+          return collisionMap.width - charMapX; // Distance to right
+      default:
+          return Infinity;
+  }
+}
+
+
 //////////////
 // MOVEMENT //
 //////////////
@@ -868,11 +1002,14 @@ let keyDominance;
 let blockMouse = false;
 let charSpeed = 0;
 
-function updateCharMovement() {
-  if (keysPressed.length !== 0 && charMenuOpen) {
+document.addEventListener('keydown', (event) => {
+  if ((event.code === 'Space' || keysPressed.length !== 0) && charMenuOpen) {
     const toggleCharMenuEvent = new Event('toggleCharMenu');
     window.dispatchEvent(toggleCharMenuEvent);
   }
+})
+
+function updateCharMovement() {
   if (blockDirectionUpdate) {
     char.frameX = 0;
     updateCharDirection(Math.PI / 2); // Look down
@@ -914,13 +1051,15 @@ function updateCharMovement() {
     }
   }
 
+  const charCollisions = checkCollisions();
+
   if (!(keyDominance && (hKeys === 0))) {
-    if ( !(((char.x <= -1700) && ((charSpeed * Math.cos(angle)) <= 0)) || (((char.x >= 1700) && ((charSpeed * Math.cos(angle)) >= 0)))) ) {
+    if (   !(((charSpeed * Math.cos(angle)) <= 0) && charCollisions.left)   &&   !(((charSpeed * Math.cos(angle)) >= 0) && charCollisions.right  )) {
       char.x += (charSpeed * Math.cos(angle));
     }
   }
   if (!(keyDominance && (vKeys === 0))) {
-    if ( !(((char.y <= -1400) && ((charSpeed * Math.sin(angle)) <= 0)) || (((char.y >= 1500) && ((charSpeed * Math.sin(angle)) >= 0)))) ) {
+    if (   !(((charSpeed * Math.sin(angle)) <= 0) && charCollisions.top)   &&   !(((charSpeed * Math.sin(angle)) >= 0) && charCollisions.bottom  )) {
       char.y += (charSpeed * Math.sin(angle));
     }
   }

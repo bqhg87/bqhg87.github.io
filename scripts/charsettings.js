@@ -102,7 +102,7 @@ function addCharMenuButtonEventListeners(buttonId) {
         button.addEventListener('click', () => {
             refreshCachedAppearance();
             if (charAppearance) {
-                console.log(charAppearance);
+                //console.log(charAppearance);
                 charAppearance.hairType = (charAppearance.hairType + 1) % 13;
                 updateCharAppearance(charAppearance);
             } else {
@@ -113,7 +113,7 @@ function addCharMenuButtonEventListeners(buttonId) {
         button.addEventListener('click', () => {
             refreshCachedAppearance();
             if (charAppearance) {
-                console.log(charAppearance);
+                //console.log(charAppearance);
                 if (shiftHeld || ctrlHeld || cmdHeld) {
                     charAppearance.eyes = 8;
                 } else {
@@ -273,7 +273,6 @@ function updateSelectorColors() {
     const hairColor = hairColors[charAppearance.hairType] || hairColors[0];
     updateSelectorColor('hair', hairToggle.isHovered ? hairColor.bgHover : hairColor.bg, hairToggle.isHovered ? hairColor.fgHover : hairColor.fg);
 
-    console.log(charAppearance.eyes);
     const autoEyesToggle = document.getElementById('autoEyesToggle');
     const manualEyesToggle = document.getElementById('eyesColorToggle');
     if (!(charAppearance.eyes === 8)) {
