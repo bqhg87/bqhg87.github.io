@@ -206,7 +206,7 @@ blush.src = './assets/char/blush.png';
 const eyes = new Image();
 eyes.src = './assets/char/eyes.png';
 
-let tops = {
+window.tops = {
   floral: new Image(),
   basic: new Image(),
   skull: new Image(),
@@ -215,14 +215,14 @@ tops.floral.src = './assets/char/floral.png';
 tops.basic.src = './assets/char/basic.png';
 tops.skull.src = './assets/char/skull.png';
 
-let bottoms = {
+window.bottoms = {
   trousers: new Image(),
   skirt: new Image(),
 };
 bottoms.trousers.src = './assets/char/trousers.png';
 bottoms.skirt.src = './assets/char/skirt.png';
 
-let hair = {
+window.hair = {
   bob: new Image(),
   braids: new Image(),
   buzzcut: new Image(),
@@ -414,10 +414,42 @@ let charMenuOpen = false;
 
 const charSettingsWrapper = document.getElementById('charSettingsWrapper');
 const randomiseCharButton = document.getElementById('randomiseCharToggle');
+const hairPairToggles = document.getElementById('charPairArrowsHair');
+const topsPairToggles = document.getElementById('charPairArrowsTops');
+const bottomsPairToggles = document.getElementById('charPairArrowsBottoms');
+const charMenuButtonPairs = document.getElementsByClassName('charSelectorArrowsPairWrapper')
+
+window.updateArrowPairVisibility = function(override) {
+  if (override === false) {
+    hairPairToggles.classList.remove('show'); // hide them all
+    topsPairToggles.classList.remove('show'); // hide them all
+    bottomsPairToggles.classList.remove('show'); // hide them all
+    return
+  }
+  if (override || charMenuOpen) {
+    if (currentCharMenuTitle === 'Body Settings') {
+      hairPairToggles.classList.add('show');
+      topsPairToggles.classList.remove('show');
+      bottomsPairToggles.classList.remove('show');
+    } else {
+      hairPairToggles.classList.remove('show');
+    }
+    if (currentCharMenuTitle === 'Wardrobe') {
+      topsPairToggles.classList.add('show');
+      bottomsPairToggles.classList.add('show');
+      hairPairToggles.classList.remove('show');
+    } else {
+      topsPairToggles.classList.remove('show');
+      bottomsPairToggles.classList.remove('show');
+    }
+  }
+}
 
 window.addEventListener('openCharMenu', () => {
+  Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = 'opacity 0.5s ease';});
   charSettingsWrapper.classList.add('show');
   randomiseCharButton.classList.add('show');
+  updateArrowPairVisibility(true);
   lowCamera = false;
   blockSpaceDialogueToggle = true;
   updateLowCamera();
@@ -448,17 +480,21 @@ window.addEventListener('openCharMenu', () => {
   }
   setTimeout(() => {
     charMenuOpen = true;
+    Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = '';}); // Remove the transition
   }, (zoomDuration))
 });
 
 window.addEventListener('closeCharMenu', () => {
+  Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = 'opacity 0.5s ease';});
   charSettingsWrapper.classList.remove('show');
   randomiseCharButton.classList.remove('show');
+  updateArrowPairVisibility(false);
   refreshCheckNPC();
   checkNPCs();
   blockMotion = false;
   blockSpaceDialogueToggle = false;
   charMenuOpen = false;
+
   if (zoomingInProgress && zoomTargetScale === 6) {
     // If zooming is in progress and we're zooming in, reverse the zoom direction
     zoomStartScale = globalScale;

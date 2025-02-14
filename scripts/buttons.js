@@ -314,7 +314,7 @@ function addButtonEventListeners(buttonId) {
 }
 
 // Function to check if the mouse is hovering over a specific button
-function checkButtonHover(buttonId) {
+window.checkButtonHover = function(buttonId) {
   const button = document.getElementById(buttonId);
   
   if (button && button.isHovered) {
@@ -389,9 +389,18 @@ window.addEventListener('toggleCharMenu', () => {
   handleButtonClick('charToggle');
 });
 
+function refreshAllButtons() {
+  const buttons = document.querySelectorAll('.headButton, .footButton');
+  
+  buttons.forEach(button => {
+    checkButtonHover(button.id);
+  });
+}
+
 // Initialize buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
   initializeButtons();  // Initialize all buttons with sprites
   addToggleListeners();  // Add toggle event to each button
   handleInitialArticleLoad(); // Automatically toggle menu if an article is present in the URL
+  refreshAllButtons();
 });

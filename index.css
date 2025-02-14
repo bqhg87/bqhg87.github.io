@@ -676,9 +676,6 @@ span, li a {
 }
 
 #charSelectorArrowsWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--pixelScale) * 8);
   align-items: center;
   height: fit-content;
   width: calc(var(--pixelScale) * 100);
@@ -689,13 +686,28 @@ span, li a {
   z-index: 1000;
 }
 .charSelectorArrowsPairWrapper {
+  position: fixed;
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
+  opacity: 0;
+}
+.charSelectorArrowsPairWrapper.show {
+  opacity: 1;
 }
 #charPairArrowsHair {
-  margin-top: calc(var(--pixelScale) * -6);
+  margin-top: calc(var(--pixelScale) * -8);
+}
+#charPairArrowsTops {
+  margin-top: calc(var(--pixelScale) * -4);
+  margin-left: 4%;
+  width: 92%;
+}
+#charPairArrowsBottoms {
+  margin-top: calc(var(--pixelScale) * 15);
+  margin-left: 4%;
+  width: 92%;
 }
 .charSelectorArrow {
   all: unset;
@@ -704,6 +716,7 @@ span, li a {
   background-image: url('./assets/charSelectorArrows.png');
   background-size: calc(var(--pixelScale) * 5 * 3 * 1.5) calc(var(--pixelScale) * 8 * 2 * 1.5);
   image-rendering: pixelated;
+  cursor: pointer;
 }
 
 .footButton {

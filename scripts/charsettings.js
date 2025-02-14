@@ -1,4 +1,4 @@
-let currentCharMenuTitle = 'Body Settings';
+window.currentCharMenuTitle = 'Body Settings';
 const charMenuTitles = ['Body Settings', 'Wardrobe', 'Hats', 'Pets'];
 
 function setCharMenuButtonSprite(buttonId, spriteX) {
@@ -13,6 +13,9 @@ function setCharMenuButtonSprite(buttonId, spriteX) {
     if (buttonId === 'charSettingsTitleLeft' || buttonId === 'charSettingsTitleRight') {
         button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
         button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 2}px`;
+    } else if (button.classList.contains('charSelectorArrow')) {
+        button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
+        button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 2}px`;  // Scale the sprite to fit the button
     } else {    
         button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
         button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 3}px`;
@@ -82,7 +85,7 @@ function addCharMenuButtonEventListeners(buttonId) {
                 newIndex = (currentIndex + 1) % charMenuTitles.length; // Cycle forwards
             }
 
-            currentCharMenuTitle = charMenuTitles[newIndex];
+            window.currentCharMenuTitle = charMenuTitles[newIndex];
             titleElement.textContent = currentCharMenuTitle; // Update the displayed title
 
             const bodySettings = document.getElementById('charBodySettings');
@@ -97,6 +100,8 @@ function addCharMenuButtonEventListeners(buttonId) {
             } else {
                 wardrobeSettings.classList.add('hidden');
             }
+
+            updateArrowPairVisibility();
         });
     } else if (button.id === "hairToggle") {
         button.addEventListener('click', () => {
@@ -124,8 +129,7 @@ function addCharMenuButtonEventListeners(buttonId) {
                 console.error("charAppearance is not initialized!");
             }
         });
-    } else {
-        if (button.id === "blushToggle") {
+    } else if (button.id === "blushToggle") {
             button.addEventListener('click', () => {
                 refreshCachedAppearance(); // Get the latest charAppearance
                 if (charAppearance) {
@@ -139,8 +143,7 @@ function addCharMenuButtonEventListeners(buttonId) {
                     console.error("charAppearance is not initialized!");
                 }
             });
-        }
-        if (button.id === "beardToggle") {
+    }   else if (button.id === "beardToggle") {
             button.addEventListener('click', () => {
                 refreshCachedAppearance(); // Get the latest charAppearance
                 if (charAppearance) {
@@ -154,12 +157,115 @@ function addCharMenuButtonEventListeners(buttonId) {
                     console.error("charAppearance is not initialized!");
                 }
             });
-        }
+    }   else if (button.id === "hairLeftToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                const hairs = Object.keys(window.hair);
+                let currentIndex = hairs.indexOf(charAppearance.hair);
+                
+                // Move to the previous index, looping to the last item if at the start
+                let prevIndex = (currentIndex - 1 + hairs.length) % hairs.length;
+    
+                // Update the hair selection
+                charAppearance.hair = hairs[prevIndex];
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
+    }   else if (button.id === "hairRightToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                const hairs = Object.keys(window.hair);
+                let currentIndex = hairs.indexOf(charAppearance.hair);
+                
+                // Move to the next index, looping back to 0 if at the end
+                let nextIndex = (currentIndex + 1) % hairs.length;
+    
+                // Update the hair selection
+                charAppearance.hair = hairs[nextIndex];
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
+    }   else if (button.id === "topsLeftToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                const tops = Object.keys(window.tops);
+                let currentIndex = tops.indexOf(charAppearance.clothingTop);
+                
+                // Move to the previous index, looping to the last item if at the start
+                let prevIndex = (currentIndex - 1 + tops.length) % tops.length;
+    
+                // Update the hair selection
+                charAppearance.clothingTop = tops[prevIndex];
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
+    }   else if (button.id === "topsRightToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                const tops = Object.keys(window.tops);
+                let currentIndex = tops.indexOf(charAppearance.clothingTop);
+                
+                // Move to the next index, looping back to 0 if at the end
+                let nextIndex = (currentIndex + 1) % tops.length;
+    
+                // Update the hair selection
+                charAppearance.clothingTop = tops[nextIndex];
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
+    }   else if (button.id === "bottomsLeftToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                const bottoms = Object.keys(window.bottoms);
+                let currentIndex = bottoms.indexOf(charAppearance.clothingBottom);
+                
+                // Move to the previous index, looping to the last item if at the start
+                let prevIndex = (currentIndex - 1 + bottoms.length) % bottoms.length;
+    
+                // Update the hair selection
+                charAppearance.clothingBottom = bottoms[prevIndex];
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
+    }   else if (button.id === "bottomsRightToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                const bottoms = Object.keys(window.bottoms);
+                let currentIndex = bottoms.indexOf(charAppearance.clothingBottom);
+                
+                // Move to the next index, looping back to 0 if at the end
+                let nextIndex = (currentIndex + 1) % bottoms.length;
+    
+                // Update the hair selection
+                charAppearance.clothingBottom = bottoms[nextIndex];
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
     }
 }
 
+
 function initializeCharMenuButtons() {
     const basicToggle = document.querySelectorAll('.basicToggle');
+    const charSelectorArrows = document.querySelectorAll('.charSelectorArrow');
 
     const titleElement = document.getElementById('charSettingsTitle'); // Get title element
     titleElement.textContent = currentCharMenuTitle; // Set initial title text
@@ -178,6 +284,15 @@ function initializeCharMenuButtons() {
     basicToggle.forEach(button => {
         setCharMenuButtonSprite(button.id, 0); // Set default sprite (normal state)
         addCharMenuButtonEventListeners(button.id); // Add event listeners for interaction
+    });
+
+    charSelectorArrows.forEach(button => {
+        const isLeft = button.classList.contains('Left');
+        const spriteY = isLeft ? 0 : 1;
+        
+        button.dataset.spriteY = spriteY; // Store spriteY value in data attribute
+        setCharMenuButtonSprite(button.id, 0); // Set default spriteX to 0
+        addCharMenuButtonEventListeners(button.id);
     });
 }
 
