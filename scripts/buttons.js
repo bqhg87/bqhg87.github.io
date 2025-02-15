@@ -32,7 +32,7 @@ window.addEventListener('autoClose', () => {
   }
 });
 
-window.autoClose = function(time) {
+window.autoClose = function(time, bypassArticleOpenCheck = false) {
   autoCloseInProgress = true;
   setTimeout(() => {
     if ((buttonClickedDuringTimeout || stoppedMoving) && !window.bypassMovementCheck) {
@@ -42,11 +42,12 @@ window.autoClose = function(time) {
     } else {
       //console.log('Menus closed due to movement');
       let meterWrapper = document.getElementById('meterWrapper');
+      let menuWrapper = document.getElementById('sideMenuWrapper');
       let articleWrapper = document.getElementById('articleWrapper');
       if (meterWrapper.classList.contains('show')) {
         handleButtonClick('meterToggle');
         checkButtonHover('meterToggle');
-      } else if (articleWrapper.classList.contains('show')) {
+      } else if (articleWrapper.classList.contains('show') || (bypassArticleOpenCheck && menuWrapper.classList.contains('show'))) {
         handleButtonClick('menuToggle');
         checkButtonHover('menuToggle');
       }

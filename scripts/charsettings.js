@@ -88,18 +88,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             window.currentCharMenuTitle = charMenuTitles[newIndex];
             titleElement.textContent = currentCharMenuTitle; // Update the displayed title
 
-            const bodySettings = document.getElementById('charBodySettings');
-            const wardrobeSettings = document.getElementById('charWardrobeSettings');
-            if (currentCharMenuTitle === "Body Settings") {
-                bodySettings.classList.remove('hidden');
-            } else {
-                bodySettings.classList.add('hidden');
-            }
-            if (currentCharMenuTitle === "Wardrobe") {
-                wardrobeSettings.classList.remove('hidden');
-            } else {
-                wardrobeSettings.classList.add('hidden');
-            }
+            refreshVisibleCharMenus();
 
             updateArrowPairVisibility();
         });
@@ -108,7 +97,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             refreshCachedAppearance();
             if (charAppearance) {
                 //console.log(charAppearance);
-                charAppearance.hairType = (charAppearance.hairType + 1) % 13;
+                charAppearance.hairType = (charAppearance.hairType + 1) % 14;
                 updateCharAppearance(charAppearance);
             } else {
                 console.error("charAppearance is not initialized!");
@@ -129,7 +118,27 @@ function addCharMenuButtonEventListeners(buttonId) {
                 console.error("charAppearance is not initialized!");
             }
         });
-    } else if (button.id === "blushToggle") {
+    } else if (button.id === "topToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                charAppearance.topType = (charAppearance.topType + 1) % 10;
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
+    } else if (button.id === "bottomToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance();
+            if (charAppearance) {
+                charAppearance.bottomType = (charAppearance.bottomType + 1) % 10;
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
+    }   else if (button.id === "blushToggle") {
             button.addEventListener('click', () => {
                 refreshCachedAppearance(); // Get the latest charAppearance
                 if (charAppearance) {
@@ -157,6 +166,20 @@ function addCharMenuButtonEventListeners(buttonId) {
                     console.error("charAppearance is not initialized!");
                 }
             });
+    }   else if (button.id === "glassesToggle") {
+        button.addEventListener('click', () => {
+            refreshCachedAppearance(); // Get the latest charAppearance
+            if (charAppearance) {
+                if (charAppearance.glasses) {
+                    charAppearance.glasses = false;
+                } else {
+                    charAppearance.glasses = true;
+                }
+                updateCharAppearance(charAppearance);
+            } else {
+                console.error("charAppearance is not initialized!");
+            }
+        });
     }   else if (button.id === "hairLeftToggle") {
         button.addEventListener('click', () => {
             refreshCachedAppearance();
@@ -262,6 +285,21 @@ function addCharMenuButtonEventListeners(buttonId) {
     }
 }
 
+function refreshVisibleCharMenus() {
+    const bodySettings = document.getElementById('charBodySettings');
+            const wardrobeSettings = document.getElementById('charWardrobeSettings');
+            if (currentCharMenuTitle === "Body Settings") {
+                bodySettings.classList.remove('hidden');
+            } else {
+                bodySettings.classList.add('hidden');
+            }
+            if (currentCharMenuTitle === "Wardrobe") {
+                wardrobeSettings.classList.remove('hidden');
+            } else {
+                wardrobeSettings.classList.add('hidden');
+            }
+}
+
 
 function initializeCharMenuButtons() {
     const basicToggle = document.querySelectorAll('.basicToggle');
@@ -280,6 +318,9 @@ function initializeCharMenuButtons() {
 
     addCharMenuButtonEventListeners('hairToggle');
     addCharMenuButtonEventListeners('eyesToggle');
+    addCharMenuButtonEventListeners('topToggle');
+    addCharMenuButtonEventListeners('bottomToggle');
+    addCharMenuButtonEventListeners('shoeToggle');
 
     basicToggle.forEach(button => {
         setCharMenuButtonSprite(button.id, 0); // Set default sprite (normal state)
@@ -324,6 +365,18 @@ function updateBasicButtons() {
                 console.warn("charAppearance or beard is not defined.");
             }
         }
+        if (button.id === "glassesToggle") {
+            if (charAppearance && typeof charAppearance.glasses !== "undefined") {
+                button.dataset.spriteY = charAppearance.glasses ? 0 : 1;
+                if (button.isHovered) {
+                    setCharMenuButtonSprite(button.id, 1)
+                } else {
+                    setCharMenuButtonSprite(button.id, 0)
+                }
+            } else {
+                console.warn("charAppearance or glasses is not defined.");
+            }
+        }
     });
 }
 
@@ -336,6 +389,15 @@ function updateSelectorColor(selector, bgColor, fgColor) {
     } else if (selector === 'eyes') {
         bgElements = document.querySelectorAll('.cls-b-eyes');
         fgElements = document.querySelectorAll('.cls-f-eyes');
+    } else if (selector === 'top') {
+        bgElements = document.querySelectorAll('.cls-b-top');
+        fgElements = document.querySelectorAll('.cls-f-top');
+    } else if (selector === 'bottom') {
+        bgElements = document.querySelectorAll('.cls-b-bottom');
+        fgElements = document.querySelectorAll('.cls-f-bottom');
+    } else if (selector === 'shoe') {
+        bgElements = document.querySelectorAll('.cls-b-shoe');
+        fgElements = document.querySelectorAll('.cls-f-shoe');
     }
 
     if (!bgElements || !fgElements) {
@@ -356,6 +418,8 @@ function updateSelectorColor(selector, bgColor, fgColor) {
 function updateSelectorColors() {
     const hairToggle = document.getElementById('hairToggle');
     const eyesToggle = document.getElementById('eyesToggle');
+    const topToggle = document.getElementById('topToggle');
+    const bottomToggle = document.getElementById('bottomToggle');
 
     const hairColors = [
         { bg: "#463533", fg: "#3d2e2e", bgHover: "#3d2e2e", fgHover: "#312627" },
@@ -385,16 +449,49 @@ function updateSelectorColors() {
         { bg: "#a12610", fg: "#85221b", bgHover: "#85221b", fgHover: "#6c1f1d" },
     ];
 
+    const topColors = [
+        { bg: "#4c464b", fg: "#413b40", bgHover: "#413b40", fgHover: "#332e32" },
+        { bg: "#4b6275", fg: "#435361", bgHover: "#435361", fgHover: "#323942" },
+        { bg: "#6283a4", fg: "#637499", bgHover: "#637499", fgHover: "#3e4457" },
+        { bg: "#654530", fg: "#583d2b", bgHover: "#583d2b", fgHover: "#443424" },
+        { bg: "#406158", fg: "#385252", bgHover: "#385252", fgHover: "#333e42" },
+        { bg: "#7d945f", fg: "#758658", bgHover: "#758658", fgHover: "#585c40" },
+        { bg: "#c8616b", fg: "#b05b6a", bgHover: "#b05b6a", fgHover: "#8c4d61" },
+        { bg: "#745c96", fg: "#5c5178", bgHover: "#5c5178", fgHover: "#423e57" },
+        { bg: "#b35249", fg: "#a14343", bgHover: "#a14343", fgHover: "#783a3d" },
+        { bg: "#c5b6a0", fg: "#9c8d83", bgHover: "#9c8d83", fgHover: "#615a55" },
+    ];
+
+    const bottomColors = [
+        { bg: "#413b40", fg: "#363235", bgHover: "#363235", fgHover: "#332e32" },
+        { bg: "#3e4957", fg: "#353f4a", bgHover: "#353f4a", fgHover: "#323942" },
+        { bg: "#505d7a", fg: "#454e66", bgHover: "#454e66", fgHover: "#3e4457" },
+        { bg: "#4a3428", fg: "#402d25", bgHover: "#402d25", fgHover: "#33251f" },
+        { bg: "#324345", fg: "#2a3638", bgHover: "#2a3638", fgHover: "#222a2b" },
+        { bg: "#596b49", fg: "#42543b", bgHover: "#42543b", fgHover: "#3d4230" },
+        { bg: "#85485c", fg: "#6b3b4b", bgHover: "#6b3b4b", fgHover: "#52303b" },
+        { bg: "#45415e", fg: "#3a354a", bgHover: "#3a354a", fgHover: "#2b2b3b" },
+        { bg: "#823c42", fg: "#66343e", bgHover: "#66343e", fgHover: "#592c2e" },
+        { bg: "#4a4a4f", fg: "#3c3b3f", bgHover: "#3c3b3f", fgHover: "#37373a" },
+    ];
+
     const hairColor = hairColors[charAppearance.hairType] || hairColors[0];
     updateSelectorColor('hair', hairToggle.isHovered ? hairColor.bgHover : hairColor.bg, hairToggle.isHovered ? hairColor.fgHover : hairColor.fg);
+
+    const eyeColor = eyeColors[charAppearance.eyes] || eyeColors[0];
+    updateSelectorColor('eyes', eyesToggle.isHovered ? eyeColor.bgHover : eyeColor.bg, eyesToggle.isHovered ? eyeColor.fgHover : eyeColor.fg);
+
+    const topColor = topColors[charAppearance.topType] || topColors[0];
+    updateSelectorColor('top', topToggle.isHovered ? topColor.bgHover : topColor.bg, topToggle.isHovered ? topColor.fgHover : topColor.fg);
+
+    const bottomColor = bottomColors[charAppearance.bottomType] || bottomColors[0];
+    updateSelectorColor('bottom', bottomToggle.isHovered ? bottomColor.bgHover : bottomColor.bg, bottomColor.isHovered ? bottomColor.fgHover : bottomColor.fg);
 
     const autoEyesToggle = document.getElementById('autoEyesToggle');
     const manualEyesToggle = document.getElementById('eyesColorToggle');
     if (!(charAppearance.eyes === 8)) {
         autoEyesToggle.classList.remove('show');
         manualEyesToggle.classList.remove('hidden');
-        const eyeColor = eyeColors[charAppearance.eyes] || eyeColors[0];
-        updateSelectorColor('eyes', eyesToggle.isHovered ? eyeColor.bgHover : eyeColor.bg, eyesToggle.isHovered ? eyeColor.fgHover : eyeColor.fg);    
     } else {
         autoEyesToggle.classList.add('show');
         manualEyesToggle.classList.add('hidden');
@@ -500,4 +597,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCharMenuButtons();
     updateDisplayedCharSettings();
     initializeSkinToneSelectors(); // Initialize skin tone selector event listeners
+    refreshVisibleCharMenus();
 });

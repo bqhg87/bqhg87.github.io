@@ -1039,9 +1039,13 @@ let blockMouse = false;
 let charSpeed = 0;
 
 document.addEventListener('keydown', (event) => {
-  if ((event.code === 'Space' || keysPressed.length !== 0) && charMenuOpen) {
+  if ((event.code === 'Space' || event.code === 'Escape' || keysPressed.length !== 0) && charMenuOpen) {
     const toggleCharMenuEvent = new Event('toggleCharMenu');
     window.dispatchEvent(toggleCharMenuEvent);
+  } 
+  if (event.code === 'Escape') {
+    window.bypassMovementCheck = true;
+    autoClose(0, true);
   }
 })
 

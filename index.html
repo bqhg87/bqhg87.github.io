@@ -92,7 +92,7 @@
             <p id="charSettingsTitle"></p>
           </div>
           <button class="charSettingsSelector" id="charSettingsTitleRight" aria-label="Character Settings Menu Right" data-sprite-y="1"></button>
-          <button class="footButton small show" id="randomiseCharToggle" aria-label="Randomise Character" data-sprite-y="6"></button>
+          <button class="footButton small show" id="randomiseCharToggle" aria-label="Randomise Character Settings" data-sprite-y="6"></button>
         </div>
         <div id="charSettingsOptionsWrapper">
           <div class="charSettingsWrapper" id="charBodySettings">
@@ -100,19 +100,19 @@
               <p class="pxSelectorLabel" id="skinToneLabel">Skin Tone</p>
               <div id="skinTonePalette"></div>
               <div id="skinToneSelectorsWrapper">
-                <button class="skinToneSelector" data-tone="0"></button>
-                <button class="skinToneSelector" data-tone="1"></button>
-                <button class="skinToneSelector" data-tone="2"></button>
-                <button class="skinToneSelector" data-tone="3"></button>
-                <button class="skinToneSelector" data-tone="4"></button>
-                <button class="skinToneSelector" data-tone="5"></button>
-                <button class="skinToneSelector" data-tone="6"></button>
-                <button class="skinToneSelector" data-tone="7"></button>
+                <button class="skinToneSelector" aria-label="Very Fair Skin Tone" data-tone="0"></button>
+                <button class="skinToneSelector" aria-label="Fair Skin Tone" data-tone="1"></button>
+                <button class="skinToneSelector" aria-label="Tan Skin Tone" data-tone="2"></button>
+                <button class="skinToneSelector" aria-label="Deep Tan Skin Tone" data-tone="3"></button>
+                <button class="skinToneSelector" aria-label="Light Brown Skin Tone" data-tone="4"></button>
+                <button class="skinToneSelector" aria-label="Medium Brown Skin Tone" data-tone="5"></button>
+                <button class="skinToneSelector" aria-label="Dark Brown Skin Tone" data-tone="6"></button>
+                <button class="skinToneSelector" aria-label="Deep Brown Skin Tone" data-tone="7"></button>
               </div>
             </div>
             <div class="pxDivWrapper pxSelector" id="hairColorToggleWrapper">
               <p class="pxSelectorLabel">Hair</p>
-              <button class="pxSelectorToggle" id="hairToggle">
+              <button class="pxSelectorToggle" aria-label="Update Hair Color" id="hairToggle">
                 <svg class="colorToggle" viewBox="0 0 8 8">
                   <rect class="cls-b-hair" x="1" y="1" width="6" height="6"/>
                   <rect class="cls-f-hair" y="1" width="1" height="6"/>
@@ -122,13 +122,9 @@
                 </svg>
               </button>
             </div>
-            <div class="pxDivWrapper pxSelector" id="beardToggleWrapper">
-              <p class="pxSelectorLabel">Beard?</p>
-              <button class="basicToggle" id="beardToggle"></button>
-            </div>
             <div class="pxDivWrapper pxSelector" id="eyeColorToggleWrapper">
               <p class="pxSelectorLabel">Eyes</p>
-              <button class="pxSelectorToggle" id="eyesToggle">
+              <button class="pxSelectorToggle" aria-label="Update Eye Color" id="eyesToggle">
                 <div id="autoEyesToggle" data-sprite-y="2"></div>
                 <svg class="colorToggle" viewBox="0 0 8 8" id="eyesColorToggle">
                   <rect class="cls-b-eyes" x="1" y="1" width="6" height="6"/>
@@ -141,10 +137,55 @@
             </div>
             <div class="pxDivWrapper pxSelector" id="blushToggleWrapper">
               <p class="pxSelectorLabel">Blush?</p>
-              <button class="basicToggle" id="blushToggle"></button>
+              <button class="basicToggle" aria-label="Enable Blush" id="blushToggle"></button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="beardToggleWrapper">
+              <p class="pxSelectorLabel">Beard?</p>
+              <button class="basicToggle" aria-label="Enable Beard" id="beardToggle"></button>
             </div>
           </div>
           <div class="charSettingsWrapper" id="charWardrobeSettings">
+            <div class="pxDivWrapper pxSelector" id="topColorToggleWrapper">
+              <p class="pxSelectorLabel">Top</p>
+              <button class="pxSelectorToggle" aria-label="Update Top Color" id="topToggle">
+                <svg class="colorToggle" viewBox="0 0 8 8">
+                  <rect class="cls-b-top" x="1" y="1" width="6" height="6"/>
+                  <rect class="cls-f-top" y="1" width="1" height="6"/>
+                  <rect class="cls-f-top" x="7" y="1" width="1" height="6"/>
+                  <rect class="cls-f-top" x="1" y="7" width="6" height="1"/>
+                  <rect class="cls-f-top" x="1" width="6" height="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="bottomColorToggleWrapper">
+              <p class="pxSelectorLabel">Bottom</p>
+              <button class="pxSelectorToggle" aria-label="Update Bottom Color" id="bottomToggle">
+                <svg class="colorToggle" viewBox="0 0 8 8">
+                  <rect class="cls-b-bottom" x="1" y="1" width="6" height="6"/>
+                  <rect class="cls-f-bottom" y="1" width="1" height="6"/>
+                  <rect class="cls-f-bottom" x="7" y="1" width="1" height="6"/>
+                  <rect class="cls-f-bottom" x="1" y="7" width="6" height="1"/>
+                  <rect class="cls-f-bottom" x="1" width="6" height="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="glassesToggleWrapper">
+              <p class="pxSelectorLabel">Glasses?</p>
+              <button class="basicToggle" aria-label="Enable Glasses" id="glassesToggle"></button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="shoeColorToggleWrapper">
+              <p class="pxSelectorLabel">Shoes</p>
+              <button class="pxSelectorToggle" aria-label="Update Shoe Color" id="shoeToggle">
+                <svg class="colorToggle" viewBox="0 0 8 8">
+                  <rect class="cls-b-shoe" x="1" y="1" width="6" height="6"/>
+                  <rect class="cls-f-shoe" y="1" width="1" height="6"/>
+                  <rect class="cls-f-shoe" x="7" y="1" width="1" height="6"/>
+                  <rect class="cls-f-shoe" x="1" y="7" width="6" height="1"/>
+                  <rect class="cls-f-shoe" x="1" width="6" height="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pxDivWrapper pxSelector" id="charSpinControl"></div>
           </div>
         </div>
       </aside>
