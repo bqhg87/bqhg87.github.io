@@ -22,7 +22,7 @@ body {
   left: calc(var(--pixelScale) * 0);
   height: calc(var(--pixelScale) * 20);
   image-rendering: pixelated;
-  opacity: 1;
+  opacity: 0;
 }
 
 #game {
@@ -378,10 +378,10 @@ span, li a {
   opacity: 0.97;
   z-index: 20000;
 }
-#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner {
+#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner {
   background-image: url('./assets/uiCorners3.png');
 }
-#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG {
+#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
 }
@@ -900,6 +900,39 @@ span, li a {
 #meterLabel {
   position: relative;
   top: calc(var(--pixelScale) * 9);
+  text-align: center;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  cursor: default;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+}
+
+
+#topContextWrapper {
+  --pxScaleMultiplier: 1;
+  height: fit-content;
+  width: fit-content;
+  max-width: calc(var(--pixelScale) * 222);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  transform: translateX(-50%);
+  position: fixed; /* Position relative to the viewport */
+  top: calc(var(--pixelScale) * 4);
+  left: 50%;
+  cursor: default;
+  pointer-events: none;
+}
+#topContextWrapper.show {
+  opacity: 1;
+}
+#topContextLabel {
+  position: relative;
+  padding: calc(var(--pixelScale) * 6);
   text-align: center;
   user-select: none; /* Modern browsers */
   -webkit-user-select: none; /* Chrome, Safari, Edge */

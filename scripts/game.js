@@ -3,7 +3,7 @@ window.console.info("Booting HarmOS...");
 const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
 window.delMeter = 0;
-window.gamemode = "restore";
+window.gamemode = "inform"; // inform or mislead
 
 // Use a single image for all character parts, and draw different sections.
 const charSheet = new Image();
@@ -74,6 +74,7 @@ function onImageLoad() {
 }
 
 images.forEach(img => img.onload = onImageLoad);
+
 
 ///////////////////
 // CHAR SETTINGS //
@@ -183,8 +184,11 @@ function createNPC(npcData) {
     image: new Image(),
     frameWidth: 32,
     frameHeight: 32,
+    currentStory: npcData.story || "default", // use local storage in future
     feet: 5,
     zIndex: 1,
+    frameX: npcData.frameX || 0,
+    frameY: npcData.frameY || 0,
     indicator: { // NPC Indicator Data
       spriteX: 0,
       spriteY: 0,
@@ -222,35 +226,18 @@ function createNPC(npcData) {
   return npc;
 }
 
+window.currentChapters = {
+  "default": 1,
+  "blackHole": 1,
+};
+
 const npcs = [
   createNPC({
-    name: 'chicken',
-    x: 120,
-    y: -14,
-    hair: 'braids',
-    clothingTop: 'basic',
-    clothingBottom: 'skirt',
-    indicatorSinSpeed: 5,
-    indicatorSinOffset: 10,
-  }),
-  createNPC({
-    name: 'merchant',
-    x: 200,
-    y: -50,
+    name: 'Tibbert',
+    story: "blackHole",
+    x: 10,
+    y: -10,
     hair: 'buzzcut',
-    clothingTop: 'floral',
-    clothingBottom: 'trousers',
-    eyes: 2,
-    skinTone: 2,
-    topType: 1,
-    bottomType: 2,
-    hairType: 1,
-  }),
-  createNPC({ // New NPC
-    name: 'villager',
-    x: 50,
-    y: -80,
-    hair: 'bob',
     clothingTop: 'skull',
     clothingBottom: 'trousers',
     skinTone: 4,
@@ -259,6 +246,20 @@ const npcs = [
     hairType: 5,
     indicatorSinSpeed: 6,
     indicatorSinOffset: 20,
+  }),
+  createNPC({
+    name: 'Jocelyn, the Astronomer',
+    x: -102.5,
+    y: -30,
+    hair: 'bob',
+    clothingTop: 'basic',
+    clothingBottom: 'skirt',
+    skinTone: 1,
+    topType: 4,
+    bottomType: 2,
+    hairType: 7,
+    indicatorSinSpeed: 3,
+    indicatorSinOffset: 80,
   }),
 ];
 
@@ -336,26 +337,27 @@ function drawNPC(npc) {
     c.drawImage(shadow, 0, 0, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
-  // Draw base character
-  c.drawImage(npc.image, (0 + skinToneOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
-  c.drawImage(eyes, (0 + eyesOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  // Draw base character - Use npc.frameX and npc.frameY
+  c.drawImage(npc.image, (npc.frameX + skinToneOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  c.drawImage(eyes, (npc.frameX + eyesOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  
   if (npc.appearance.blush) {
-    c.drawImage(blush, (0 + skinToneOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+    c.drawImage(blush, (npc.frameX + skinToneOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
   let selectedTop = npc.tops[npc.appearance.clothingTop];
   if (selectedTop) {
-    c.drawImage(selectedTop, (0 + topOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+    c.drawImage(selectedTop, (npc.frameX + topOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
   let selectedBottom = npc.bottoms[npc.appearance.clothingBottom];
   if (selectedBottom) {
-    c.drawImage(selectedBottom, (0 + bottomOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+    c.drawImage(selectedBottom, (npc.frameX + bottomOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 
   let selectedHair = npc.hair[npc.appearance.hair];
   if (selectedHair) {
-    c.drawImage(selectedHair, (0 + hairOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+    c.drawImage(selectedHair, (npc.frameX + hairOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 }
 
@@ -381,37 +383,26 @@ function draw() {
   sortedObjects.forEach(obj => {
     if (obj === char) {
       drawCharacterWithClothing();
+      return
+    } if (obj.name) { // If it's an NPC, draw it with clothing/hair
+      drawNPC(obj);
+      return
     } else if (obj.image === collisionMap) {
       return
     } else if (obj.image) {
-      const { image, x, y, frameX, frameY, frameWidth, frameHeight, opacity = 1, scale = 1 } = obj;
+      const { image, x, y, opacity = 1, scale = 1 } = obj;
       const scaledX = (x * scale * globalScale) + translationX;
       const scaledY = (y * scale * globalScale) + translationY;
-      const scaledWidth = frameWidth * scale * globalScale;
-      const scaledHeight = frameHeight * scale * globalScale;
 
       c.globalAlpha = opacity;
-
-      // *** KEY CHANGE: Only draw the base image if it's NOT an NPC ***
-      if (!obj.name) { // Check if the object has a 'name' property (NPCs have names)
-        if (frameX !== undefined && frameY !== undefined) {
-          c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
-                      scaledX, scaledY, scaledWidth, scaledHeight);
-        } else {
-          const scaledImgWidth = image.width * scale * globalScale;
-          const scaledImgHeight = image.height * scale * globalScale;
-          c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
-        }
-      }
+      
+      const scaledImgWidth = image.width * scale * globalScale;
+      const scaledImgHeight = image.height * scale * globalScale;
+      c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
 
       c.globalAlpha = 1;
-
-      if (obj.name) { // If it's an NPC, draw it with clothing/hair
-        drawNPC(obj);
-      }
     }
   });
-
 
   // Draw NPC indicators
   npcs.forEach(npc => {
@@ -532,7 +523,7 @@ window.addEventListener('openCharMenu', () => {
   lowCamera = false;
   blockSpaceDialogueToggle = true;
   updateLowCamera();
-  updateCharDirection(Math.PI / 2);
+  char.frameY = updateCharDirection(Math.PI / 2);
   if (zoomingInProgress && zoomTargetScale === 4) {
     // If zooming is in progress and we're zooming out, reverse the zoom direction
     zoomStartScale = globalScale;
@@ -693,6 +684,7 @@ function checkNPC(npc, char, distance) {
   } else if (!isNear && wasNear) {
     toggleNPCs[npc.name] = false;
     npc.indicator.spriteY = 0;  // Revert spriteY when far
+    npc.frameY = updateCharDirection(Math.PI / 2);
     bottomLabelWrapper.classList.remove('show');
     dialogueToggle.classList.remove('show');
   }
@@ -724,7 +716,7 @@ function spaceDialogueToggle(event) {
     return;
   }
 
-  loadDialogue("concept", 1, npcMemory.name); // LOAD STORY
+  loadStory();
 
   handleStartEndDialogue();
 }
@@ -740,8 +732,12 @@ window.addEventListener("keydown", spaceDialogueToggle);
 window.addEventListener("keyup", resetSpaceHeld); // Listen for key release
 
 window.toggleDialogueOpen = function () {
-  loadDialogue("concept", 1, npcMemory.name); // LOAD STORY
+  loadStory();
   handleStartEndDialogue();
+}
+
+function loadStory() {
+  loadDialogue(npcMemory.currentStory, currentChapters[npcMemory.currentStory], npcMemory.name); // LOAD STORY
 }
 
 function clickDialogueToggle() {
@@ -751,7 +747,7 @@ function clickDialogueToggle() {
     return
   };
 
-  loadDialogue("concept", 1, npcMemory.name); // LOAD STORY
+  loadStory();
 
   for (let npcName in toggleNPCs) {
     if (toggleNPCs[npcName]) {
@@ -792,6 +788,7 @@ function startDialogue(npcName) {
   dialogueToggle.classList.remove('show');
   dialogueWrapper.classList.add('show');
   npc.indicator.spriteX = -1;
+  char.frameY = updateCharDirection((-directionQuery(npc, char)) * Math.PI / 180);
   //loadDialogue("concept", 1, npcName);
   lowCameraOffsetHistory = lowCameraOffset;
   const direction = snapToValidDirection(directionQuery(char, npc));
@@ -866,7 +863,6 @@ function teleportToNPC(npc, direction) {
   const angleRad = direction * (Math.PI / 180);
   char.x = (npc.x + npc.frameWidth / 2) + Math.cos(angleRad) * teleportDistance * 5 - char.frameWidth / 2;
   char.y = (npc.y + npc.frameHeight / 2) - Math.sin(angleRad) * teleportDistance * 5 - char.frameHeight / 2;
-  updateCharDirection(Math.PI / 2); // Look down
   draw();
 }
 
@@ -1077,8 +1073,16 @@ document.addEventListener('keydown', (event) => {
 function updateCharMovement() {
   if (blockDirectionUpdate) {
     char.frameX = 0;
-    updateCharDirection(Math.PI / 2); // Look down
+    if (!dialogueToggled) {
+      char.frameY = updateCharDirection(Math.PI / 2); // Look down
+    }
     return;
+  } else {
+    npcs.forEach((npc) => {
+      if (toggleNPCs[npc.name]) {
+        npc.frameY = updateCharDirection((-directionQuery(char, npc)) * Math.PI / 180);
+      }
+    });
   }
   let maxSpeed = 1.1;
   if (keysPressed.length !== 0) {
@@ -1104,7 +1108,7 @@ function updateCharMovement() {
     moving(true);
     charSpeed += charAcceleration;
     charSpeed = Math.min(charSpeed, maxSpeed);
-    updateCharDirection(angle);
+    char.frameY = updateCharDirection(angle);
     updateAnimation(animationSpeed, false);
   } else {
     moving(false);
@@ -1112,7 +1116,7 @@ function updateCharMovement() {
     charSpeed = Math.max(charSpeed, 0);
     updateAnimation(animationSpeed, true);
     if (isDragging) {
-      updateCharDirection(angle);
+      char.frameY = updateCharDirection(angle);
     }
   }
 
@@ -1196,8 +1200,6 @@ function updateAnimation(speed, stop) {
   }
 }
 
-
-
 function limitCharMovement(radius, maxSpeed) {
   let maxRadius = 60;
   let minRadius = 30;
@@ -1217,21 +1219,21 @@ function limitCharMovement(radius, maxSpeed) {
 function updateCharDirection(angle) {
   angle = angle * (180 / Math.PI); // Convert to degrees
   if (angle <= -67.5 && angle >= -112.5) { // N
-    char.frameY = 1;
+    return 1;
   } else if (angle >= -157.5 && angle <= -112.5) { // NW
-    char.frameY = 7;
+    return 7;
   } else if (angle >= -67.5 && angle <= -22.5) { // NE
-    char.frameY = 6;
+    return 6;
   } else if (angle >= 157.5 || angle <= -157.5) { // W
-    char.frameY = 5;
+    return 5;
   } else if (angle >= -22.5 && angle <= 22.5) { // E
-    char.frameY = 4;
+    return 4;
   } else if (angle >= 22.5 && angle <= 67.5) { // SE
-    char.frameY = 3;
+    return 3;
   } else if (angle >= 67.5 && angle <= 112.5) { // S
-    char.frameY = 0;
+    return 0;
   } else if (angle >= 112.5 && angle <= 157.5) { // SW
-    char.frameY = 2;
+    return 2;
   }
 }
 
@@ -1318,7 +1320,7 @@ function updateCharAngle() {
 window.onload = function () {
   (function updateCharMovementLoop() {
     updateCharMovement();
-    requestAnimationFrame(updateCharMovementLoop); // Schedule the next frame
+    requestAnimationFrame(updateCharMovementLoop);
     draw();
-  })(); // Immediately invoke the function
+  })();
 };

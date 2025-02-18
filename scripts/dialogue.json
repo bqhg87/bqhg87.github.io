@@ -1,5 +1,187 @@
 {
     "dialogue": [
-      
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I remember when the townspeople used to come here to watch the stars at night"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "What happened?"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "It seems like everyone has forgotten those days, people don't seem to care about the universe anymore"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I care! I'm trying my best to teach people more about science"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "That's wonderful. If you ever need my help, I'll be here!"
+      },
+
+
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Tibbert",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "We're all doomed! We're all doomed!"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Tibbert",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "They've done it, the end is here! The Large Hadron Collider has been switched on! Any moment now, a black hole will open, swallowing us all! We'll be torn apart, crushed into nothing!"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Tibbert",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "That sounds ridiculous, scientists wouldn't let that happen?"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Tibbert",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "That's what they want you to think. They hide behind big words and fancy experiments, but the truth is slipping through their fingers. When the sky cracks open and everything starts falling apart, don't say I didn't warn you!!"
+      },
+
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "A visitor! What brings you here?"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I met a guy named Tibbert in Market Square - he told me the Large Hadron Collider is going to cause a black hole and destroy the Earth. He seemed convinced; is there any truth in what he's saying?"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Not this again. Okay, let's break this down..."
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "The LHC collides particles at high speeds, but the energy levels are minuscule compared to what happens in nature every second"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "But he told me it would create black holes!?"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 6,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Yes, but only tiny ones. They evaporate instantly due to 'Hawking Radiation'"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 7,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "So, is it recreating the Big Bang or not?"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 8,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "In a sense, but on a much, much smaller scale. Cosmic rays hit the Earth with far higher energy levels every day"
+      },
+      {
+        "story": "blackHole",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 9,
+        "npc": "Jocelyn, the Astronomer",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "Go visit the Library and find the peer-reviewed paper on the LHC's safety. If Mister Tibbert sees it, he may calm down!"
+      }
     ]
   }
