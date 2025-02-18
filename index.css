@@ -919,7 +919,7 @@ span, li a {
   width: fit-content;
   max-width: calc(var(--pixelScale) * 222);
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
   transform: translateX(-50%);
   position: fixed; /* Position relative to the viewport */
   top: calc(var(--pixelScale) * 4);
@@ -928,7 +928,7 @@ span, li a {
   pointer-events: none;
 }
 #topContextWrapper.show {
-  opacity: 1;
+  opacity: 0.97;
 }
 #topContextLabel {
   position: relative;
@@ -1041,6 +1041,9 @@ span, li a {
   #meterWrapper {
     width: calc(100vw - var(--pixelScale) * 140);
   }
+  #topContextWrapper {
+    max-width: calc(100vw - var(--pixelScale) * 140);
+  }
   #meterBG {
     width: calc(100vw - var(--pixelScale) * (140 + 14));
   }
@@ -1059,6 +1062,9 @@ span, li a {
   }
   #meterWrapper {
     width: calc(738px - var(--pixelScale) * 140);
+  }
+  #topContextWrapper {
+    max-width: calc(738px - var(--pixelScale) * 140);
   }
 }
 @media (max-width: 618px) {
@@ -1102,6 +1108,9 @@ span, li a {
   #meterWrapper {
     width: calc(100vw - var(--pixelScale) * 8);
   }
+  #topContextWrapper {
+    max-width: calc(100vw - var(--pixelScale) * 8);
+  }
 }
 @media (max-width: 320px) {
   #sideMenuWrapper {
@@ -1130,6 +1139,9 @@ span, li a {
   }
   #meterWrapper {
     width: calc(320px - var(--pixelScale) * (6));
+  }
+  #topContextWrapper {
+    min-width: calc(320px - var(--pixelScale) * (6));
   }
   #meterBG {
     width: calc(100% - var(--pixelScale) * (27));

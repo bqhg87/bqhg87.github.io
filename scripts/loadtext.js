@@ -4,6 +4,10 @@ let finalPart = false; // Global variable to track if it's the final part (defau
 window.finalPart = finalPart;
 let isNpcSpeaking = false;
 window.isNpcSpeaking = isNpcSpeaking;
+let unlockCharNext;
+let unlockText;
+let unlockStory;
+let topContextNext;
 
 let textPart;
 
@@ -29,6 +33,20 @@ function loadDialoguePart(story, gamemode, chapter, npc, part) {
         
         isNpcSpeaking = dialogues[0].isNpcSpeaking;
         window.isNpcSpeaking = isNpcSpeaking;
+
+        if (dialogues[0].unlock) { // unlock a character
+          unlockCharNext = dialogues[0].unlock;
+          unlockText = dialogues[0].unlockText;
+          unlockStory = dialogues[0].unlockStory;
+        } else {
+          unlockCharNext = null;
+        }
+
+        if (dialogues[0].topContext) {
+          topContextNext = dialogues[0].topContext;
+        } else {
+          topContextNext = null
+        }
       }
 
       const dialogueLoadedEvent = new Event('dialogueLoaded');
@@ -83,14 +101,25 @@ window.skipDialogue = function() {
 window.bypassMovementCheck = false;
 
 // Function to load the next part
-window.loadDialogue = function(story, chapter, npc) {
+window.loadDialogue = function(story, chapter, bla) {
   currentPart = window.currentPart;
   const gamemode = window.gamemode;
 
   autoClose(2000);
   window.bypassMovementCheck = true;
-  loadDialoguePart(story, gamemode, chapter, npc, currentPart);
+  loadDialoguePart(story, gamemode, chapter, bla, currentPart);
   
+
+  if (unlockCharNext) {
+    broadcastTopContextMessage(`${unlockText} ${unlockCharNext}`, 4000);
+    updateStories(unlockCharNext, unlockStory);
+    unlockCharNext = null;
+  }
+
+  if (topContextNext) {
+    broadcastTopContextMessage(topContextNext, 4000);
+  }
+
   currentPart++;
   window.currentPart = currentPart;
 }

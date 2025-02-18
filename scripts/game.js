@@ -179,12 +179,11 @@ const npcImages = {}; // Store NPC image data
 
 // Function to create a new NPC
 function createNPC(npcData) {
-  const npc = {
+  let npc = {
     ...npcData, // Spread the provided data
     image: new Image(),
     frameWidth: 32,
     frameHeight: 32,
-    currentStory: npcData.story || "default", // use local storage in future
     feet: 5,
     zIndex: 1,
     frameX: npcData.frameX || 0,
@@ -226,15 +225,9 @@ function createNPC(npcData) {
   return npc;
 }
 
-window.currentChapters = {
-  "default": 1,
-  "blackHole": 1,
-};
-
-const npcs = [
+window.npcs = [
   createNPC({
     name: 'Tibbert',
-    story: "blackHole",
     x: 10,
     y: -10,
     hair: 'buzzcut',
@@ -263,6 +256,39 @@ const npcs = [
   }),
 ];
 
+
+window.currentChapters = {
+  "default": 1,
+  "blackHole": 1,
+};
+
+window.currentStories = [ // Default
+  {
+    name: 'Tibbert',
+    story: 'blackHole',
+  },
+  {
+    name: 'Astronomer',
+    story: 'default',
+  }
+];
+
+// Load from cache or set defaults
+const cachedStories = JSON.parse(localStorage.getItem('currentStories'));
+if (cachedStories && !(1 === 1)) { // bypassing so it resets every time
+  currentStories = cachedStories;
+} else {
+  localStorage.setItem('currentStories', JSON.stringify(currentStories));
+}
+
+// Function to update a story
+window.updateStories = function(name, newStory) {
+  const storyToUpdate = currentStories.find(story => story.name === name);
+  if (storyToUpdate) {
+    storyToUpdate.story = newStory;
+    localStorage.setItem('currentStories', JSON.stringify(currentStories));
+  }
+}
 
 ///////////////
 // RENDERING //
@@ -680,7 +706,7 @@ function checkNPC(npc, char, distance) {
     bottomLabel.textContent = `Talk to ${npc.name}`;
     bottomLabelWrapper.classList.add('show');
     dialogueToggle.classList.add('show');
-    npcMemory = npc;
+    npcMemory = npc.name;
   } else if (!isNear && wasNear) {
     toggleNPCs[npc.name] = false;
     npc.indicator.spriteY = 0;  // Revert spriteY when far
@@ -736,8 +762,14 @@ window.toggleDialogueOpen = function () {
   handleStartEndDialogue();
 }
 
+function getStoryForNPC(name) {
+  const npc = window.currentStories.find(npc => npc.name === name);
+  return npc ? npc.story : null;  // Return the story or null if not found
+}
+
 function loadStory() {
-  loadDialogue(npcMemory.currentStory, currentChapters[npcMemory.currentStory], npcMemory.name); // LOAD STORY
+  const npc = npcs.find(npc => npc.name === npcMemory);
+  loadDialogue(getStoryForNPC(npc.name), currentChapters[getStoryForNPC(npc.name)], npc.name); // LOAD STORY
 }
 
 function clickDialogueToggle() {
@@ -782,7 +814,7 @@ let npcMemory = false;
 
 function startDialogue(npcName) {
   const npc = npcs.find(npc => npc.name === npcName);
-  npcMemory = npc;
+  npcMemory = npc.name;
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.remove('show');
   dialogueToggle.classList.remove('show');
@@ -828,7 +860,7 @@ function endDialogue(npcName) {
 
 window.breakDialogue = function() {
   window.currentPart = 1;
-  const npc = npcMemory;
+  npc.name = npcMemory;
   npc.indicator.spriteX = 2;
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');

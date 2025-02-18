@@ -358,6 +358,7 @@ function addToggleListeners() {
 window.updateHeadButtonsVisibility = function() {
   const articleWrapper = document.getElementById('articleWrapper');
   const meterWrapper = document.getElementById('meterWrapper');
+  const topContextWrapper = document.getElementById('topContextWrapper');
 
   if (window.innerWidth <= 618 && articleWrapper.classList.contains('show')) {
     document.body.classList.add('article-open');
@@ -365,7 +366,7 @@ window.updateHeadButtonsVisibility = function() {
     document.body.classList.remove('article-open');
   }
 
-  if (window.innerWidth <= 738 && meterWrapper.classList.contains('show')) {
+  if (window.innerWidth <= 738 && (meterWrapper.classList.contains('show') || topContextWrapper.classList.contains('show'))) {
     document.body.classList.add('meter-open');
   } else {
     document.body.classList.remove('meter-open');
