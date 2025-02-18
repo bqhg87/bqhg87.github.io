@@ -2,24 +2,26 @@ window.console.info("Booting HarmOS...");
 
 const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
-window.delMeter = 64;
+window.delMeter = 0;
 window.gamemode = "restore";
 
+// Use a single image for all character parts, and draw different sections.
 const charSheet = new Image();
-const shroomsImage = new Image();
-const chickenNPC = new Image();
-const npcIndicators = new Image();
-const mapGuide = new Image();
-const groundImage = new Image();
 charSheet.src = './assets/char/base.png';
-shroomsImage.src = './assets/shrooms.png';
-chickenNPC.src = './assets/chicken.png';
+const npcIndicators = new Image();
 npcIndicators.src = './assets/npcIndicators.png';
+const groundImage = new Image();
 groundImage.src = './assets/ground.png';
 const collisionMap = new Image();
 collisionMap.src = './assets/collisionMap.png';
 const exampleHouse = new Image();
 exampleHouse.src = './assets/buildings/hsst1a.png';
+const shadow = new Image();
+shadow.src = './assets/char/shadow.png';
+const blush = new Image();
+blush.src = './assets/char/blush.png';
+const eyes = new Image();
+eyes.src = './assets/char/eyes.png';
 
 const objectsToDraw = [
   {
@@ -32,30 +34,6 @@ const objectsToDraw = [
     frameHeight: 32,
     feet: 5,
     zIndex: 2,
-  },
-  {
-    image: shroomsImage,
-    name: 'shrooms',
-    properName: 'Mr. Lvndquist',
-    x: 14,
-    y: -40,
-    frameWidth: 14,
-    frameHeight: 11,
-    feet: 2,
-    zIndex: 1
-  },
-  {
-    image: chickenNPC,
-    name: 'chicken',
-    properName: 'Chicken',
-    x: 120,
-    y: -14,
-    frameX: 0,
-    frameY: 0,
-    frameWidth: 16,
-    frameHeight: 16,
-    feet: 2,
-    zIndex: 1
   },
   {
     image: groundImage,
@@ -80,55 +58,22 @@ const objectsToDraw = [
   }
 ];
 const char = objectsToDraw[0]; // this is the character
-const shrooms = objectsToDraw[1];
-const chicken = objectsToDraw[2];
-const collisionMapOffset = objectsToDraw[4];
+const collisionMapOffset = objectsToDraw[2];
 
-const npcIndicatorData = { 
-  chicken: { 
-    spriteX: 0, 
-    spriteY: 0,
-    indicatorOffsetX: 5,  // Offset in X direction (right)
-    indicatorOffsetY: -5,  // Offset in Y direction (above)
-    animate: true,  // Enable sinusoidal animation for chicken indicator
-    sinDistance: 5, // Max movement in the y-direction (pixels)
-    sinSpeed: 4.6,    // Speed of the oscillation (higher value = faster oscillation)
-    sinOffset: 0,    // Offset for starting point of sine wave
-    visible: true     // Set visibility property
-  },
-  shrooms: { 
-    spriteX: 0, 
-    spriteY: 0,
-    indicatorOffsetX: 4.5,  // Offset in X direction (left)
-    indicatorOffsetY: -8,  // Offset in Y direction (above)
-    animate: true,  // Disable sinusoidal animation for shrooms indicator
-    sinDistance: 5.1, // Max movement in the y-direction (pixels)
-    sinSpeed: 4.4,    // Speed of the oscillation
-    sinOffset: 20,   // Offset for starting point of sine wave (e.g., starts 45° offset)
-    visible: true     // Set visibility property
-  }
-};
-
-// Track number of loaded images
+// Consolidated image loading
+const images = [charSheet, npcIndicators, groundImage, collisionMap, exampleHouse, shadow, blush, eyes];
 let imagesLoaded = 0;
-const totalImages = objectsToDraw.length; // Update to include charSheet
+const totalImages = images.length;
 
-// Check if the images load correctly
 function onImageLoad() {
-  imagesLoaded++;
-  if (imagesLoaded === totalImages) {
-    adjustForRetina();  // Adjust for retina display and set canvas size
-    chickenAnimate();
-    draw();  // Draw the images once they're all loaded
-  }
+    imagesLoaded++;
+    if (imagesLoaded === totalImages) {
+        adjustForRetina();
+        draw();
+    }
 }
 
-exampleHouse.onload = onImageLoad;
-collisionMap.onload = onImageLoad;
-shroomsImage.onload = onImageLoad;
-chickenNPC.onload = onImageLoad;
-charSheet.onload = onImageLoad;
-groundImage.onload = onImageLoad;
+images.forEach(img => img.onload = onImageLoad);
 
 ///////////////////
 // CHAR SETTINGS //
@@ -147,7 +92,7 @@ let charAppearance = {
   topType: 3,
   clothingBottom: 'trousers',
   bottomType: 8,
-  shadow: false,
+  shadow: true,
 };
 
 // Load from cache or set defaults
@@ -199,13 +144,6 @@ window.randomiseCharAppearance = function() {
   });
 }
 
-const shadow = new Image();
-shadow.src = './assets/char/shadow.png';
-const blush = new Image();
-blush.src = './assets/char/blush.png';
-const eyes = new Image();
-eyes.src = './assets/char/eyes.png';
-
 window.tops = {
   floral: new Image(),
   basic: new Image(),
@@ -231,12 +169,111 @@ hair.bob.src = './assets/char/bob.png';
 hair.braids.src = './assets/char/braids.png';
 hair.buzzcut.src = './assets/char/buzzcut.png';
 
+
+//////////////////
+// NPC SETTINGS //
+//////////////////
+
+const npcImages = {}; // Store NPC image data
+
+// Function to create a new NPC
+function createNPC(npcData) {
+  const npc = {
+    ...npcData, // Spread the provided data
+    image: new Image(),
+    frameWidth: 32,
+    frameHeight: 32,
+    feet: 5,
+    zIndex: 1,
+    indicator: { // NPC Indicator Data
+      spriteX: 0,
+      spriteY: 0,
+      offsetX: npcData.indicatorOffsetX || 13.5, // Default offset if not provided
+      offsetY: npcData.indicatorOffsetY || -1,
+      animate: npcData.indicatorAnimate !== undefined ? npcData.indicatorAnimate : true, // Default to true if not specified
+      sinDistance: npcData.indicatorSinDistance || 5,
+      sinSpeed: npcData.indicatorSinSpeed || 4.4,
+      sinOffset: npcData.indicatorSinOffset || 0,
+      visible: npcData.indicatorVisible !== undefined ? npcData.indicatorVisible : true, // Set visibility property
+    },
+    appearance: { // NPC Appearance Data
+      skinTone: npcData.skinTone || 0,
+      eyes: npcData.eyes || 9,
+      blush: npcData.blush || false,
+      beard: npcData.beard || false,
+      glasses: npcData.glasses || false,
+      hair: npcData.hair || 'bob',
+      hairType: npcData.hairType || 10,
+      clothingTop: npcData.clothingTop || 'skull',
+      topType: npcData.topType || 3,
+      clothingBottom: npcData.clothingBottom || 'trousers',
+      bottomType: npcData.bottomType || 8,
+      shadow: npcData.shadow || true,
+    },
+  };
+
+  npc.image.src = `./assets/char/base.png`; // All NPCs use the same base
+  npc.tops = { ...tops }; // Clone tops
+  npc.bottoms = { ...bottoms }; // Clone bottoms
+  npc.hair = { ...hair }; // Clone hair
+
+  npc.image.onload = onImageLoad; // Call onImageLoad when NPC image loads
+
+  return npc;
+}
+
+const npcs = [
+  createNPC({
+    name: 'chicken',
+    x: 120,
+    y: -14,
+    hair: 'braids',
+    clothingTop: 'basic',
+    clothingBottom: 'skirt',
+    indicatorSinSpeed: 5,
+    indicatorSinOffset: 10,
+  }),
+  createNPC({
+    name: 'merchant',
+    x: 200,
+    y: -50,
+    hair: 'buzzcut',
+    clothingTop: 'floral',
+    clothingBottom: 'trousers',
+    eyes: 2,
+    skinTone: 2,
+    topType: 1,
+    bottomType: 2,
+    hairType: 1,
+  }),
+  createNPC({ // New NPC
+    name: 'villager',
+    x: 50,
+    y: -80,
+    hair: 'bob',
+    clothingTop: 'skull',
+    clothingBottom: 'trousers',
+    skinTone: 4,
+    topType: 5,
+    bottomType: 5,
+    hairType: 5,
+    indicatorSinSpeed: 6,
+    indicatorSinOffset: 20,
+  }),
+];
+
+
 ///////////////
 // RENDERING //
 ///////////////
 
-// Resize canvas on window resize
 window.addEventListener('resize', adjustForRetina);
+let canvasWidth, canvasHeight;
+
+function updateCanvasDimensions() {
+  canvasWidth = canvas.width / dpr;
+  canvasHeight = canvas.height / dpr;
+}
 
 function drawCharacterWithClothing() {
   const { x, y, frameWidth, frameHeight, scale = 1 } = char;
@@ -280,38 +317,74 @@ function drawCharacterWithClothing() {
   }
 }
 
+function drawNPC(npc) {
+  const { x, y, frameWidth, frameHeight, scale = 1 } = npc;
+
+  const scaledX = (x * scale * globalScale) + translationX;
+  const scaledY = (y * scale * globalScale) + translationY;
+  const scaledWidth = frameWidth * scale * globalScale;
+  const scaledHeight = frameHeight * scale * globalScale;
+
+  const skinToneOffsetX = npc.appearance.skinTone * 8;
+  const topOffsetX = npc.appearance.topType * 8;
+  const bottomOffsetX = npc.appearance.bottomType * 8;
+  const hairOffsetX = npc.appearance.hairType * 8;
+  const eyesOffsetX = npc.appearance.eyes * 8;
+
+  // Draw character shadow
+  if (npc.appearance.shadow) {
+    c.drawImage(shadow, 0, 0, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  }
+
+  // Draw base character
+  c.drawImage(npc.image, (0 + skinToneOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  c.drawImage(eyes, (0 + eyesOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  if (npc.appearance.blush) {
+    c.drawImage(blush, (0 + skinToneOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  }
+
+  let selectedTop = npc.tops[npc.appearance.clothingTop];
+  if (selectedTop) {
+    c.drawImage(selectedTop, (0 + topOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  }
+
+  let selectedBottom = npc.bottoms[npc.appearance.clothingBottom];
+  if (selectedBottom) {
+    c.drawImage(selectedBottom, (0 + bottomOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  }
+
+  let selectedHair = npc.hair[npc.appearance.hair];
+  if (selectedHair) {
+    c.drawImage(selectedHair, (0 + hairOffsetX) * frameWidth, 0 * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
+  }
+}
+
 // Draw all objects
 function draw() {
-  // Clear the canvas
   c.clearRect(0, 0, canvas.width, canvas.height);
   centerCamera();
 
-  // Continue drawing other objects (like shrooms, chicken, etc.)
-  const sortedObjects = [...objectsToDraw].sort((a, b) => {
-    const charFeet = char.y + char.frameHeight - char.feet; // Character's feet position
-
-    const aFeet = a.y + a.frameHeight - a.feet; // Object a's feet position
-    const bFeet = b.y + b.frameHeight - b.feet; // Object b's feet position
+  const sortedObjects = [...objectsToDraw, ...npcs].sort((a, b) => {
+    const charFeet = char.y + char.frameHeight - char.feet;
+    const aFeet = (a.y || 0) + (a.frameHeight || 0) - (a.feet || 0);
+    const bFeet = (b.y || 0) + (b.frameHeight || 0) - (b.feet || 0);
 
     if (charFeet < aFeet) {
-      return 1; // A should be behind the character
+      return 1;
     }
-
     if (charFeet < bFeet) {
-      return -1; // B should be behind the character
+      return -1;
     }
-
-    return a.zIndex - b.zIndex;
+    return (a.zIndex || 0) - (b.zIndex || 0);
   });
 
   sortedObjects.forEach(obj => {
     if (obj === char) {
-      drawCharacterWithClothing(); // Draw the character with clothing
-    } else if (obj === collisionMapOffset) {
-
-    } else {
+      drawCharacterWithClothing();
+    } else if (obj.image === collisionMap) {
+      return
+    } else if (obj.image) {
       const { image, x, y, frameX, frameY, frameWidth, frameHeight, opacity = 1, scale = 1 } = obj;
-
       const scaledX = (x * scale * globalScale) + translationX;
       const scaledY = (y * scale * globalScale) + translationY;
       const scaledWidth = frameWidth * scale * globalScale;
@@ -319,39 +392,45 @@ function draw() {
 
       c.globalAlpha = opacity;
 
-      if (frameX !== undefined && frameY !== undefined) {
-        c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
-                    scaledX, scaledY, scaledWidth, scaledHeight);
-      } else {
-        const scaledImgWidth = image.width * scale * globalScale;
-        const scaledImgHeight = image.height * scale * globalScale;
-        c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
+      // *** KEY CHANGE: Only draw the base image if it's NOT an NPC ***
+      if (!obj.name) { // Check if the object has a 'name' property (NPCs have names)
+        if (frameX !== undefined && frameY !== undefined) {
+          c.drawImage(image, frameX * frameWidth, frameY * frameHeight, frameWidth, frameHeight,
+                      scaledX, scaledY, scaledWidth, scaledHeight);
+        } else {
+          const scaledImgWidth = image.width * scale * globalScale;
+          const scaledImgHeight = image.height * scale * globalScale;
+          c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
+        }
       }
 
       c.globalAlpha = 1;
+
+      if (obj.name) { // If it's an NPC, draw it with clothing/hair
+        drawNPC(obj);
+      }
     }
   });
 
+
   // Draw NPC indicators
-  [npcIndicators].forEach(() => {
-    [chicken, shrooms].forEach(npc => {
-      const indicatorData = npcIndicatorData[npc.name];
+  npcs.forEach(npc => {
+    const indicatorData = npc.indicator;
 
-      if (indicatorData.visible) {
-        const baseIndicatorX = ((npc.x + indicatorData.indicatorOffsetX) * globalScale) + translationX;
-        let baseIndicatorY = ((npc.y + indicatorData.indicatorOffsetY) * globalScale) + translationY;
+    if (indicatorData.visible) {
+      const baseIndicatorX = ((npc.x + indicatorData.offsetX) * globalScale) + translationX;
+      let baseIndicatorY = ((npc.y + indicatorData.offsetY) * globalScale) + translationY;
 
-        if (indicatorData.animate) {
-          const time = Date.now() / 1000;
-          baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset);
-        }
-
-        const spriteX = indicatorData.spriteX * 4;
-        const spriteY = indicatorData.spriteY * 4;
-
-        c.drawImage(npcIndicators, spriteX, spriteY, 4, 4, baseIndicatorX, baseIndicatorY, 4 * globalScale, 4 * globalScale);
+      if (indicatorData.animate) {
+        const time = Date.now() / 1000;
+        baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset);
       }
-    });
+
+      const spriteX = indicatorData.spriteX * 4;
+      const spriteY = indicatorData.spriteY * 4;
+
+      c.drawImage(npcIndicators, spriteX, spriteY, 4, 4, baseIndicatorX, baseIndicatorY, 4 * globalScale, 4 * globalScale);
+    }
   });
 }
 
@@ -581,10 +660,6 @@ function updateLowCamera() {
   centerCamera();
 }
 
-function handleLowCameraResize() {
-
-}
-
 window.addEventListener('resize', updateLowCamera);
 window.addEventListener('typeLetter', updateLowCamera);
 window.addEventListener('dialogueLoaded', updateLowCamera);
@@ -598,8 +673,6 @@ let toggleNPCs = {}; // Store states for multiple NPCs
 const npcUpdateEvent = new Event('npcUpdate');
 let dialogueToggled = false;
 window.dialogueToggled = dialogueToggled;
-const distances = [20, 20]; // Add more NPCs' distances here
-const npcs = [chicken, shrooms]; // Add more NPCs here
 
 const bottomLabel = document.getElementById('bottomLabel');
 const bottomLabelWrapper = document.getElementById('bottomLabelWrapper');
@@ -612,14 +685,14 @@ function checkNPC(npc, char, distance) {
 
   if (isNear && !wasNear) {
     toggleNPCs[npc.name] = true;
-    npcIndicatorData[npc.name].spriteY = 1;  // Change spriteY when near
-    bottomLabel.textContent = `Talk to ${npc.properName}`;
+    npc.indicator.spriteY = 1;  // Change spriteY when near
+    bottomLabel.textContent = `Talk to ${npc.name}`;
     bottomLabelWrapper.classList.add('show');
     dialogueToggle.classList.add('show');
     npcMemory = npc;
   } else if (!isNear && wasNear) {
     toggleNPCs[npc.name] = false;
-    npcIndicatorData[npc.name].spriteY = 0;  // Revert spriteY when far
+    npc.indicator.spriteY = 0;  // Revert spriteY when far
     bottomLabelWrapper.classList.remove('show');
     dialogueToggle.classList.remove('show');
   }
@@ -636,7 +709,7 @@ function refreshCheckNPC() {
 }
 
 function checkNPCs() {
-  npcs.forEach((npc, index) => checkNPC(npc, char, distances[index]));
+  npcs.forEach((npc) => checkNPC(npc, char, 20));
 }
 
 let spaceHeld = false; // Flag to track whether Space is held
@@ -712,13 +785,13 @@ window.handleStartEndDialogue = function() {
 let npcMemory = false;
 
 function startDialogue(npcName) {
-  const npc = objectsToDraw.find(obj => obj.name === npcName);
+  const npc = npcs.find(npc => npc.name === npcName);
   npcMemory = npc;
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.remove('show');
   dialogueToggle.classList.remove('show');
   dialogueWrapper.classList.add('show');
-  npcIndicatorData[npc.name].spriteX = -1;
+  npc.indicator.spriteX = -1;
   //loadDialogue("concept", 1, npcName);
   lowCameraOffsetHistory = lowCameraOffset;
   const direction = snapToValidDirection(directionQuery(char, npc));
@@ -740,12 +813,12 @@ window.dialogueEnding = dialogueEnding;
 
 function endDialogue(npcName) {
   window.currentPart = 1;
-  const npc = objectsToDraw.find(obj => obj.name === npcName);
+  const npc = npcs.find(npc => npc.name === npcName);
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');
   dialogueToggle.classList.add('show');
   dialogueWrapper.classList.remove('show');
-  npcIndicatorData[npc.name].spriteX = 2;
+  npc.indicator.spriteX = 2;
   blockDirectionUpdate = false;
   lowCameraOffsetHistory = lowCameraOffset;
   handleZoom(4);
@@ -759,7 +832,7 @@ function endDialogue(npcName) {
 window.breakDialogue = function() {
   window.currentPart = 1;
   const npc = npcMemory;
-  npcIndicatorData[npc.name].spriteX = 2;
+  npc.indicator.spriteX = 2;
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');
   dialogueToggle.classList.add('show');
@@ -848,108 +921,58 @@ function directionQuery(object1, object2) {
 
 const collisionMapCanvas = document.createElement('canvas');
 const c2 = collisionMapCanvas.getContext('2d');
+let collisionMapData; // Store collision map data
+
+// Initialize collision map data (do this ONCE when the image loads)
+collisionMap.onload = () => {
+    collisionMapCanvas.width = collisionMap.width;
+    collisionMapCanvas.height = collisionMap.height;
+    c2.drawImage(collisionMap, 0, 0);
+    collisionMapData = c2.getImageData(0, 0, collisionMap.width, collisionMap.height).data;
+};
 
 function checkCollisions() {
-  collisionMapCanvas.width = collisionMap.width;
-  collisionMapCanvas.height = collisionMap.height;
-  c2.drawImage(collisionMap, 0, 0);
-  const collisionMapData = c2.getImageData(0, 0, collisionMap.width, collisionMap.height).data;
+    if (!collisionMapData) return { top: false, bottom: false, left: false, right: false }; // Return if data not loaded yet
 
-  const charMapX = Math.floor((char.x + 16) - collisionMapOffset.x);
-  const charMapY = Math.floor((char.y + 26) - collisionMapOffset.y);
+    const charMapX = Math.floor((char.x + 16) - collisionMapOffset.x);
+    const charMapY = Math.floor((char.y + 26) - collisionMapOffset.y);
 
-  const requiredConsistency = 0.5; // Adjust as needed (higher = more precise?)
+    const requiredConsistency = 0.5;
 
-  let collidingSides = {
-      top: false,
-      bottom: false,
-      left: false,
-      right: false,
-  };
+    const collidingSides = {
+        top: false,
+        bottom: false,
+        left: false,
+        right: false,
+    };
 
-  for (const side in collidingSides) {
-      let collisionCount = 0;
-      let totalChecks = 0;
+    const checkSide = (side, startX, startY, endX, endY) => {
+        let collisionCount = 0;
+        let totalChecks = 0;
 
-      let startX = charMapX - 4; // Start from left of the check area
-      let startY = charMapY - 2; // Start from top of the check area
-      let endX = charMapX + 4;   // End at right of the check area
-      let endY = charMapY + 2;   // End at bottom of the check area
+        for (let y = startY; y < endY; y++) {
+            for (let x = startX; x < endX; x++) {
+                if (x >= 0 && x < collisionMap.width && y >= 0 && y < collisionMap.height) {
+                    const pixelIndex = (y * collisionMap.width + x) * 4;
+                    const a = collisionMapData[pixelIndex + 3];
 
-      switch (side) {
-          case "top":
-              endY = charMapY;        // Check only the top edge
-              break;
-          case "bottom":
-              startY = charMapY;        // Check only the bottom edge
-              break;
-          case "left":
-              endX = charMapX;        // Check only the left edge
-              break;
-          case "right":
-              startX = charMapX;        // Check only the right edge
-              break;
-      }
-
-      for (let y = startY; y < endY; y++) { // Correct loop bounds
-          for (let x = startX; x < endX; x++) { // Correct loop bounds
-              if (x >= 0 && x < collisionMap.width && y >= 0 && y < collisionMap.height) {
-                  const pixelIndex = (y * collisionMap.width + x) * 4;
-                  const a = collisionMapData[pixelIndex + 3];
-
-                  if (a > 0) {
-                      collisionCount++;
-                  }
-                  totalChecks++;
-              }
-          }
-      }
-
-      if (totalChecks > 0 && collisionCount / totalChecks >= requiredConsistency) {
-          collidingSides[side] = true;
-      }
-  }
-
-  const collidingSidesArray = Object.entries(collidingSides).filter(([side, isColliding]) => isColliding);
-
-  if (collidingSidesArray.length > 2) {
-      collidingSidesArray.sort(([sideA], [sideB]) => {
-          const distA = getSideDistance(sideA, charMapX, charMapY); // Pass offset
-          const distB = getSideDistance(sideB, charMapX, charMapY); // Pass offset
-          return distA - distB;
-      });
-
-      for (let i = 2; i < collidingSidesArray.length; i++) {
-          collidingSides[collidingSidesArray[i][0]] = false;
-      }
-  }
+                    if (a > 0) {
+                        collisionCount++;
+                    }
+                    totalChecks++;
+                }
+            }
+        }
+        return totalChecks > 0 && collisionCount / totalChecks >= requiredConsistency;
+    };
 
 
-  if (collidingSides.top || collidingSides.bottom || collidingSides.left || collidingSides.right) {
-      let collisionMessage = "Character is colliding on: ";
-      for (const side in collidingSides) {
-          if (collidingSides[side]) {
-              collisionMessage += side + " ";
-          }
-      }
-  }
+    collidingSides.top = checkSide("top", charMapX - 4, charMapY - 2, charMapX + 4, charMapY);
+    collidingSides.bottom = checkSide("bottom", charMapX - 4, charMapY, charMapX + 4, charMapY + 2);
+    collidingSides.left = checkSide("left", charMapX - 4, charMapY - 2, charMapX, charMapY + 2);
+    collidingSides.right = checkSide("right", charMapX, charMapY - 2, charMapX + 4, charMapY + 2);
 
-  return collidingSides;
-}
-
-function getSideDistance(side, charMapX, charMapY) {
-  switch (side) {
-      case "top":
-          return charMapY; // Distance to top edge (relative to offset)
-      case "bottom":
-          return collisionMap.height - charMapY; // Distance to bottom
-      case "left":
-          return charMapX; // Distance to left edge
-      case "right":
-          return collisionMap.width - charMapX; // Distance to right
-      default:
-          return Infinity;
-  }
+    return collidingSides;
 }
 
 
@@ -1014,13 +1037,15 @@ canvas.addEventListener('touchmove', (event) => {
 
 function updateMouseData(event) {
   let mouseXInGameCoords, mouseYInGameCoords;
-  
+
   if (event.type === "mousemove") {
     mouseXInGameCoords = (event.clientX - translationX) / globalScale;
     mouseYInGameCoords = (event.clientY - translationY) / globalScale;
   } else if (event.type === "touchmove" || event.type === "touchstart") {
     mouseXInGameCoords = (event.touches[0].clientX - translationX) / globalScale;
     mouseYInGameCoords = (event.touches[0].clientY - translationY) / globalScale;
+  } else { // Handle other event types if necessary
+    return;
   }
 
   const charCenterX = char.x + 15.5;
@@ -1028,7 +1053,7 @@ function updateMouseData(event) {
 
   const dx = mouseXInGameCoords - charCenterX;
   const dy = mouseYInGameCoords - charCenterY;
- 
+
   mouseRadius = Math.sqrt(dx * dx + dy * dy);
   mouseAngle = Math.atan2(dy, dx);
 }
@@ -1147,27 +1172,31 @@ function limitAngle(angle, divisions) {
 
 let lastUpdate = 0;
 
+let charFrameX = 0; // Store frameX separately
+
 function updateAnimation(speed, stop) {
   const now = performance.now();
-
   if (now - lastUpdate >= speed) {
+    lastUpdate = now; // Update this first to avoid skipping frames
+
     if (stop) {
-      if (char.frameX === 0 || char.frameX === 1 || char.frameX === 4 || char.frameX === 5) {
-        char.frameX = 0; // Instantly reset to 0
+      if (charFrameX === 0 || charFrameX === 1 || charFrameX === 4 || charFrameX === 5) {
+        charFrameX = 0;
       } else {
-        char.frameX = (char.frameX + 1) % 8; // Continue animating
-        if (char.frameX === 0 || char.frameX === 4) {
-          char.frameX = 0; // Stop once we reach 0 or 4
+        charFrameX = (charFrameX + 1) % 8;
+        if (charFrameX === 0 || charFrameX === 4) {
+          charFrameX = 0;
           return;
         }
       }
     } else {
-      // Normal animation loop
-      char.frameX = (char.frameX + 1) % 8;
+      charFrameX = (charFrameX + 1) % 8;
     }
-    lastUpdate = now;
+    char.frameX = charFrameX; // Update char.frameX only once per animation frame
   }
 }
+
+
 
 function limitCharMovement(radius, maxSpeed) {
   let maxRadius = 60;
@@ -1208,7 +1237,7 @@ function updateCharDirection(angle) {
 
 let vKeys = 0;
 let hKeys = 0;
-let angleHistory = 0;
+let angleHistory = 0
 
 function updateCharAngle() {
   const keyAcceleration = 0.1;
@@ -1284,17 +1313,6 @@ function updateCharAngle() {
     angleHistory = Math.atan2(-vKeys, hKeys);
     return angleHistory;
   }
-}
-
-let chickenInterval;
-function chickenAnimate() {
-  if (chickenInterval) return;
-
-  chickenInterval = setInterval(() => {
-    // Increment frameX and loop back to 0 after the last frame
-    chicken.frameX = (chicken.frameX + 1) % 2;
-    draw(); // Redraw the image with the updated frameX
-  }, 1000);
 }
 
 window.onload = function () {

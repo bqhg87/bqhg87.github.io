@@ -16,6 +16,15 @@ body {
   overscroll-behavior: none;
 }
 
+.logo {
+  position: relative;
+  top: calc(var(--pixelScale) * 0);
+  left: calc(var(--pixelScale) * 0);
+  height: calc(var(--pixelScale) * 20);
+  image-rendering: pixelated;
+  opacity: 1;
+}
+
 #game {
   touch-action: none;
   position: fixed;

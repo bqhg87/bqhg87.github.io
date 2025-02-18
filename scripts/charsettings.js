@@ -449,7 +449,7 @@ function updateSelectorColors() {
         { bg: "#a12610", fg: "#85221b", bgHover: "#85221b", fgHover: "#6c1f1d" },
     ];
 
-    const topColors = [
+    const clothingColors = [
         { bg: "#4c464b", fg: "#413b40", bgHover: "#413b40", fgHover: "#332e32" },
         { bg: "#4b6275", fg: "#435361", bgHover: "#435361", fgHover: "#323942" },
         { bg: "#6283a4", fg: "#637499", bgHover: "#637499", fgHover: "#3e4457" },
@@ -462,7 +462,7 @@ function updateSelectorColors() {
         { bg: "#c5b6a0", fg: "#9c8d83", bgHover: "#9c8d83", fgHover: "#615a55" },
     ];
 
-    const bottomColors = [
+    const skirtColors = [
         { bg: "#413b40", fg: "#363235", bgHover: "#363235", fgHover: "#332e32" },
         { bg: "#3e4957", fg: "#353f4a", bgHover: "#353f4a", fgHover: "#323942" },
         { bg: "#505d7a", fg: "#454e66", bgHover: "#454e66", fgHover: "#3e4457" },
@@ -481,10 +481,15 @@ function updateSelectorColors() {
     const eyeColor = eyeColors[charAppearance.eyes] || eyeColors[0];
     updateSelectorColor('eyes', eyesToggle.isHovered ? eyeColor.bgHover : eyeColor.bg, eyesToggle.isHovered ? eyeColor.fgHover : eyeColor.fg);
 
-    const topColor = topColors[charAppearance.topType] || topColors[0];
+    const topColor = clothingColors[charAppearance.topType] || clothingColors[0];
     updateSelectorColor('top', topToggle.isHovered ? topColor.bgHover : topColor.bg, topToggle.isHovered ? topColor.fgHover : topColor.fg);
 
-    const bottomColor = bottomColors[charAppearance.bottomType] || bottomColors[0];
+    let bottomColor;
+    if (charAppearance.clothingBottom === 'skirt') {
+        bottomColor = skirtColors[charAppearance.bottomType] || skirtColors[0];
+    } else {
+        bottomColor = clothingColors[charAppearance.bottomType] || clothingColors[0];
+    }
     updateSelectorColor('bottom', bottomToggle.isHovered ? bottomColor.bgHover : bottomColor.bg, bottomColor.isHovered ? bottomColor.fgHover : bottomColor.fg);
 
     const autoEyesToggle = document.getElementById('autoEyesToggle');
