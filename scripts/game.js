@@ -248,7 +248,7 @@ const npcs = [
     indicatorSinOffset: 20,
   }),
   createNPC({
-    name: 'Jocelyn, the Astronomer',
+    name: 'Astronomer',
     x: -102.5,
     y: -30,
     hair: 'bob',
