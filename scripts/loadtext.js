@@ -118,6 +118,7 @@ window.loadDialogue = function(story, chapter, bla) {
 
   if (topContextNext) {
     broadcastTopContextMessage(topContextNext, 4000);
+    topContextNext = null;
   }
 
   currentPart++;
