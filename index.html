@@ -104,11 +104,27 @@
     <footer>
       <div id="mainGameMenuWrapper">
         <button class="mainGameMenu" id="mainGameMenuToggle" aria-label="Main Game Menu" data-sprite-y="0"></button>
-        <div class="pxDivWrapper" id="mainGameMenuSubWrapper">
-          <button class="mainGameMenuSubToggle" aria-label="Open Inventory" id="inventoryToggle"></button>
-          <button class="mainGameMenuSubToggle" aria-label="Open Settings" id="settingsToggle"></button>
-          <button class="mainGameMenuSubToggle" aria-label="Open Tasks" id="tasksToggle"></button>
-          <button class="mainGameMenuSubToggle" aria-label="Open Achievements" id="achievementsToggle"></button>
+        <div id="mainGameMenuCombiWrapper">
+          <div class="pxDivWrapper" id="mainGameMenuSubWrapper">
+            <button class="mainGameMenuSubToggle" aria-label="Open Inventory" id="inventoryToggle"></button>
+            <button class="mainGameMenuSubToggle" aria-label="Open Settings" id="settingsToggle"></button>
+            <button class="mainGameMenuSubToggle" aria-label="Open Tasks" id="tasksToggle"></button>
+            <button class="mainGameMenuSubToggle" aria-label="Open Achievements" id="achievementsToggle"></button>
+          </div>
+          <div id="mainGameMenuLabelsWrapper">
+            <div class="pxDivWrapper mainGameMenuLabelWrapper" id="inventoryLabel">
+              <p class="mainGameMenuLabel">Inventory</p>
+            </div>
+            <div class="pxDivWrapper mainGameMenuLabelWrapper" id="settingsLabel">
+              <p class="mainGameMenuLabel">Settings</p>
+            </div>
+            <div class="pxDivWrapper mainGameMenuLabelWrapper" id="tasksLabel">
+              <p class="mainGameMenuLabel">Tasks</p>
+            </div>
+            <div class="pxDivWrapper mainGameMenuLabelWrapper" id="achievementsLabel">
+              <p class="mainGameMenuLabel">Achievements</p>
+            </div>
+          </div>
         </div>
       </div>
       <aside id="dialogueContextWrapper">
@@ -233,6 +249,6 @@
     <script type="module" src="/scripts/loadtext.js"></script>
     <script type="module" src="/scripts/dialoguebox.js"></script>
     <script type="module" src="/scripts/contextui.js"></script>
-    <script type="module" src="/scripts/defaults.js"></script>
+    <!--<script type="module" src="/scripts/defaults.js"></script>-->
   </body>
 </html>

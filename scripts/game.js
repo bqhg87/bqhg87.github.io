@@ -541,6 +541,8 @@ window.updateArrowPairVisibility = function(override) {
   }
 }
 
+const dialogueContextWrapper = document.getElementById('dialogueContextWrapper');
+
 window.addEventListener('openCharMenu', () => {
   Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = 'opacity 0.5s ease';});
   charSettingsWrapper.classList.add('show');
@@ -560,6 +562,7 @@ window.addEventListener('openCharMenu', () => {
       blockDirectionUpdate = true;
       bottomLabelWrapper.classList.remove('show');
       dialogueToggle.classList.remove('show');
+      dialogueContextWrapper.classList.add('hidden');
     }, (zoomDuration))
   } else if (!zoomingInProgress) {
     // If no zooming is in progress, start the zoom-in transition
@@ -572,6 +575,7 @@ window.addEventListener('openCharMenu', () => {
       blockDirectionUpdate = true;
       bottomLabelWrapper.classList.remove('show');
       dialogueToggle.classList.remove('show');
+      dialogueContextWrapper.classList.add('hidden');
     }, (0)) // Will be better once i code the character movement better with decelertation
   }
   setTimeout(() => {
@@ -706,6 +710,7 @@ function checkNPC(npc, char, distance) {
     bottomLabel.textContent = `Talk to ${npc.name}`;
     bottomLabelWrapper.classList.add('show');
     dialogueToggle.classList.add('show');
+    dialogueContextWrapper.classList.remove('hidden');
     npcMemory = npc.name;
   } else if (!isNear && wasNear) {
     toggleNPCs[npc.name] = false;
@@ -713,6 +718,7 @@ function checkNPC(npc, char, distance) {
     npc.frameY = updateCharDirection(Math.PI / 2);
     bottomLabelWrapper.classList.remove('show');
     dialogueToggle.classList.remove('show');
+    dialogueContextWrapper.classList.add('hidden');
   }
 
   if (isNear !== wasNear) {
@@ -726,7 +732,7 @@ function refreshCheckNPC() {
   toggleNPCs[npcMemory] = false;
 }
 
-function checkNPCs() {
+window.checkNPCs = function() {
   npcs.forEach((npc) => checkNPC(npc, char, 20));
 }
 
@@ -818,6 +824,7 @@ function startDialogue(npcName) {
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.remove('show');
   dialogueToggle.classList.remove('show');
+  dialogueContextWrapper.classList.add('hidden');
   dialogueWrapper.classList.add('show');
   npc.indicator.spriteX = -1;
   char.frameY = updateCharDirection((-directionQuery(npc, char)) * Math.PI / 180);
@@ -846,6 +853,7 @@ function endDialogue(npcName) {
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');
   dialogueToggle.classList.add('show');
+  dialogueContextWrapper.classList.remove('hidden');
   dialogueWrapper.classList.remove('show');
   npc.indicator.spriteX = 2;
   blockDirectionUpdate = false;
@@ -858,7 +866,13 @@ function endDialogue(npcName) {
   window.dialogueToggled = dialogueToggled;
 }
 
-window.breakDialogue = function() {
+document.addEventListener('keydown', (event) => {
+  if (event.code === 'Escape' && dialogueToggled) {
+    breakDialogue(true);
+  } 
+})
+
+window.breakDialogue = function(zoomOut) {
   window.currentPart = 1;
   console.log(npcMemory)
   const npc = npcs.find(npc => npc.name === npcMemory);
@@ -866,10 +880,12 @@ window.breakDialogue = function() {
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');
   dialogueToggle.classList.add('show');
+  dialogueContextWrapper.classList.remove('hidden');
   dialogueWrapper.classList.remove('show');
   lowCamera = false;
   blockDirectionUpdate = false;
   lowCameraOffsetHistory = lowCameraOffset;
+  if(zoomOut) {handleZoom(4);}
   dialogueEnding = true;
   window.dialogueEnding = dialogueEnding;
   dialogueToggled = false;

@@ -38,13 +38,16 @@ function addButtonEventListeners(buttonId) {
     button.addEventListener('mouseenter', () => {
         button.isHovered = true;
         setButtonSprite(button.id, 1);
+        updateLabel(buttonId)
     })
     button.addEventListener('mouseleave', () => {
         button.isHovered = false;
         setButtonSprite(button.id, 0);
+        updateLabel(buttonId)
     })
     button.addEventListener('mousedown', () => {
         setButtonSprite(button.id, 2);
+        updateLabel(buttonId)
     })
     button.addEventListener('mouseup', () => {
         if (button.isHovered) {
@@ -52,7 +55,42 @@ function addButtonEventListeners(buttonId) {
         } else {
             setButtonSprite(button.id, 0);
         }
+        updateLabel(buttonId)
     })
+}
+
+function updateLabel(buttonId) {
+    const button = document.getElementById(buttonId);
+    const inventoryLabel = document.getElementById('inventoryLabel');
+    const settingsLabel = document.getElementById('settingsLabel');
+    const tasksLabel = document.getElementById('tasksLabel');
+    const achievementsLabel = document.getElementById('achievementsLabel');
+
+        if (button.id === "inventoryToggle") {
+            if (button.isHovered) {
+                inventoryLabel.classList.add('show')
+            } else {
+                inventoryLabel.classList.remove('show')
+            }
+        } else if (button.id === "settingsToggle") {
+            if (button.isHovered) {
+                settingsLabel.classList.add('show')
+            } else {
+                settingsLabel.classList.remove('show')
+            }
+        } else if (button.id === "tasksToggle") {
+            if (button.isHovered) {
+                tasksLabel.classList.add('show')
+            } else {
+                tasksLabel.classList.remove('show')
+            }
+        } else if (button.id === "achievementsToggle") {
+            if (button.isHovered) {
+                achievementsLabel.classList.add('show')
+            } else {
+                achievementsLabel.classList.remove('show')
+            }
+        }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

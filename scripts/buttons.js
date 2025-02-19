@@ -388,12 +388,9 @@ window.updateFootButtonsVisibility = function() {
   const charSettingsWrapper = document.getElementById('charSettingsWrapper');
   const dialogueToggle = document.getElementById('dialogueToggle');
 //used to be 383 . 591
-  if ((window.innerWidth <= 481 && (dialogueToggle.classList.contains('show')) || charSettingsWrapper.classList.contains('show')) || articleWrapper.classList.contains('show')) {
+  if ((window.innerWidth <= 481 && (dialogueToggle.classList.contains('show')) )) {
     mainGameMenu.classList.add('hidden');
-  } else {
-    mainGameMenu.classList.remove('hidden');
-  }
-  if ((window.innerWidth <= 383 && (sideMenuWrapper.classList.contains('show')) || charSettingsWrapper.classList.contains('show')) || articleWrapper.classList.contains('show')) {
+  } else if ((window.innerWidth <= 383 && (sideMenuWrapper.classList.contains('show')) || charSettingsWrapper.classList.contains('show')) || articleWrapper.classList.contains('show')) {
     mainGameMenu.classList.add('hidden');
   } else {
     mainGameMenu.classList.remove('hidden');

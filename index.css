@@ -379,10 +379,10 @@ span, li a {
   opacity: 0.97;
   z-index: 20000;
 }
-#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner, #mainGameMenuSubWrapper .corner {
+#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner, #mainGameMenuSubWrapper .corner, .mainGameMenuLabelWrapper .corner {
   background-image: url('./assets/uiCorners3.png');
 }
-#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG, #mainGameMenuSubWrapper .pxDivBG {
+#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG, #mainGameMenuSubWrapper .pxDivBG, .mainGameMenuLabelWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
 }
@@ -390,7 +390,7 @@ span, li a {
 #dialogueContextWrapper {
   position: fixed;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%);
   min-width: fit-content;
   display: flex;
   flex-direction: row-reverse;
@@ -402,11 +402,14 @@ span, li a {
   opacity: 0;
   pointer-events: none;
 }
+#dialogueContextWrapper.hidden * {
+  pointer-events: none;
+}
 
 #charSettingsWrapper {
   position: fixed;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%);
   min-width: fit-content;
   display: flex;
   flex-direction: column;
@@ -422,7 +425,7 @@ span, li a {
   opacity: 0.97;
 }
 #charSettingsWrapper * {
-  pointer-events: none;
+  pointer-events: none !important;
 }
 #charSettingsWrapper.show * {
   pointer-events: auto;
@@ -682,7 +685,7 @@ span, li a {
   image-rendering: pixelated;
   opacity: 0;
   transition: opacity 0.2s ease;
-  pointer-events: visible;
+  pointer-events: none;
   cursor: pointer;
   user-select: none; /* Modern browsers */
   -webkit-user-select: none; /* Chrome, Safari, Edge */
@@ -693,6 +696,7 @@ span, li a {
 }
 #autoEyesToggle.show {
   opacity: 1;
+  pointer-events: visible;
 }
 #eyesColorToggle {
   position: absolute;
@@ -810,15 +814,15 @@ span, li a {
   display: flex;
   flex-direction: column-reverse;
   gap: calc(var(--pixelScale) * 5);
-  transition: opacity 0.15s ease, transform 0s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease;
   transform: translateY(1px);
-  pointer-events: none;
   left: -1500%;
+  pointer-events: none;
+  cursor: default;
 }
 #mainGameMenuSubWrapper.show {
   left: auto;
   opacity: 0.97;
-  transition: transform 0.1s ease;
   transform: translateY(0);
   pointer-events: auto;
 }
@@ -908,6 +912,63 @@ span, li a {
   -ms-user-select: none; /* IE/Edge (legacy) */
   -webkit-user-drag: none; /* Prevent dragging */
   pointer-events: none;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+  padding-bottom: 16px;
+}
+
+#mainGameMenuCombiWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: calc(var(--pixelScale) * 2);
+  align-items: end;
+  pointer-events: none;
+}
+#mainGameMenuCombiWrapper * {
+  pointer-events: auto;
+}
+#mainGameMenuLabelsWrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: calc(var(--pixelScale) * 4);
+  pointer-events: none;
+}
+#mainGameMenuLabelsWrapper * {
+  pointer-events: auto;
+}
+
+.mainGameMenuLabelWrapper{
+  --pxScaleMultiplier: 1;
+  height: fit-content;
+  width: fit-content;
+  min-width: fit-content;
+  opacity: 0;
+  gap: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+  position: relative; /* Position relative to the viewport */
+  top: calc(var(--pixelScale) * 2);
+  margin-top: calc(var(--pixelScale) * -2.75);
+  pointer-events: none;
+  /*left: -1500%;*/
+}
+.mainGameMenuLabelWrapper.show {
+  left: 0;
+  opacity: 0.9;
+}
+.mainGameMenuLabel {
+  position: relative;
+  left: calc(var(--pixelScale) * 6);
+  top: calc(var(--pixelScale) * 3);
+  min-width: calc(var(--pixelScale) * (6));
+  max-width: calc(var(--pixelScale) * (182));
+  padding-right: calc(var(--pixelScale) * 12);
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  cursor: default;
   color: rgb(97, 70, 60);
   z-index: 1001;
   padding-bottom: 16px;
