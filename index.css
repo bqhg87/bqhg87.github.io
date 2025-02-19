@@ -762,7 +762,7 @@ span, li a {
 #mainGameMenuWrapper {
   display: flex;
   flex-direction: column-reverse;
-  gap: calc(var(--pixelScale) * 4);
+  gap: calc(var(--pixelScale) * 3);
   position: fixed;
   left: calc(var(--pixelScale) * 4);
   bottom: calc(var(--pixelScale) * 4);
@@ -793,15 +793,26 @@ span, li a {
   transition: opacity 0.2s ease;
   opacity: 1;
 }
+#mainGameMenuToggle.toggled {
+  /* redundant */
+  opacity: 1;
+}
 #mainGameMenuSubWrapper {
   --pxScaleMultiplier: 1;
   position: relative;
   width: calc(var(--pixelScale) * 18);
   height: calc(var(--pixelScale) * 47);
-  opacity: 1;
+  opacity: 0;
   display: flex;
   flex-direction: column-reverse;
   gap: calc(var(--pixelScale) * 5);
+  transition: opacity 0.15s ease, transform 0s ease;
+  transform: translateY(1px);
+}
+#mainGameMenuSubWrapper.show {
+  opacity: 0.97;
+  transition: transform 0.1s ease;
+  transform: translateY(0);
 }
 .mainGameMenuSubToggle {
   all: unset;

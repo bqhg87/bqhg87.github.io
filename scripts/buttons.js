@@ -45,6 +45,12 @@ window.autoClose = function(time, bypassArticleOpenCheck = false) {
       let meterWrapper = document.getElementById('meterWrapper');
       let menuWrapper = document.getElementById('sideMenuWrapper');
       let articleWrapper = document.getElementById('articleWrapper');
+
+      const mainGameMenuToggle = document.getElementById('mainGameMenuToggle');
+      if ((mainGameMenuToggle.dataset.toggled === 'true')) {
+        handleButtonClick('mainGameMenuToggle')
+      }
+
       if (meterWrapper.classList.contains('show')) {
         handleButtonClick('meterToggle');
         checkButtonHover('meterToggle');
@@ -119,12 +125,15 @@ function handleButtonClick(buttonId) {
   // If the clicked button is already toggled, untoggle it and hide all menus
   const isToggled = clickedButton.dataset.toggled === 'true';
 
+
   // Untoggle all buttons and reset sprites, hide all buttons
   buttons.forEach(button => {
     button.dataset.toggled = 'false'; // Untoggle all buttons
     setButtonSprite(button.id, 0, button.dataset.spriteY); // Reset all buttons' sprites
     if (!(buttonId === 'mainGameMenuToggle')) {
       button.classList.add('hidden'); // Hide all buttons
+    } else {
+      button.classList.remove('hidden');
     }
   });
 
@@ -199,6 +208,9 @@ function handleButtonClick(buttonId) {
       closeArticle();
     }, 200);
   }
+
+  const buttonClickedEvent = new Event('buttonClick');
+  window.dispatchEvent(buttonClickedEvent);  
 
   // If a different button (not menuToggle or meterToggle) is toggled, hide both the side menu and meter wrapper
   if (buttonId !== 'menuToggle' && buttonId !== 'meterToggle') {
@@ -349,8 +361,8 @@ window.checkButtonHover = function(buttonId) {
   }
 }
 
-// Initialize sprites for each button and add the click event listener
-function initializeButtons() {
+// initialise sprites for each button and add the click event listener
+function initialiseButtons() {
   const buttons = document.querySelectorAll('.headButton, .footButton, .mainGameMenu');
   
   buttons.forEach(button => {
@@ -427,9 +439,9 @@ function refreshAllButtons() {
   });
 }
 
-// Initialize buttons and toggle functionality when the page is loaded
+// initialise buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  initializeButtons();  // Initialize all buttons with sprites
+  initialiseButtons();  // initialise all buttons with sprites
   addToggleListeners();  // Add toggle event to each button
   handleInitialArticleLoad(); // Automatically toggle menu if an article is present in the URL
   refreshAllButtons();

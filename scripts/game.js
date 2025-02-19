@@ -1191,7 +1191,8 @@ function moving(isMoving) {
     let meterWrapper = document.getElementById('meterWrapper');
     let articleWrapper = document.getElementById('articleWrapper');
     let autoCloseInProgress = window.autoCloseInProgress;
-    if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show')) && !autoCloseInProgress) {
+    const mainGameMenuToggle = document.getElementById('mainGameMenuToggle');
+    if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show') || (mainGameMenuToggle.dataset.toggled === 'true')) && !autoCloseInProgress) {
       const autoCloseEvent = new Event('autoClose');
       window.dispatchEvent(autoCloseEvent);
     }
