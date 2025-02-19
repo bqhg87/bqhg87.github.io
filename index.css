@@ -87,7 +87,7 @@ footer {
   opacity: 1;
   align-items: center; 
   padding: calc(var(--pixelScale) * 4);
-  z-index: 10000;
+  z-index: 500;
   transition: opacity 0.2s ease;
   pointer-events: none;
 }
@@ -378,10 +378,10 @@ span, li a {
   opacity: 0.97;
   z-index: 20000;
 }
-#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner {
+#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner, #mainGameMenuSubWrapper .corner {
   background-image: url('./assets/uiCorners3.png');
 }
-#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG {
+#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG, #mainGameMenuSubWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
 }
@@ -756,6 +756,49 @@ span, li a {
   background-size: calc(var(--pixelScale) * 5 * 3 * 1.5) calc(var(--pixelScale) * 8 * 2 * 1.5);
   image-rendering: pixelated;
   cursor: pointer;
+}
+
+#mainGameMenuWrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: calc(var(--pixelScale) * 4);
+  position: fixed;
+  left: calc(var(--pixelScale) * 4);
+  bottom: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+  opacity: 0.97;
+}
+#mainGameMenuWrapper.hidden {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+#mainGameMenuWrapper.hidden * {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#mainGameMenuToggle {
+  width: calc(var(--pixelScale) * 18);  /* 18x20 sprites */
+  height: calc(var(--pixelScale) * 20); /* 18x20 sprites */
+  margin: 0;
+  border: none;
+  background: transparent;
+  background-image: url('./assets/footButtons.png');
+  background-size: calc(var(--pixelScale) * 18 * 3) calc(var(--pixelScale) * 20 * 5);
+  padding: 0;
+  cursor: pointer;
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  transition: opacity 0.2s ease;
+  opacity: 1;
+}
+#mainGameMenuSubWrapper {
+  --pxScaleMultiplier: 1;
+  position: relative;
+  width: calc(var(--pixelScale) * 18);
+  height: calc(var(--pixelScale) * 68);
+  opacity: 1;
+  display: flex;
 }
 
 .footButton {

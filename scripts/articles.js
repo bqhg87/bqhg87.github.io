@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const content = await fetchArticleContent(article);
     await crossDissolve(content);
     articleWrapper.classList.add('show');
+    
+    const mainGameMenu = document.getElementById('mainGameMenuWrapper');
+    mainGameMenu.classList.add('hidden');
 
     // Update the URL after the animation finishes
     if (updateURL) {

@@ -506,7 +506,7 @@ function animateZoom() {
 let blockMotion;
 let blockDirectionUpdate = false;
 let blockSpaceDialogueToggle = false;
-let charMenuOpen = false;
+window.charMenuOpen = false;
 
 const charSettingsWrapper = document.getElementById('charSettingsWrapper');
 const randomiseCharButton = document.getElementById('randomiseCharToggle');
@@ -575,7 +575,7 @@ window.addEventListener('openCharMenu', () => {
     }, (0)) // Will be better once i code the character movement better with decelertation
   }
   setTimeout(() => {
-    charMenuOpen = true;
+    window.charMenuOpen = true;
     Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = '';}); // Remove the transition
   }, (zoomDuration))
 });
@@ -589,7 +589,7 @@ window.addEventListener('closeCharMenu', () => {
   checkNPCs();
   blockMotion = false;
   blockSpaceDialogueToggle = false;
-  charMenuOpen = false;
+  window.charMenuOpen = false;
 
   if (zoomingInProgress && zoomTargetScale === 6) {
     // If zooming is in progress and we're zooming in, reverse the zoom direction
@@ -722,8 +722,7 @@ function checkNPC(npc, char, distance) {
 
 function refreshCheckNPC() {
   if (!npcMemory) {return}
-  const npc = npcMemory;
-  toggleNPCs[npc.name] = false;
+  toggleNPCs[npcMemory] = false;
 }
 
 function checkNPCs() {
@@ -860,7 +859,8 @@ function endDialogue(npcName) {
 
 window.breakDialogue = function() {
   window.currentPart = 1;
-  npc.name = npcMemory;
+  console.log(npcMemory)
+  const npc = npcs.find(npc => npc.name === npcMemory);
   npc.indicator.spriteX = 2;
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');

@@ -8,12 +8,13 @@ function setButtonSprite(buttonId, spriteX, spriteY) {
   const backgroundPositionY = -spriteY * buttonHeight; // Negative offset for Y-axis
 
   if (buttonId === 'randomiseCharToggle') {
-    button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
     button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 1}px`;  // Scale the sprite to fit the button
+  } else if (button.classList.contains('mainGameMenu')) {
+    button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 5}px`;
   } else {
-    button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
     button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 7}px`;  // Scale the sprite to fit the button
   }
+  button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
 }
 
 let autoCloseInProgress = false
@@ -77,15 +78,20 @@ function handleButtonClick(buttonId) {
     return
   }
 
-  const buttons = document.querySelectorAll('.headButton');
+  const buttons = document.querySelectorAll('.headButton, #mainGameMenuToggle');
   const clickedButton = document.getElementById(buttonId);
   const sideMenuWrapper = document.getElementById('sideMenuWrapper'); // Get the sideMenuWrapper element
   const meterWrapper = document.getElementById('meterWrapper'); // Get the meterWrapper element
   const articleWrapper = document.getElementById('articleWrapper'); // Get the articleWrapper element
   const dialogueContextWrapper = document.getElementById('dialogueContextWrapper');
+  const charSettingsWrapper = document.getElementById('charSettingsWrapper');
 
   const openCharMenuEvent = new Event('openCharMenu');
   const closeCharMenuEvent = new Event('closeCharMenu');
+
+  if (buttonId === "mainGameMenuToggle" && charSettingsWrapper.classList.contains('show')) {
+    return
+  }
   
   if (!(lastClickedButton === 'charToggle') && (buttonId === 'charToggle') && (prev === false)) {
     prev = true;
@@ -117,7 +123,9 @@ function handleButtonClick(buttonId) {
   buttons.forEach(button => {
     button.dataset.toggled = 'false'; // Untoggle all buttons
     setButtonSprite(button.id, 0, button.dataset.spriteY); // Reset all buttons' sprites
-    button.classList.add('hidden'); // Hide all buttons
+    if (!(buttonId === 'mainGameMenuToggle')) {
+      button.classList.add('hidden'); // Hide all buttons
+    }
   });
 
   // If the clicked button wasn't toggled, toggle it and show it
@@ -165,6 +173,8 @@ function handleButtonClick(buttonId) {
     // Close the articleWrapper if the menu is untoggled, and fade it out
     if (buttonId === 'menuToggle' && articleWrapper.classList.contains('show')) {
       articleWrapper.classList.add('fade-out'); // Add fade-out class immediately
+      const mainGameMenu = document.getElementById('mainGameMenuWrapper');
+      mainGameMenu.classList.remove('hidden');
     }
 
     const indicator = document.getElementById('meterIndicator');
@@ -184,6 +194,7 @@ function handleButtonClick(buttonId) {
       sideMenuWrapper.classList.remove('show', 'fade-out');
       meterWrapper.classList.remove('show', 'fade-out');
       articleWrapper.classList.remove('show', 'fade-out');
+      updateFootButtonsVisibility();
       updateHeadButtonsVisibility();
       closeArticle();
     }, 200);
@@ -199,6 +210,8 @@ function handleButtonClick(buttonId) {
     }
     if (articleWrapper.classList.contains('show')) {
       articleWrapper.classList.add('fade-out'); // Hide the article wrapper if it's visible
+      const mainGameMenu = document.getElementById('mainGameMenuWrapper');
+      mainGameMenu.classList.remove('hidden');
     }
     setTimeout(() => {
       sideMenuWrapper.classList.remove('show', 'fade-out');
@@ -209,6 +222,7 @@ function handleButtonClick(buttonId) {
   }
 
   updateHeadButtonsVisibility();
+  updateFootButtonsVisibility();
   lastClickedButton = buttonId;
 }
 
@@ -230,6 +244,7 @@ window.closeArticle = function() {
 
     setTimeout(() => {
       articleWrapper.classList.remove('show', 'fade-out'); // Remove show and fade-out
+      updateFootButtonsVisibility();
       updateHeadButtonsVisibility();
     }, 200);
   }
@@ -336,7 +351,7 @@ window.checkButtonHover = function(buttonId) {
 
 // Initialize sprites for each button and add the click event listener
 function initializeButtons() {
-  const buttons = document.querySelectorAll('.headButton, .footButton');
+  const buttons = document.querySelectorAll('.headButton, .footButton, .mainGameMenu');
   
   buttons.forEach(button => {
     button.dataset.toggled = 'false'; // Set initial toggled state to false
@@ -348,10 +363,22 @@ function initializeButtons() {
 
 // Event listener for the "menuToggle", "meterToggle", and other buttons to handle toggle action
 function addToggleListeners() {
-  const buttons = document.querySelectorAll('.headButton, .footButton');
+  const buttons = document.querySelectorAll('.headButton, .footButton, #mainGameMenuToggle');
   buttons.forEach(button => {
     button.addEventListener('click', () => handleButtonClick(button.id)); // Toggle state on click
   });
+}
+
+window.updateFootButtonsVisibility = function() {
+  const mainGameMenu = document.getElementById('mainGameMenuWrapper');
+  const sideMenuWrapper = document.getElementById('sideMenuWrapper');
+  const charSettingsWrapper = document.getElementById('charSettingsWrapper');
+//used to be 383 . 591
+  if ((window.innerWidth <= 383 && (sideMenuWrapper.classList.contains('show')) || charSettingsWrapper.classList.contains('show'))) {
+    mainGameMenu.classList.add('hidden');
+  } else {
+    mainGameMenu.classList.remove('hidden');
+  }
 }
 
 // Function to check if article is open and viewport width is <= 618px
@@ -386,13 +413,14 @@ function handleInitialArticleLoad() {
 
 // Listen to window resize events to update visibility
 window.addEventListener('resize', updateHeadButtonsVisibility);
+window.addEventListener('resize', updateFootButtonsVisibility);
 
 window.addEventListener('toggleCharMenu', () => {
   handleButtonClick('charToggle');
 });
 
 function refreshAllButtons() {
-  const buttons = document.querySelectorAll('.headButton, .footButton');
+  const buttons = document.querySelectorAll('.headButton, .footButton, .mainGameMenu');
   
   buttons.forEach(button => {
     checkButtonHover(button.id);
