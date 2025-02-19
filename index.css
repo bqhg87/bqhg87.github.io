@@ -768,6 +768,10 @@ span, li a {
   bottom: calc(var(--pixelScale) * 4);
   transition: opacity 0.2s ease;
   opacity: 0.97;
+  pointer-events: none;
+}
+#mainGameMenuWrapper * {
+  pointer-events: auto;
 }
 #mainGameMenuWrapper.hidden {
   opacity: 0;
@@ -786,7 +790,7 @@ span, li a {
   border: none;
   background: transparent;
   background-image: url('./assets/footButtons.png');
-  background-size: calc(var(--pixelScale) * 18 * 3) calc(var(--pixelScale) * 20 * 5);
+  background-size: calc(var(--pixelScale) * 18 * 3) calc(var(--pixelScale) * 20 * 6);
   padding: 0;
   cursor: pointer;
   image-rendering: pixelated; /* Prevent anti-aliasing */
@@ -801,18 +805,22 @@ span, li a {
   --pxScaleMultiplier: 1;
   position: relative;
   width: calc(var(--pixelScale) * 18);
-  height: calc(var(--pixelScale) * 47);
+  height: calc(var(--pixelScale) * 60);
   opacity: 0;
   display: flex;
   flex-direction: column-reverse;
   gap: calc(var(--pixelScale) * 5);
   transition: opacity 0.15s ease, transform 0s ease;
   transform: translateY(1px);
+  pointer-events: none;
+  left: -1500%;
 }
 #mainGameMenuSubWrapper.show {
+  left: auto;
   opacity: 0.97;
   transition: transform 0.1s ease;
   transform: translateY(0);
+  pointer-events: auto;
 }
 .mainGameMenuSubToggle {
   all: unset;
@@ -838,6 +846,9 @@ span, li a {
 }
 #achievementsToggle {
   background-position-y: calc(var(--pixelScale) * -65);
+}
+#settingsToggle {
+  background-position-y: calc(var(--pixelScale) * -105);
 }
 
 .footButton {
@@ -1245,6 +1256,9 @@ span, li a {
 @media (max-height: 320px) {
   #charSettingsWrapper {
     bottom: calc(var(--pixelScale) * 4); /* give enough space for iphone in landscape */
+  }
+  #mainGameMenuWrapper {
+    bottom: calc(var(--pixelScale) * 6);
   }
   #dialogueContextWrapper {
     margin-bottom: calc(var(--pixelScale) * 4);

@@ -10,7 +10,7 @@ function setButtonSprite(buttonId, spriteX, spriteY) {
   if (buttonId === 'randomiseCharToggle') {
     button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 1}px`;  // Scale the sprite to fit the button
   } else if (button.classList.contains('mainGameMenu')) {
-    button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 5}px`;
+    button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 6}px`;
   } else {
     button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 7}px`;  // Scale the sprite to fit the button
   }
@@ -384,9 +384,16 @@ function addToggleListeners() {
 window.updateFootButtonsVisibility = function() {
   const mainGameMenu = document.getElementById('mainGameMenuWrapper');
   const sideMenuWrapper = document.getElementById('sideMenuWrapper');
+  const articleWrapper = document.getElementById('articleWrapper');
   const charSettingsWrapper = document.getElementById('charSettingsWrapper');
+  const dialogueToggle = document.getElementById('dialogueToggle');
 //used to be 383 . 591
-  if ((window.innerWidth <= 383 && (sideMenuWrapper.classList.contains('show')) || charSettingsWrapper.classList.contains('show'))) {
+  if ((window.innerWidth <= 481 && (dialogueToggle.classList.contains('show')) || charSettingsWrapper.classList.contains('show')) || articleWrapper.classList.contains('show')) {
+    mainGameMenu.classList.add('hidden');
+  } else {
+    mainGameMenu.classList.remove('hidden');
+  }
+  if ((window.innerWidth <= 383 && (sideMenuWrapper.classList.contains('show')) || charSettingsWrapper.classList.contains('show')) || articleWrapper.classList.contains('show')) {
     mainGameMenu.classList.add('hidden');
   } else {
     mainGameMenu.classList.remove('hidden');

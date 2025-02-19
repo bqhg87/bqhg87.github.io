@@ -717,6 +717,7 @@ function checkNPC(npc, char, distance) {
 
   if (isNear !== wasNear) {
     window.dispatchEvent(npcUpdateEvent);
+    updateFootButtonsVisibility();
   }
 }
 
