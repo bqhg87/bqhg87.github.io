@@ -11,9 +11,9 @@ charSheet.src = './assets/char/base.png';
 const npcIndicators = new Image();
 npcIndicators.src = './assets/npcIndicators.png';
 const groundImage = new Image();
-groundImage.src = './assets/ground.png';
+groundImage.src = './assets/ground2.png';
 const collisionMap = new Image();
-collisionMap.src = './assets/collisionMap.png';
+collisionMap.src = './assets/collisionMap2.png';
 const exampleHouse = new Image();
 exampleHouse.src = './assets/buildings/hsst1a.png';
 const shadow = new Image();
@@ -27,7 +27,7 @@ const objectsToDraw = [
   {
     image: charSheet,
     x: -24,
-    y: -24,
+    y: -104,
     frameX: 0,
     frameY: 0,
     frameWidth: 32,
@@ -37,20 +37,20 @@ const objectsToDraw = [
   },
   {
     image: groundImage,
-    x: -1144,
-    y: -1064,
+    x: -1024,
+    y: -1024,
     zIndex: -1000
   },
   {
     image: collisionMap,
-    x: -1144,
-    y: -1064,
+    x: -1024,
+    y: -1024,
     zIndex: -900
   },
   {
     image: exampleHouse,
-    x: -106,
-    y: -56,
+    x: -206,
+    y: -156,
     frameWidth: 38,
     frameHeight: 38,
     feet: 1,
@@ -228,7 +228,7 @@ function createNPC(npcData) {
 window.npcs = [
   createNPC({
     name: 'Tibbert',
-    x: 10,
+    x: 100,
     y: -10,
     hair: 'buzzcut',
     clothingTop: 'skull',
@@ -242,8 +242,8 @@ window.npcs = [
   }),
   createNPC({
     name: 'Astronomer',
-    x: -102.5,
-    y: -30,
+    x: -202.5,
+    y: -130,
     hair: 'bob',
     clothingTop: 'basic',
     clothingBottom: 'skirt',
