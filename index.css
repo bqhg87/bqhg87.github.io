@@ -871,7 +871,7 @@ span, li a {
   pointer-events: none; /* Disable interaction */
 }
 .footButton.show {
-  opacity: 0.9;
+  opacity: 0.97;
   pointer-events: visible; /* Disable interaction */
 }
 .footButton.small {

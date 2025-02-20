@@ -14,8 +14,14 @@ const groundImage = new Image();
 groundImage.src = './assets/ground2.png';
 const collisionMap = new Image();
 collisionMap.src = './assets/collisionMap2.png';
+const overlap = new Image();
+overlap.src = './assets/overlap.png';
+const pearTree = new Image();
+pearTree.src = './assets/pearTree1.png';
 const exampleHouse = new Image();
 exampleHouse.src = './assets/buildings/hsst1a.png';
+const mdar1 = new Image();
+mdar1.src = './assets/buildings/mdar1.png';
 const shadow = new Image();
 shadow.src = './assets/char/shadow.png';
 const blush = new Image();
@@ -26,8 +32,8 @@ eyes.src = './assets/char/eyes.png';
 const objectsToDraw = [
   {
     image: charSheet,
-    x: -24,
-    y: -104,
+    x: 40,
+    y: -94,
     frameX: 0,
     frameY: 0,
     frameWidth: 32,
@@ -54,6 +60,30 @@ const objectsToDraw = [
     frameWidth: 38,
     frameHeight: 38,
     feet: 1,
+    zIndex: 1
+  },
+  {
+    image: mdar1,
+    x: -43,
+    y: 226,
+    frameWidth: 85,
+    frameHeight: 94,
+    feet: 4,
+    zIndex: 1
+  },
+  {
+    image: overlap,
+    x: -1024,
+    y: -1024,
+    zIndex: 9009
+  },
+  {
+    image: pearTree,
+    x: 339,
+    y: -12,
+    frameWidth: 24,
+    frameHeight: 31,
+    feet: 0,
     zIndex: 1
   }
 ];
@@ -93,7 +123,7 @@ let charAppearance = {
   topType: 3,
   clothingBottom: 'trousers',
   bottomType: 8,
-  shadow: true,
+  shadow: false,
 };
 
 // Load from cache or set defaults
