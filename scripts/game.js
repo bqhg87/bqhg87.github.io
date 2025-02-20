@@ -391,6 +391,7 @@ function drawNPC(npc) {
 function draw() {
   c.clearRect(0, 0, canvas.width, canvas.height);
   centerCamera();
+  updateFootButtonsVisibility();
 
   const sortedObjects = [...objectsToDraw, ...npcs].sort((a, b) => {
     const charFeet = char.y + char.frameHeight - char.feet;
