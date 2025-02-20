@@ -423,9 +423,10 @@ span, li a {
 }
 #charSettingsWrapper.show {
   opacity: 0.97;
+  pointer-events: auto;
 }
 #charSettingsWrapper * {
-  pointer-events: none !important;
+  pointer-events: none;
 }
 #charSettingsWrapper.show * {
   pointer-events: auto;
