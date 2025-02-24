@@ -1,5 +1,5 @@
 // General function to set the sprite for the closeMenuButton
-function setCloseMenuButtonSprite(buttonId, spriteX, spriteY) {
+window.setCloseMenuButtonSprite = function(buttonId, spriteX, spriteY) {
     const button = document.getElementById(buttonId);
     const buttonWidth = button.offsetWidth;
     const buttonHeight = button.offsetHeight;
@@ -37,16 +37,24 @@ function addCloseMenuButtonEventListeners(buttonId) {
 function initializeCloseMenuButton() {
     const articleButton = document.getElementById('closeArticle');
     const meterButton = document.getElementById('closeMeter');
+    const inventoryButton = document.getElementById('closeInventory');
+    const tasksButton = document.getElementById('closeTasks');
 
     // Set initial state to regular (spriteX = 0, spriteY = 0)
     setCloseMenuButtonSprite('closeArticle', 0, 0); // Regular state
     setCloseMenuButtonSprite('closeMeter', 0, 0); // Regular state
+    setCloseMenuButtonSprite('closeInventory', 0, 0); // Regular state
+    setCloseMenuButtonSprite('closeTasks', 0, 0); // Regular state
     
     // Add event listeners for the hover/active states
     addCloseMenuButtonEventListeners('closeArticle');
     articleButton.addEventListener('click', () => {closeArticle();});
     addCloseMenuButtonEventListeners('closeMeter');
     meterButton.addEventListener('click', () => {closeMeter();});
+    addCloseMenuButtonEventListeners('closeInventory');
+    inventoryButton.addEventListener('click', () => {closeInventory();});
+    addCloseMenuButtonEventListeners('closeTasks');
+    tasksButton.addEventListener('click', () => {closeTasks();});
 }
 
 // Initialize the closeMenuButton on page load

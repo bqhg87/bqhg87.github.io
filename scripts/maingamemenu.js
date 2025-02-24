@@ -57,6 +57,97 @@ function addButtonEventListeners(buttonId) {
         }
         updateLabel(buttonId)
     })
+
+    if (buttonId === "inventoryToggle") {
+        button.addEventListener('click', () => {
+            openInventory();
+            handleButtonClick("mainGameMenuToggle");
+            const inventoryLabel = document.getElementById('inventoryLabel')
+            inventoryLabel.classList.remove('show');
+            setCloseMenuButtonSprite("closeInventory", 0, 0);
+            document.body.style.cursor = "default";
+        })
+    }
+    if (buttonId === "tasksToggle") {
+        button.addEventListener('click', () => {
+            openTasks();
+            handleButtonClick("mainGameMenuToggle");
+            const tasksLabel = document.getElementById('tasksLabel')
+            tasksLabel.classList.remove('show');
+            setCloseMenuButtonSprite("closeTasks", 0, 0);
+            document.body.style.cursor = "default";
+        })
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'I' || event.key === 'i') {
+        // logic to only register it if the game is open
+        if (window.isInventoryOpen) {
+            closeInventory();
+        } else {
+            openInventory();
+        }
+    }
+    if (event.key === 'T' || event.key === 't') {
+        // logic to only register it if the game is open
+        if (window.isTasksOpen) {
+            closeTasks();
+        } else {
+            openTasks();
+        }
+    }
+});
+
+window.isInventoryOpen;
+
+window.openInventory = function() {
+    window.isInventoryOpen = true;
+    const inventoryWrapper = document.getElementById('inventoryWrapper');
+
+    inventoryWrapper.classList.add('show');
+    setTimeout(() => {
+        inventoryWrapper.classList.add('fade-in');
+    }, 10)
+}
+
+window.closeInventory = function() {
+    window.isInventoryOpen = false;
+    const inventoryWrapper = document.getElementById('inventoryWrapper');
+
+    inventoryWrapper.classList.remove('fade-in');
+    setTimeout(() => {
+        inventoryWrapper.classList.remove('show');
+    }, 200);
+}
+
+
+window.isTasksOpen;
+
+window.openTasks = function() {
+    window.isTasksOpen = true;
+    const tasksWrapper = document.getElementById('tasksWrapper');
+    const closeTaskButton = document.getElementById('closeTasks');
+
+    closeTaskButton.classList.remove('inactive')
+
+    tasksWrapper.classList.add('show');
+    setTimeout(() => {
+        tasksWrapper.classList.add('fade-in');
+        setCloseMenuButtonSprite('closeTasks', 0, 0);
+    }, 10)
+}
+
+window.closeTasks = function() {
+    window.isTasksOpen = false;
+    const tasksWrapper = document.getElementById('tasksWrapper');
+    const closeTaskButton = document.getElementById('closeTasks');
+
+    tasksWrapper.classList.remove('fade-in');
+    closeTaskButton.classList.add('inactive')
+    setTimeout(() => {
+        tasksWrapper.classList.remove('show');
+    }, 200);
 }
 
 function updateLabel(buttonId) {

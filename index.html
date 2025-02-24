@@ -75,11 +75,58 @@
         <p id="meterLabel">Delusion Meter (%)</p>
       </aside>
       <aside class="pxDivWrapper" id="topContextWrapper">
+        <div id="topContextImage"></div>
         <p id="topContextLabel"></p>
       </aside>
       <aside class="pxDivWrapper" id="articleWrapper">
         <button class="closeMenuButton" id="closeArticle" aria-label="Close Article"></button>
         <div class="article"></div>
+      </aside>
+      <aside class="pxDivWrapper" id="tasksWrapper">
+        <div id="tasksHeadContainer">
+          <p id="tasksTitle">Tasks:</p>
+          <button class="closeMenuButton" id="closeTasks" aria-label="Close Task List"></button>
+        </div>
+        <div id="taskItemsContainer">
+          <div id="taskItemsWrapper">
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+            <div class="pxDivWrapper taskItem">
+              <div class="taskIcon"></div>
+              <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
+            </div>
+          </div>
+        </div>
       </aside>
       <aside class="pxDivWrapper" id="dialogueWrapper">
         <p id="dialogue"></p>
@@ -127,6 +174,66 @@
           </div>
         </div>
       </div>
+      <aside id="inventoryWrapper">
+        <div id="inventoryHeadContainer">
+          <div class="pxDivWrapper" id="inventoryOpenLabel">
+            <p id="inventoryOpenLabelText">Inventory:</p>
+          </div>
+          <button class="closeMenuButton" id="closeInventory" aria-label="Close Inventory"></button>
+        </div>
+        <div id="inventoryScrollContainer">
+          <div id="inventoryScrollWrapper">
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="0">
+              <button class="inventoryItem" id="inventoryItem0" aria-label="Reveal Slot 1 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="1">
+              <button class="inventoryItem" id="inventoryItem1" aria-label="Reveal Slot 2 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="2">
+              <button class="inventoryItem" id="inventoryItem2" aria-label="Reveal Slot 3 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="3">
+              <button class="inventoryItem" id="inventoryItem3" aria-label="Reveal Slot 4 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="4">
+              <button class="inventoryItem" id="inventoryItem4" aria-label="Reveal Slot 5 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="5">
+              <button class="inventoryItem" id="inventoryItem5" aria-label="Reveal Slot 6 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="6">
+              <button class="inventoryItem" id="inventoryItem6" aria-label="Reveal Slot 7 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+            <div class="pxDivWrapper inventoryItemWrapper" data-slot="7">
+              <button class="inventoryItem" id="inventoryItem6" aria-label="Reveal Slot 8 Item Description"></button>
+              <div class="pxDivWrapper inventoryQuantityWrapper">
+                <p class="inventoryQuantityText"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
       <aside id="dialogueContextWrapper">
         <button class="footButton" id="dialogueToggle" aria-label="Start Dialogue" data-sprite-y="3"></button>
         <div class="pxDivWrapper" id="bottomLabelWrapper">
@@ -248,7 +355,8 @@
     <script type="module" src="/scripts/articles.js"></script>
     <script type="module" src="/scripts/loadtext.js"></script>
     <script type="module" src="/scripts/dialoguebox.js"></script>
+    <script type="module" src="/scripts/inventory.js"></script>
     <script type="module" src="/scripts/contextui.js"></script>
-    <!--<script type="module" src="/scripts/defaults.js"></script>-->
+    <script type="module" src="/scripts/defaults.js"></script>
   </body>
 </html>

@@ -111,13 +111,16 @@ window.loadDialogue = function(story, chapter, bla) {
   
 
   if (unlockCharNext) {
-    broadcastTopContextMessage(`${unlockText} ${unlockCharNext}`, 4000);
+    console.log('hi')
+    broadcastTopContextMessage(`${unlockText} ${unlockCharNext}`, 4000, 'task');
     updateStories(unlockCharNext, unlockStory);
     unlockCharNext = null;
   }
 
   if (topContextNext) {
-    broadcastTopContextMessage(topContextNext, 4000);
+    //its a task!
+    
+    broadcastTopContextMessage(topContextNext, 4000, 'task');
     topContextNext = null;
   }
 

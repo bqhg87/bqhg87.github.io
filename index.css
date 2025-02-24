@@ -17,6 +17,11 @@ body {
   overscroll-behavior: none;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 .logo {
   position: relative;
   top: calc(var(--pixelScale) * 0);
@@ -123,7 +128,7 @@ h3 {
   font-size: 24.1px;
 }
 p {
-  font-size: calc(24.1px * 0.5); 
+  font-size: 12px; /*calc(24.1px * 0.5)*/
 }
 span {
   font-size: calc(24.1px * 0.5);
@@ -209,6 +214,7 @@ span, li a {
   border: none;
   background: transparent;
   background-image: url('./assets/headButtons.png');
+  background-size: calc(var(--pixelScale) * 18 * 3) calc(var(--pixelScale) * 20 * 7);
   padding: 0;
   image-rendering: pixelated; /* Prevent anti-aliasing */
   transition: opacity 0.2s ease;
@@ -284,22 +290,22 @@ span, li a {
   scrollbar-color: rgb(228, 208, 171) transparent; /* Red scrollbar, no background */
 }
 /* Webkit-based browsers */
-.sideMenu::-webkit-scrollbar, .article::-webkit-scrollbar, #charSettingsOptionsWrapper::-webkit-scrollbar {
+.sideMenu::-webkit-scrollbar, .article::-webkit-scrollbar, #charSettingsOptionsWrapper::-webkit-scrollbar, #inventoryScrollContainer::-webkit-scrollbar, #taskItemsContainer::-webkit-scrollbar {
   width: calc(var(--pixelScale) * 2); /* Width of the scrollbar */
   height: calc(var(--pixelScale) * 2); /* Width of the scrollbar */
 }
-.sideMenu::-webkit-scrollbar-track, .article::-webkit-scrollbar-track, #charSettingsOptionsWrapper::-webkit-scrollbar-track {
+.sideMenu::-webkit-scrollbar-track, .article::-webkit-scrollbar-track, #charSettingsOptionsWrapper::-webkit-scrollbar-track,  #inventoryScrollContainer::-webkit-scrollabar-track, #taskItemsContainer::-webkit-scrollbar-track {
   background: transparent; /* Removes scrollbar background */
   margin: var(--pixelScale); /* Adds space around the scrollbar */
 }
-.sideMenu::-webkit-scrollbar-thumb, .article::-webkit-scrollbar-thumb, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb {
+.sideMenu::-webkit-scrollbar-thumb, .article::-webkit-scrollbar-thumb, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb,  #inventoryScrollContainer::-webkit-scrollbar-thumb, #taskItemsContainer::-webkit-scrollbar-thumb {
   background-color: rgb(176, 143, 119); /* Default scrollbar color */
   border: calc(var(--pixelScale) / 2) solid transparent; /* Space around the thumb */
 }
-.sideMenu::-webkit-scrollbar-thumb:hover, .article::-webkit-scrollbar-thumb:hover, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb:hover {
+.sideMenu::-webkit-scrollbar-thumb:hover, .article::-webkit-scrollbar-thumb:hover, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb:hover,  #inventoryScrollContainer::-webkit-scrollbar-thumb:hover, #taskItemsContainer::-webkit-scrollbar-thumb:hover {
   background-color: rgb(163, 123, 94); /* Hover state */
 }
-.sideMenu::-webkit-scrollbar-thumb:active, .article::-webkit-scrollbar-thumb:hover, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb:hover {
+.sideMenu::-webkit-scrollbar-thumb:active, .article::-webkit-scrollbar-thumb:active, #charSettingsOptionsWrapper::-webkit-scrollbar-thumb:active,  #inventoryScrollContainer::-webkit-scrollbar-thumb:active, #taskItemsContainer::-webkit-scrollbar-thumb:active {
   background-color: rgb(137, 100, 95); /* Active state */
 }
 
@@ -362,6 +368,141 @@ span, li a {
 }
 
 
+#tasksWrapper {
+  display: none;
+  flex-direction: column;
+  --pxScaleMultiplier: 1.5;
+  position: fixed;
+  width: calc(var(--pixelScale) * 202);
+  height: calc(var(--pixelScale) * 230);
+  left: calc(50% + 1px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+#tasksWrapper.fade-in {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+#tasksWrapper.show {
+  display: flex;
+}
+
+#tasksHeadContainer {
+  margin-top: calc(var(--pixelScale) * 5);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: fit-content;
+  width: 100%;
+  padding-bottom: calc(var(--pixelScale) * 3.5);
+  z-index: 20;
+  cursor: default;
+}
+#tasksTitle {
+  position: relative;
+  text-align: center;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  cursor: default;
+  z-index: 1001;
+  padding-top: calc(var(--pixelScale) * 3);
+  padding-left: calc(var(--pixelScale) * 10);
+}
+#closeTasks {
+  position: relative;
+  right: 15px;
+  margin-top: calc(var(--pixelScale) * 2.5);
+  opacity: 1;
+  cursor: pointer;
+  top: calc(var(--pixelScale) * 2);
+  margin-right: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+}
+#closeTasks.inactive {
+  pointer-events: none;
+  display: none;
+  cursor: default;
+}
+
+#taskItemsContainer {
+  position: relative;
+  width: calc(100% - var(--pixelScale) * 8);
+  height: calc(100% - var(--pixelScale) * 28);
+  z-index: 100;
+  opacity: 1;
+  padding-top: calc(var(--pixelScale) * 1);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+#taskItemsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pixelScale) * 2);
+  position: relative;
+  width: calc(100% - var(--pixelScale) * 12);
+  height: fit-content;
+  left: calc(50% + var(--pixelScale) * 3);
+  transform: translateX(-50%);
+  z-index: 20;
+  padding-bottom: calc(var(--pixelScale) * 2);
+}
+.taskItem {
+  --pxScaleMultiplier: 1;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: calc(var(--pixelScale) * 4);
+  padding: calc(var(--pixelScale) * 5);
+  height: fit-content;
+  width: calc(100% - calc(var(--pixelScale) * 10));
+  z-index: 20;
+}
+.taskLabel {
+  position: relative;
+  text-align: left;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  cursor: default;
+  z-index: 1001;
+}
+.taskIcon {
+  position: relative;
+  z-index: 10;
+  top: 1px;
+  padding-left: calc(var(--pixelScale) * 2);
+  min-width: calc(var(--pixelScale) * 14);  /* 18x20 sprites */
+  height: calc(var(--pixelScale) * 20); /* 18x20 sprites */
+  margin: 0;
+  border: none;
+  background: transparent;
+  background-image: url('./assets/footButtons.png');
+  background-size: calc(var(--pixelScale) * 18 * 3) calc(var(--pixelScale) * 20 * 6);
+  background-position-x: -5px;
+  background-position-y: calc(var(--pixelScale) * -40);
+  padding: 0;
+  cursor: default;
+  pointer-events: none;
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  transition: opacity 0.2s ease;
+  opacity: 1;
+}
+
+
+
 #meterWrapper {
   --pxScaleMultiplier: 1;
   height: calc(var(--pixelScale) * (20 + 6 + 4));
@@ -379,13 +520,42 @@ span, li a {
   opacity: 0.97;
   z-index: 20000;
 }
-#meterWrapper .corner, #articleWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner, #mainGameMenuSubWrapper .corner, .mainGameMenuLabelWrapper .corner {
+#meterWrapper .corner, .taskItem .corner, #articleWrapper .corner, #tasksWrapper .corner, .inventoryItemWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner, #mainGameMenuSubWrapper .corner, .mainGameMenuLabelWrapper .corner {
   background-image: url('./assets/uiCorners3.png');
 }
-#meterWrapper .pxDivBG, #articleWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG, #mainGameMenuSubWrapper .pxDivBG, .mainGameMenuLabelWrapper .pxDivBG {
+#inventoryOpenLabel .corner, .inventoryQuantityWrapper .corner {
+  background-image: url('./assets/uiCorners3b.png');
+}
+ /*{
+  background-image: url('./assets/uiCorners4.png');
+}*/
+#meterWrapper .pxDivBG, .taskItem .pxDivBG, #articleWrapper .pxDivBG, #tasksWrapper .pxDivBG, .inventoryItemWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG, #mainGameMenuSubWrapper .pxDivBG, .mainGameMenuLabelWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
 }
+#inventoryOpenLabel .pxDivBG, .inventoryQuantityWrapper .pxDivBG {
+  --c1: rgb(228, 208, 171);
+  --c2: rgb(241, 229, 198);
+  margin: calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier));
+  box-shadow: 
+    calc(var(--pixelScale) * -2 * var(--pxScaleMultiplier)) 0 0 var(--c1), /* Left */
+    calc(var(--pixelScale) * 2 * var(--pxScaleMultiplier)) 0 0 var(--c1), /* Right */
+    0 calc(var(--pixelScale) * -2 * var(--pxScaleMultiplier)) 0 var(--c1), /* Top */
+    0 calc(var(--pixelScale) * 2 * var(--pxScaleMultiplier)) 0 var(--c1), /* Bottom */
+    calc(var(--pixelScale) * -3 * var(--pxScaleMultiplier)) 0 0 var(--c2), /* Left */
+    calc(var(--pixelScale) * 3 * var(--pxScaleMultiplier)) 0 0 var(--c2), /* Right */
+    0 calc(var(--pixelScale) * -3 * var(--pxScaleMultiplier)) 0 var(--c2), /* Top */
+    0 calc(var(--pixelScale) * 3 * var(--pxScaleMultiplier)) 0 var(--c2), /* Bottom */
+    calc(var(--pixelScale) * -4 * var(--pxScaleMultiplier)) 0 0 var(--c3), /* Left */
+    calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier)) 0 0 var(--c3), /* Right */
+    0 calc(var(--pixelScale) * -4 * var(--pxScaleMultiplier)) 0 var(--c3), /* Top */
+    0 calc(var(--pixelScale) * 4 * var(--pxScaleMultiplier)) 0 var(--c3); /* Bottom */
+}
+ /*{
+  --c1: rgb(182, 137, 98);
+  --c2: rgb(196, 154, 108);
+  --c3: rgb(144, 98, 93);
+}*/
 
 #dialogueContextWrapper {
   position: fixed;
@@ -475,6 +645,162 @@ span, li a {
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;
+}
+
+#inventoryWrapper {
+  display: none;
+  position: relative;
+  left: 50%;
+  bottom: calc(var(--pixelScale) * 4);
+  transform: translateX(calc(-50% - 10px));
+  opacity: 0;
+  height: calc(var(--pixelScale) * 55);
+  width: fit-content;
+  max-width: 100vw;
+  padding-bottom: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+}
+#inventoryWrapper.fade-in {
+  opacity: 0.97;
+  transition: opacity 0.2s ease;
+}
+#inventoryWrapper.show {
+  display: block;
+}
+
+#inventoryHeadContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#inventoryScrollWrapper {
+  width: calc(var(--pixelScale) * 239.5);
+  display: flex;
+  flex-direction: row;
+  gap: calc(var(--pixelScale) * 2);
+}
+
+#inventoryScrollContainer {
+  overflow-y: hidden;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  max-width: 100vw;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.inventoryItemWrapper {
+  display: flex;
+  position: relative;
+  --pxScaleMultiplier: 1;
+  height: calc(var(--pixelScale) * 28);
+  max-height: calc(var(--pixelScale) * 28);
+  width: calc(var(--pixelScale) * 28);
+  min-width: calc(var(--pixelScale) * 28);
+  margin-bottom: calc(var(--pixelScale) * 2);
+}
+
+#inventoryOpenLabel {
+  position: relative;
+  opacity: 0.97;
+  --pxScaleMultiplier: 1;
+  padding: calc(var(--pixelScale) * 1) calc(var(--pixelScale) * 4) calc(var(--pixelScale) * 1) calc(var(--pixelScale) * 4);
+  height: fit-content;
+  width: fit-content;
+  cursor: default;
+  margin-left: calc(var(--pixelScale) * 0);
+  margin-bottom: calc(var(--pixelScale) * 2);
+}
+
+#closeInventory {
+  position: relative;
+  right: 15px;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
+  top: calc(var(--pixelScale) * 2);
+  margin-right: calc(var(--pixelScale) * 4);
+  transition: opacity 0.2s ease;
+}
+
+#inventoryOpenLabelText {
+  position: relative;
+  text-align: center;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  cursor: default;
+  z-index: 1001;
+  padding-bottom: calc(var(--pixelScale) * 1);
+}
+
+.inventoryItem {
+  all: unset;
+  position: relative;
+  background: transparent;
+  border: none;
+  background-image: url(./assets/items.png);
+  background-size: calc(var(--pixelScale) * 16 * 3) calc(var(--pixelScale) * 16 * 8);
+  background-position-x: calc(var(--pixelScale) * 16 * -0);
+  image-rendering: pixelated;
+  padding: 0;
+  height: calc(var(--pixelScale) * 16);
+  width: calc(var(--pixelScale) * 16);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.inventoryItem.show {
+  opacity: 1;
+}
+
+.inventoryQuantityWrapper {
+  position: relative;
+  --pxScaleMultiplier: 1;
+  padding: calc(var(--pixelScale) * 1);
+  height: calc(var(--pixelScale) * 10);
+  width: calc(var(--pixelScale) * 10);
+  cursor: default;
+  left: calc(var(--pixelScale) * 1.5);
+  top: calc(var(--pixelScale) * 17.5);
+  margin-left: calc(var(--pixelScale) * 0);
+  margin-bottom: calc(var(--pixelScale) * 2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.inventoryQuantityWrapper.show {
+  opacity: 1;
+}
+
+.inventoryQuantityText {
+  position: relative;
+  text-align: center;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  color: rgb(97, 70, 60);
+  cursor: default;
+  z-index: 1001;
+  padding-left: calc(var(--pixelScale) * 1);
+  top: calc(var(--pixelScale) * -0.3);
+  left: calc(var(--pixelScale) * 0.1);
 }
 
 .charSettingsWrapper {
@@ -1006,6 +1332,7 @@ span, li a {
   -ms-user-select: none; /* IE/Edge (legacy) */
   -webkit-user-drag: none; /* Prevent dragging */
   pointer-events: none;
+  font-size: 12px !important;
   color: rgb(97, 70, 60);
   z-index: 1001;
   padding-bottom: 30px;
@@ -1070,6 +1397,9 @@ span, li a {
 
 #topContextWrapper {
   --pxScaleMultiplier: 1;
+  display: flex;
+  gap: calc(var(--pixelScale) * 4);
+  flex-direction: row;
   height: fit-content;
   width: fit-content;
   max-width: calc(var(--pixelScale) * 222);
@@ -1088,6 +1418,7 @@ span, li a {
 #topContextLabel {
   position: relative;
   padding: calc(var(--pixelScale) * 6);
+  width: calc(var(--pixelScale) * 222);
   text-align: center;
   user-select: none; /* Modern browsers */
   -webkit-user-select: none; /* Chrome, Safari, Edge */
@@ -1098,6 +1429,34 @@ span, li a {
   cursor: default;
   color: rgb(97, 70, 60);
   z-index: 1001;
+}
+#topContextLabel.withImage {
+  text-align: left;
+}
+
+#topContextImage {
+  display: none;
+  position: relative;
+  background: transparent;
+  border: none;
+  background-image: url(./assets/items.png);
+  background-size: calc(var(--pixelScale) * 16 * 3) calc(var(--pixelScale) * 16 * 8);
+  background-position-y: calc(var(--pixelScale) * 16 * -1);
+  background-position-x: calc(var(--pixelScale) * 16 * -0);
+  image-rendering: pixelated;
+  padding: 0;
+  min-height: calc(var(--pixelScale) * 16);
+  min-width: calc(var(--pixelScale) * 16);
+  left: calc(var(--pixelScale) * 6);
+  align-self: center;
+  z-index: 1;
+  pointer-events: none;
+  cursor: default;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+#topContextImage.show {
+  display: block;
 }
 
 #meterIndicator {
@@ -1246,6 +1605,11 @@ span, li a {
     grid-area: 1 / 3 / 2 / 4;
   }
 }
+@media (max-width: 524px) {
+  #tasksWrapper {
+    width: calc(100% - 19px);
+  }
+}
 @media (max-width: 500px) {
   #dialogue {
     max-width: calc(100vw - var(--pixelScale) * (12 + 8));
@@ -1307,10 +1671,16 @@ span, li a {
   #dialogue {
     min-width: calc(320px - var(--pixelScale) * (12 + 8));
   }
+  #tasksWrapper {
+    left: 10px;
+    transform: translate(0, -50%);
+    width: 301px;
+    min-width: 301px;
+  }
   footer {
-    left: 0;
+    left: 50%;
     width: 320px;
-    transform: translateX(0);
+    transform: translateX(-50%);
   }
 }
 
@@ -1319,10 +1689,18 @@ span, li a {
   #charSettingsWrapper {
     bottom: calc(var(--pixelScale) * 4); /* give enough space for iphone in landscape */
   }
+  #inventoryWrapper {
+    bottom: calc(var(--pixelScale) * 4); /* give enough space for iphone in landscape */
+  }
   #mainGameMenuWrapper {
     bottom: calc(var(--pixelScale) * 6);
   }
   #dialogueContextWrapper {
     margin-bottom: calc(var(--pixelScale) * 4);
+  }
+}
+@media (max-height: 720px) {
+  #tasksWrapper {
+    height: calc(100% - 145px);
   }
 }

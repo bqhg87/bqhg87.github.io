@@ -51,6 +51,9 @@ window.autoClose = function(time, bypassArticleOpenCheck = false) {
         handleButtonClick('mainGameMenuToggle')
       }
 
+      closeTasks();
+      closeInventory();
+
       if (meterWrapper.classList.contains('show')) {
         handleButtonClick('meterToggle');
         checkButtonHover('meterToggle');
@@ -76,7 +79,7 @@ let lastClickedButton = null;
 let prev = false;
 
 // Function to handle button click, toggle visibility, and manage state
-function handleButtonClick(buttonId) {
+window.handleButtonClick = function(buttonId) {
   buttonClickedDuringTimeout = true;
 
   if (buttonId === "randomiseCharToggle") {
@@ -120,6 +123,10 @@ function handleButtonClick(buttonId) {
   if (buttonId === 'dialogueToggle') {
     toggleDialogueOpen();
     return
+  }
+
+  if (!(buttonId === "mainGameMenuToggle" || buttonId === "meterToggle")) {
+    closeInventory();
   }
 
   // If the clicked button is already toggled, untoggle it and hide all menus
@@ -445,6 +452,17 @@ function refreshAllButtons() {
     checkButtonHover(button.id);
   });
 }
+
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'C' || event.key === 'c') {
+    handleButtonClick("charToggle")
+  }
+  if (event.key === 'M' || event.key === 'm') {
+    handleButtonClick("meterToggle")
+  }
+});
+
 
 // initialise buttons and toggle functionality when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {

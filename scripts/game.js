@@ -11,9 +11,9 @@ charSheet.src = './assets/char/base.png';
 const npcIndicators = new Image();
 npcIndicators.src = './assets/npcIndicators.png';
 const groundImage = new Image();
-groundImage.src = './assets/ground2.png';
+groundImage.src = './assets/ground.png';
 const collisionMap = new Image();
-collisionMap.src = './assets/collisionMap2.png';
+collisionMap.src = './assets/collisions.png';
 const overlap = new Image();
 overlap.src = './assets/overlap.png';
 const pearTree = new Image();
@@ -28,6 +28,14 @@ const blush = new Image();
 blush.src = './assets/char/blush.png';
 const eyes = new Image();
 eyes.src = './assets/char/eyes.png';
+const cowbrown = new Image();
+cowbrown.src = './assets/animated/cowbrown.png';
+const cowlight = new Image();
+cowlight.src = './assets/animated/cowlight.png';
+const cowpink = new Image();
+cowpink.src = './assets/animated/cowpink.png';
+const cowpurple = new Image();
+cowpurple.src = './assets/animated/cowpurple.png';
 
 const objectsToDraw = [
   {
@@ -85,10 +93,70 @@ const objectsToDraw = [
     frameHeight: 31,
     feet: 0,
     zIndex: 1
-  }
+  },
+  {
+    image: cowbrown,
+    x: -286,
+    y: 590,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 400,
+    animationOffset: 2,
+    animationFrames: 8,
+    feet: 0,
+    zIndex: 1
+  },
+  {
+    image: cowlight,
+    x: -186,
+    y: 622,
+    frameX: 0,
+    frameY: 4,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 600,
+    animationOffset: 0,
+    animationFrames: 4,
+    feet: 0,
+    zIndex: 1
+  },
+  {
+    image: cowpink,
+    x: -35,
+    y: 538,
+    frameX: 0,
+    frameY: 5,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 200,
+    animationOffset: 1,
+    animationFrames: 20,
+    feet: 0,
+    zIndex: 1
+  },
+  {
+    image: cowpurple,
+    x: -148,
+    y: 508,
+    frameX: 0,
+    frameY: 6,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 200,
+    animationOffset: 5,
+    animationFrames: 4,
+    feet: 0,
+    zIndex: 1
+  },
 ];
 const char = objectsToDraw[0]; // this is the character
 const collisionMapOffset = objectsToDraw[2];
+const cowbrownNPC = objectsToDraw[7];
+const cowlightNPC = objectsToDraw[8];
+const cowpinkNPC = objectsToDraw[9];
+const cowpurpleNPC = objectsToDraw[10];
 
 // Consolidated image loading
 const images = [charSheet, npcIndicators, groundImage, collisionMap, exampleHouse, shadow, blush, eyes];
@@ -447,17 +515,26 @@ function draw() {
     } else if (obj.image === collisionMap) {
       return
     } else if (obj.image) {
-      const { image, x, y, opacity = 1, scale = 1 } = obj;
-      const scaledX = (x * scale * globalScale) + translationX;
-      const scaledY = (y * scale * globalScale) + translationY;
+      const { image, x, y, opacity = 1, scale = 1, frameX = 0, frameY = 0, frameWidth = image.width, frameHeight = image.height } = obj;
+    
+    const scaledX = (x * scale * globalScale) + translationX;
+    const scaledY = (y * scale * globalScale) + translationY;
 
-      c.globalAlpha = opacity;
-      
-      const scaledImgWidth = image.width * scale * globalScale;
-      const scaledImgHeight = image.height * scale * globalScale;
-      c.drawImage(image, scaledX, scaledY, scaledImgWidth, scaledImgHeight);
+    c.globalAlpha = opacity;
 
-      c.globalAlpha = 1;
+    const scaledImgWidth = frameWidth * scale * globalScale;
+    const scaledImgHeight = frameHeight * scale * globalScale;
+
+    // Draw the correct sprite frame if frameX and frameY exist
+    c.drawImage(
+      image,
+      frameX * frameWidth, frameY * frameHeight,  // Source position in sprite sheet
+      frameWidth, frameHeight,                     // Source dimensions
+      scaledX, scaledY,                           // Destination position
+      scaledImgWidth, scaledImgHeight             // Destination dimensions
+    );
+
+    c.globalAlpha = 1;
     }
   });
 
@@ -579,6 +656,8 @@ window.addEventListener('openCharMenu', () => {
   charSettingsWrapper.classList.add('show');
   randomiseCharButton.classList.add('show');
   updateArrowPairVisibility(true);
+  closeTasks();
+  closeInventory();
   lowCamera = false;
   blockSpaceDialogueToggle = true;
   updateLowCamera();
@@ -1213,9 +1292,10 @@ function updateCharMovement() {
     }
   }
 
-  // Constrain position to units of 0.25
   char.x = round(char.x, 100);
   char.y = round(char.y, 100);
+
+  localStorage.setItem("charMemory", JSON.stringify(char));
 
   checkNPCs();
 }
@@ -1240,7 +1320,7 @@ function moving(isMoving) {
     let articleWrapper = document.getElementById('articleWrapper');
     let autoCloseInProgress = window.autoCloseInProgress;
     const mainGameMenuToggle = document.getElementById('mainGameMenuToggle');
-    if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show') || (mainGameMenuToggle.dataset.toggled === 'true')) && !autoCloseInProgress) {
+    if ((meterWrapper.classList.contains('show') || articleWrapper.classList.contains('show') || (window.isInventoryOpen) || (window.isTasksOpen)  || (mainGameMenuToggle.dataset.toggled === 'true')) && !autoCloseInProgress) {
       const autoCloseEvent = new Event('autoClose');
       window.dispatchEvent(autoCloseEvent);
     }
@@ -1398,9 +1478,45 @@ function updateCharAngle() {
   }
 }
 
+function initialiseCharPosition() {
+  let storedChar = localStorage.getItem("charMemory");
+  storedChar = storedChar ? JSON.parse(storedChar) : [...char];
+  char.x = storedChar.x;
+  char.y = storedChar.y;
+}
+
+////////////
+// RANDOM //
+////////////
+
+function animateCows() {
+  const cows = [cowbrownNPC, cowlightNPC, cowpinkNPC, cowpurpleNPC];
+
+  cows.forEach(cow => {
+    // Initialize lastUpdate if it's undefined
+    if (cow.lastUpdate === undefined) {
+      cow.lastUpdate = Date.now();
+      cow.frameX = cow.animationOffset; // Start at the specified animationOffset
+    }
+
+    const now = Date.now();
+    const elapsedTime = now - cow.lastUpdate;
+
+    if (elapsedTime >= cow.animationSpeed) {
+      // Move to the next frame, looping back if necessary
+      cow.frameX = (cow.frameX + 1) % cow.animationFrames;
+      cow.lastUpdate = now; // Update the time of the last frame change
+    }
+  });
+
+  requestAnimationFrame(animateCows);
+}
+
 window.onload = function () {
+  initialiseCharPosition();
   (function updateCharMovementLoop() {
     updateCharMovement();
+    animateCows();
     requestAnimationFrame(updateCharMovementLoop);
     draw();
   })();
