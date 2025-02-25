@@ -43,3 +43,37 @@ window.broadcastTopContextMessage = function(message, time, image) {
         resetTimeout -= 1;
     }, time)
 }
+
+
+const bottomContextWrapper = document.getElementById('bottomContextWrapper');
+const bottomContextImage = document.getElementById('bottomContextImage');
+let bottomResetTimeout = 0;
+
+window.broadcastBottomContextMessage = function(image, time) {
+    bottomResetTimeout += 1;
+
+    if (image) {
+        bottomContextImage.classList.add('show');
+
+        const foundItem = window.defaultInventory.find(obj => obj.item === image);
+
+        if (foundItem) { // if it is an item in the inventory
+            bottomContextImage.style.backgroundImage = "url('./assets/items.png')";
+            bottomContextImage.style.backgroundSize = "calc(var(--pixelScale) * 16 * 3) calc(var(--pixelScale) * 16 * 8)";
+            bottomContextImage.style.width = "calc(var(--pixelScale) * 16)";
+            bottomContextImage.style.height = "calc(var(--pixelScale) * 16)";
+            bottomContextImage.style.backgroundPositionY = `${(-foundItem.spriteY * 16 * 2.5)}px`;
+        }
+    } else {
+        bottomContextImage.classList.remove('show');
+    }
+
+    bottomContextWrapper.classList.add('show');
+
+    setTimeout(() => {
+        if (bottomResetTimeout <= 1) {
+            bottomContextWrapper.classList.remove('show');
+        }
+        bottomResetTimeout -= 1;
+    }, time);
+};

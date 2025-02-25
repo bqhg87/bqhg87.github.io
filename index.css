@@ -571,7 +571,7 @@ span, li a {
   opacity: 0.97;
   z-index: 20000;
 }
-#meterWrapper .corner, .taskItem .corner, #articleWrapper .corner, #tasksWrapper .corner, .inventoryItemWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner, #mainGameMenuSubWrapper .corner, .mainGameMenuLabelWrapper .corner {
+#meterWrapper .corner, #bottomContextWrapper .corner, .taskItem .corner, #articleWrapper .corner, #tasksWrapper .corner, .inventoryItemWrapper .corner,  #dialogueWrapper .corner, #bottomLabelWrapper .corner, #charSettingsTitleWrapper .corner, .pxSelector .corner, #topContextWrapper .corner, #mainGameMenuSubWrapper .corner, .mainGameMenuLabelWrapper .corner {
   background-image: url('./assets/uiCorners3.png');
 }
 #inventoryOpenLabel .corner, .inventoryQuantityWrapper .corner {
@@ -580,7 +580,7 @@ span, li a {
  /*{
   background-image: url('./assets/uiCorners4.png');
 }*/
-#meterWrapper .pxDivBG, .taskItem .pxDivBG, #articleWrapper .pxDivBG, #tasksWrapper .pxDivBG, .inventoryItemWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG, #mainGameMenuSubWrapper .pxDivBG, .mainGameMenuLabelWrapper .pxDivBG {
+#meterWrapper .pxDivBG, #bottomContextWrapper .pxDivBG, .taskItem .pxDivBG, #articleWrapper .pxDivBG, #tasksWrapper .pxDivBG, .inventoryItemWrapper .pxDivBG, #dialogueWrapper .pxDivBG, #bottomLabelWrapper .pxDivBG, #charSettingsTitleWrapper .pxDivBG, .pxSelector .pxDivBG, #topContextWrapper .pxDivBG, #mainGameMenuSubWrapper .pxDivBG, .mainGameMenuLabelWrapper .pxDivBG {
   --c1: rgb(228, 208, 171);
   --c2: rgb(241, 229, 198);
 }
@@ -1532,6 +1532,72 @@ span, li a {
 #topContextImage.show {
   display: block;
 }
+
+
+#bottomContextWrapper {
+  --pxScaleMultiplier: 1;
+  display: flex;
+  gap: calc(var(--pixelScale) * 4);
+  flex-direction: row;
+  height: fit-content;
+  width: fit-content;
+  max-width: calc(var(--pixelScale) * 120);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: translateX(-50%);
+  position: fixed; /* Position relative to the viewport */
+  bottom: calc(var(--pixelScale) * 4);
+  left: 50%;
+  cursor: default;
+  pointer-events: none;
+}
+#bottomContextWrapper.show {
+  opacity: 0.9;
+}
+#bottomContextLabel {
+  position: relative;
+  padding: calc(var(--pixelScale) * 6);
+  width: calc(var(--pixelScale) * 222);
+  text-align: center;
+  user-select: none; /* Modern browsers */
+  -webkit-user-select: none; /* Chrome, Safari, Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge (legacy) */
+  -webkit-user-drag: none; /* Prevent dragging */
+  pointer-events: none;
+  cursor: default;
+  color: rgb(97, 70, 60);
+  z-index: 1001;
+}
+#bottomContextLabel.withImage {
+  text-align: left;
+}
+
+#bottomContextImage {
+  display: none;
+  position: relative;
+  background: transparent;
+  border: none;
+  background-image: url(./assets/items.png);
+  background-size: calc(var(--pixelScale) * 16 * 3) calc(var(--pixelScale) * 16 * 8);
+  background-position-y: calc(var(--pixelScale) * 16 * -1);
+  background-position-x: calc(var(--pixelScale) * 16 * -0);
+  image-rendering: pixelated;
+  padding: 0;
+  min-height: calc(var(--pixelScale) * 16);
+  min-width: calc(var(--pixelScale) * 16);
+  left: calc(var(--pixelScale) * 6);
+  align-self: center;
+  z-index: 1;
+  pointer-events: none;
+  cursor: default;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+#bottomContextImage.show {
+  display: block;
+}
+
 
 #meterIndicator {
   height: 15px;

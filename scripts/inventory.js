@@ -137,5 +137,21 @@ function generateInventoryItemWrappers(numItems) {
     requestAnimationFrame(updateInventory);  // Call updateInventory after items are rendered
 }
 
+
+window.addInventoryItems = function(itemId, quantity, increment = true) {
+    console.log(inventory)
+    const item = inventory.find(i => i.item === itemId);
+    if (item) {
+        if (increment) {
+            item.quantity += quantity;
+        } else {
+            item.quantity = quantity;
+        }
+    } else {
+        console.log('oh noo')
+    }
+    updateInventory();
+}
+
 // Initialize inventory on page load
 document.addEventListener("DOMContentLoaded", initialiseInventory);

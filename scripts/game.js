@@ -47,6 +47,9 @@ const cowpurple = new Image();
 cowpurple.src = './assets/animated/cowpurple.png';
 const boat = new Image();
 boat.src = './assets/animated/boat.png';
+const itemsSheet = new Image();
+itemsSheet.src = './assets/items.png';
+
 
 const objectsToDraw = [
   {
@@ -176,7 +179,7 @@ const objectsToDraw = [
     zIndex: 1
   },
 ];
-const char = objectsToDraw[0]; // this is the character
+window.char = objectsToDraw[0]; // this is the character
 const collisionMapOffset = objectsToDraw[2];
 const cowbrownNPC = objectsToDraw[7];
 const cowlightNPC = objectsToDraw[8];
@@ -293,6 +296,67 @@ window.hair = {
 hair.bob.src = './assets/char/bob.png';
 hair.braids.src = './assets/char/braids.png';
 hair.buzzcut.src = './assets/char/buzzcut.png';
+
+
+///////////
+// ITEMS //
+///////////
+
+const items = []; // Array to store ground items
+images.push(itemsSheet);
+
+function createItem(itemData) {
+  const item = {
+    x: itemData.x,
+    y: itemData.y,
+    spriteX: itemData.spriteX || 0,
+    spriteY: itemData.spriteY || 0,
+    visible: itemData.visible !== undefined ? itemData.visible : true,
+    scale: itemData.scale || 1,
+    zIndex: itemData.zIndex || 1,
+    frameWidth: 16,
+    frameHeight: 16,
+    feet: itemData.feet || 0, // Add feet property
+  };
+  items.push(item);
+}
+
+function updateItemProximity() {
+  items.forEach(item => {
+    const charCenterX = char.x + char.frameWidth / 2;
+    const charCenterY = char.y + char.frameHeight / 2;
+    const itemCenterX = item.x + item.frameWidth / 2;
+    const itemCenterY = item.y + item.frameHeight / 2;
+
+    const distance = Math.sqrt(Math.pow(charCenterX - itemCenterX, 2) + Math.pow(charCenterY - itemCenterY, 2));
+    item.spriteX = distance <= 10 ? 1 : 0;
+  });
+}
+
+// Function to handle item pickup
+function handleItemPickup() {
+  items.forEach(item => {
+    const charCenterX = char.x + char.frameWidth / 2;
+    const charCenterY = char.y + char.frameHeight / 2;
+    const itemCenterX = item.x + item.frameWidth / 2;
+    const itemCenterY = item.y + item.frameHeight / 2;
+
+    const distance = Math.sqrt(Math.pow(charCenterX - itemCenterX, 2) + Math.pow(charCenterY - itemCenterY, 2));
+
+    if (distance <= 10) {
+      console.log(item.spriteY);
+    }
+  });
+}
+
+// Event listener for spacebar press
+window.addEventListener('keydown', event => {
+  if (event.code === 'Space') {
+    handleItemPickup();
+  }
+});
+
+createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
 
 
 //////////////////
@@ -548,6 +612,25 @@ function drawNPC(npc) {
   }
 }
 
+function drawItem(item) {
+  if (!item.visible) return;
+
+  const scaledX = (item.x * item.scale * globalScale) + translationX;
+  const scaledY = (item.y * item.scale * globalScale) + translationY;
+  const scaledWidth = item.frameWidth * item.scale * globalScale;
+  const scaledHeight = item.frameHeight * item.scale * globalScale;
+
+  const spriteX = item.spriteX * item.frameWidth;
+  const spriteY = item.spriteY * item.frameHeight;
+
+  c.drawImage(
+    itemsSheet,
+    spriteX, spriteY, item.frameWidth, item.frameHeight,
+    scaledX, scaledY, scaledWidth, scaledHeight
+  );
+}
+
+
 let cowsVisible = false; 
 let boatVisible = false; 
 
@@ -555,9 +638,10 @@ let boatVisible = false;
 function draw() {
   c.clearRect(0, 0, canvas.width, canvas.height);
   centerCamera();
-  updateFootButtonsVisibility();
+  updateItemProximity();
 
-  const sortedObjects = [...objectsToDraw, ...npcs].sort((a, b) => {
+  // Include items in the sortedObjects array
+  const sortedObjects = [...objectsToDraw, ...npcs, ...items].sort((a, b) => {
     const charFeet = char.y + char.frameHeight - char.feet;
     const aFeet = (a.y || 0) + (a.frameHeight || 0) - (a.feet || 0);
     const bFeet = (b.y || 0) + (b.frameHeight || 0) - (b.feet || 0);
@@ -574,47 +658,52 @@ function draw() {
   cowsVisible = false;
   boatVisible = false;
 
+  // Draw the sorted objects (including items).
   sortedObjects.forEach(obj => {
     if (obj === char) {
       drawCharacterWithClothing();
-      return
-    } if (obj.name) { // If it's an NPC, draw it with clothing/hair
+      return;
+    }
+    if (obj.name) {
       drawNPC(obj);
-      return
-    } else if (obj.image === collisionMap) {
-      return
-    } else if (obj.image) {
+      return;
+    }
+    if (obj.image === collisionMap) {
+      return;
+    }
+    if (obj.image) {
       const { image, x, y, opacity = 1, scale = 1, frameX = 0, frameY = 0, frameWidth = image.width, frameHeight = image.height } = obj;
-    
-    const scaledX = (x * scale * globalScale) + translationX;
-    const scaledY = (y * scale * globalScale) + translationY;
 
-    if ([cowbrown, cowlight, cowpink, cowpurple].includes(image) && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
-      cowsVisible = true;
-    }
-    if (image === boat && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
-      boatVisible = true;
-    }
+      const scaledX = (x * scale * globalScale) + translationX;
+      const scaledY = (y * scale * globalScale) + translationY;
 
-    c.globalAlpha = opacity;
+      if ([cowbrown, cowlight, cowpink, cowpurple].includes(image) && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
+        cowsVisible = true;
+      }
+      if (image === boat && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
+        boatVisible = true;
+      }
 
-    const scaledImgWidth = frameWidth * scale * globalScale;
-    const scaledImgHeight = frameHeight * scale * globalScale;
+      c.globalAlpha = opacity;
 
-    // Draw the correct sprite frame if frameX and frameY exist
-    c.drawImage(
-      image,
-      frameX * frameWidth, frameY * frameHeight,  // Source position in sprite sheet
-      frameWidth, frameHeight,                     // Source dimensions
-      scaledX, scaledY,                           // Destination position
-      scaledImgWidth, scaledImgHeight             // Destination dimensions
-    );
+      const scaledImgWidth = frameWidth * scale * globalScale;
+      const scaledImgHeight = frameHeight * scale * globalScale;
 
-    c.globalAlpha = 1;
+      c.drawImage(
+        image,
+        frameX * frameWidth, frameY * frameHeight,
+        frameWidth, frameHeight,
+        scaledX, scaledY,
+        scaledImgWidth, scaledImgHeight
+      );
+
+      c.globalAlpha = 1;
+    } else if (items.includes(obj)) {
+      drawItem(obj);
     }
   });
 
-  // Draw NPC indicators
+  // Draw NPC indicators.
   npcs.forEach(npc => {
     const indicatorData = npc.indicator;
 
