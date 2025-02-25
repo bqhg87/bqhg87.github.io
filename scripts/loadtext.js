@@ -15,6 +15,8 @@ let meterPushNext;
 let completeStoryNext;
 let currentNPC;
 let currentStory;
+window.currentLearnMoreArticle = null;
+window.learnMoreVisible = false;
 
 let textPart;
 
@@ -86,6 +88,16 @@ function loadDialoguePart(story, gamemode, chapter, npc, part) {
         } else {
           completeStoryNext = null
         }
+
+        if (dialogues[0].learnMore) {
+          window.currentLearnMoreArticle = dialogues[0].learnMore;
+          window.learnMoreVisible = true;
+          updateFootButtonsVisibility();
+        } else {
+          window.learnMoreVisible = false;
+          window.currentLearnMoreArticle = null;
+          updateFootButtonsVisibility();
+        }
       }
 
       const dialogueLoadedEvent = new Event('dialogueLoaded');
@@ -145,7 +157,7 @@ window.loadDialogue = function(story, chapter, bla) {
   currentPart = window.currentPart;
   const gamemode = window.gamemode;
 
-  autoClose(2000);
+  //autoClose(2000);
   window.bypassMovementCheck = true;
   loadDialoguePart(story, gamemode, chapter, bla, currentPart);
   

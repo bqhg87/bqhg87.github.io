@@ -1233,6 +1233,29 @@ span, li a {
   background-position-y: calc(var(--pixelScale) * -105);
 }
 
+#learnMoreToggle {
+  position: fixed;
+  width: calc(var(--pixelScale) * 18);  /* 18x20 sprites */
+  height: calc(var(--pixelScale) * 20); /* 18x20 sprites */
+  margin: 0;
+  border: none;
+  background: transparent;
+  background-image: url('./assets/headButtons.png');
+  background-size: calc(var(--pixelScale) * 18 * 3) calc(var(--pixelScale) * 20 * 7);
+  background-position-y: calc(var(--pixelScale) * 20 * -5);
+  padding: 0;
+  cursor: default;
+  image-rendering: pixelated; /* Prevent anti-aliasing */
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+#learnMoreToggle.show {
+  opacity: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 .footButton {
   width: calc(var(--pixelScale) * 18);  /* 18x20 sprites */
   height: calc(var(--pixelScale) * 20); /* 18x20 sprites */

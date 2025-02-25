@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
   // Load an article
-  const loadArticle = async (article, updateURL = true) => {
+  window.loadArticle = async(article, updateURL=true) => {
     const content = await fetchArticleContent(article);
     await crossDissolve(content);
     articleWrapper.classList.add('show');
@@ -50,7 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
       hideSidebar();
     }
 
+    refreshCloseMenuButtons();
     updateHeadButtonsVisibility();
+    updateFootButtonsVisibility();
     checkArticleOverflow();
   };
 

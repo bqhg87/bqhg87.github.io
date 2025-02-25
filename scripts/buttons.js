@@ -41,7 +41,8 @@ window.autoClose = function(time, bypassArticleOpenCheck = false) {
       window.autoCloseInProgress = autoCloseInProgress;
       return;
     } else {
-      //console.log('Menus closed due to movement');
+      //if (window.learnMoreVisible) {return}
+      // closed due to movement');
       let meterWrapper = document.getElementById('meterWrapper');
       let menuWrapper = document.getElementById('sideMenuWrapper');
       let articleWrapper = document.getElementById('articleWrapper');
@@ -95,6 +96,16 @@ window.handleButtonClick = function(buttonId, preventCloseMainGameMenus = false)
 
   if (buttonId === "randomiseCharToggle") {
     randomiseCharAppearance();
+    return
+  }
+
+  if (buttonId === "learnMoreToggle") {
+    const menuToggle = document.getElementById('menuToggle');
+    menuToggle.dataset.toggled = 'false';
+    handleButtonClick('menuToggle');
+    refreshAllButtons();
+    //console.log(window.currentLearnMoreArticle)
+    loadArticle(window.currentLearnMoreArticle);
     return
   }
 
@@ -411,16 +422,32 @@ window.updateFootButtonsVisibility = function() {
   const articleWrapper = document.getElementById('articleWrapper');
   const charSettingsWrapper = document.getElementById('charSettingsWrapper');
   const dialogueToggle = document.getElementById('dialogueToggle');
-  const dialogueContextWrapper = document.getElementById('dialogueContextWrapper');
+  const learnMoreToggle = document.getElementById('learnMoreToggle');
 //used to be 383 . 591
   if (!dialogueToggle.classList.contains('hidden')) {
     if ((window.innerWidth <= 481 && (dialogueToggle.classList.contains('show')) )) {
       mainGameMenu.classList.add('hidden');
     } else if ((window.innerWidth <= 383 && (sideMenuWrapper.classList.contains('show')) || charSettingsWrapper.classList.contains('show')) || articleWrapper.classList.contains('show')) {
       mainGameMenu.classList.add('hidden');
+      learnMoreToggle.classList.remove('show');
     } else {
-      mainGameMenu.classList.remove('hidden');
+      if (window.learnMoreVisible === true) {
+        learnMoreToggle.classList.add('show');
+      }
+      if (window.dialogueToggled) {
+        mainGameMenu.classList.add('hidden');
+      } else if (!window.dialogueToggled) {
+        mainGameMenu.classList.remove('hidden');
+      }
     }
+  }
+  if (window.learnMoreVisible === false) {
+    learnMoreToggle.classList.remove('show');
+  }
+  if (articleWrapper.classList.contains('show')) {
+    document.getElementById('dialogueContextWrapper').classList.add('hidden')
+  } else {
+    document.getElementById('dialogueContextWrapper').classList.remove('hidden')
   }
 }
 

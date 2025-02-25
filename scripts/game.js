@@ -1013,6 +1013,7 @@ function startDialogue(npcName) {
   dialogueToggle.classList.remove('show');
   dialogueContextWrapper.classList.add('hidden');
   dialogueWrapper.classList.add('show');
+  document.getElementById('mainGameMenuWrapper').classList.add('hidden');
   npc.indicator.spriteY = -1;
   char.frameY = updateCharDirection((-directionQuery(npc, char)) * Math.PI / 180);
   //loadDialogue("concept", 1, npcName);
@@ -1040,8 +1041,8 @@ function endDialogue(npcName) {
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');
   dialogueToggle.classList.add('show');
-  dialogueContextWrapper.classList.remove('hidden');
   dialogueWrapper.classList.remove('show');
+  document.getElementById('mainGameMenuWrapper').classList.remove('hidden');
   npc.indicator.spriteY = 1;
   blockDirectionUpdate = false;
   lowCameraOffsetHistory = lowCameraOffset;

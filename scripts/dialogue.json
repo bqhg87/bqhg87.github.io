@@ -60,7 +60,8 @@
         "npc": "Tibbert",
         "isNpcSpeaking": true,
         "finalPart": false,
-        "text": "We're all doomed! We're all doomed!"
+        "text": "We're all doomed! We're all doomed!",
+        "learnMore": "about"
       },
       {
         "story": "blackHole",
@@ -90,7 +91,7 @@
         "npc": "Tibbert",
         "isNpcSpeaking": true,
         "finalPart": true,
-        "unlockText": "This doesn't sound right. You should pay a visit to the ",
+        "unlockText": "That doesn't sound right. You should pay a visit to the ",
         "unlockStory": "blackHole",
         "unlock": "Astronomer",
         "text": "That's what they want you to think. They hide behind big words and fancy experiments, but the truth is slipping through their fingers. When the sky cracks open and everything starts falling apart, don't say I didn't warn you!!",
