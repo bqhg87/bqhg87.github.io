@@ -4,11 +4,15 @@ const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
 window.delMeter = Number(localStorage.getItem("delMeter")) || 100;
 
-if (!localStorage.getItem("gamemode")) {
-  localStorage.setItem("gamemode", "inform");
-} else {
+function refreshGamemode() {
+  if (localStorage.getItem("gamemode") === null) {
+    localStorage.setItem("gamemode", "inform");
+  }
   window.gamemode = localStorage.getItem("gamemode");
 }
+
+// Ensure this runs after the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", refreshGamemode);
 
 // Use a single image for all character parts, and draw different sections.
 const charSheet = new Image();
