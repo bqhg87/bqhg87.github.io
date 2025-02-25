@@ -6,7 +6,7 @@
   --c3: rgb(163, 123, 94);
 }
 
-#loading {
+loader {
   position: fixed;
   top: 0;
   left: 0;
@@ -743,7 +743,7 @@ span, li a {
   height: calc(var(--pixelScale) * 28);
   max-height: calc(var(--pixelScale) * 28);
   width: calc(var(--pixelScale) * 28);
-  min-width: calc(var(--pixelScale) * 28);
+  min-width: calc(var(--pixelScale) * 28) !important;
   margin-bottom: calc(var(--pixelScale) * 2);
 }
 

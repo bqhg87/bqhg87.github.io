@@ -53,11 +53,43 @@ function addButtonEventListeners(button, spriteY, item) {
 
 let itemWrappers = [];
 
+// Function to dynamically generate inventory item wrappers
+function generateInventoryItemWrappers(numItems) {
+    const inventoryScrollWrapper = document.querySelector("#inventoryScrollWrapper");
+    inventoryScrollWrapper.innerHTML = '';  // Clear the existing items
+    
+    for (let i = 0; i < numItems; i++) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('pxDivWrapper', 'inventoryItemWrapper');
+        wrapper.dataset.slot = i;
+
+        const button = document.createElement('button');
+        button.classList.add('inventoryItem');
+        button.id = `inventoryItem${i}`;
+        button.setAttribute('aria-label', `Reveal Slot ${i + 1} Item Description`);
+
+        const quantityWrapper = document.createElement('div');
+        quantityWrapper.classList.add('pxDivWrapper', 'inventoryQuantityWrapper');
+
+        const quantityText = document.createElement('p');
+        quantityText.classList.add('inventoryQuantityText');
+        quantityWrapper.appendChild(quantityText);
+
+        wrapper.appendChild(button);
+        wrapper.appendChild(quantityWrapper);
+        inventoryScrollWrapper.appendChild(wrapper);
+    }
+}
+
 // Initialize inventory UI
 function initialiseInventory() {
+    // Generate the inventory item wrappers dynamically
+    generateInventoryItemWrappers(Math.max(8, inventory.length));  // Ensure at least 8 slots
+
     itemWrappers = Array.from(document.querySelectorAll(".inventoryItemWrapper"));
     updateInventory();
 }
+
 
 window.updateInventory = function() {
     saveInventory();
@@ -66,6 +98,13 @@ window.updateInventory = function() {
     const validItems = inventory
         .filter(item => item.quantity > 0)
         .sort((a, b) => a.index - b.index);
+
+    // Adjust the number of inventory item wrappers if necessary
+    const requiredSlots = Math.max(8, validItems.length);  // Ensure at least 8 slots
+    if (itemWrappers.length < requiredSlots) {
+        generateInventoryItemWrappers(requiredSlots);  // Add more slots if needed
+        itemWrappers = Array.from(document.querySelectorAll(".inventoryItemWrapper"));
+    }
 
     itemWrappers.forEach((wrapper, index) => {
         const button = wrapper.querySelector(".inventoryItem");

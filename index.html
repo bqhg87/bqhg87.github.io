@@ -13,7 +13,7 @@
     <meta property="og:locale" content="en_GB">
     <meta property="og:title" content="ECHO GROVE - A game about disinformation in physics">
     <meta property="og:description" content="Welcome to the town! I've heard some rumours, lots of suspicious things are happening. I'm starting to get worried...">
-    <meta property="og:image" content="https://bqhg87.github.io/assets/preview.png">
+    <meta property="og:image" loading="lazy" content="https://bqhg87.github.io/assets/preview.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="ECHO GROVE - A game about disinformation in physics">
@@ -21,16 +21,16 @@
     <meta name="twitter:title" content="ECHO GROVE - A game about disinformation in physics">
     <meta name="twitter:description" content="Welcome to the town! I've heard some rumours, lots of suspicious things are happening. I'm starting to get worried...">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://bqhg87.github.io/assets/preview.png">
+    <meta name="twitter:image" loading="lazy" content="https://bqhg87.github.io/assets/preview.png">
     <link rel="stylesheet" href="index.css">
-    <link rel="icon" href="https://bqhg87.github.io/assets/favicon.png" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="https://bqhg87.github.io/assets/touchicon.png">
+    <link rel="icon" loading="lazy" href="https://bqhg87.github.io/assets/favicon.png" type="image/svg+xml">
+    <link rel="apple-touch-icon" loading="lazy" href="https://bqhg87.github.io/assets/touchicon.png">
     <title>ECHO GROVE</title>
   </head>
   <body>
-    <div id="loading">
+    <loader>
       <p id="loadingText">Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
-    </div>
+    </loader>
     <header loading="lazy">
       <img class="logo" src="./assets/logo.png"></img>
       <div class="headButtons">
@@ -349,23 +349,23 @@
         </div>
       </aside>
     </footer>
-    <script type="module" src="/scripts/game.js"></script>
-    <script type="module" src="/scripts/tasks.js"></script>
-    <script type="module" src="/scripts/buttons.js"></script>
-    <script type="module" src="scripts/closemenubutton.js"></script>
-    <script type="module" src="scripts/maingamemenu.js"></script>
-    <script type="module" src="scripts/charsettings.js"></script>
-    <script type="module" src="/scripts/pxdiv.js"></script>
-    <script type="module" src="/scripts/delmeter.js"></script>
-    <script type="module" src="/scripts/articles.js"></script>
-    <script type="module" src="/scripts/loadtext.js"></script>
-    <script type="module" src="/scripts/dialoguebox.js"></script>
-    <script type="module" src="/scripts/inventory.js"></script>
-    <script type="module" src="/scripts/contextui.js"></script>
-    <script type="module" src="/scripts/defaults.js"></script>
+    <script type="module" loading="lazy" src="/scripts/game.js"></script>
+    <script type="module" loading="lazy" src="/scripts/tasks.js"></script>
+    <script type="module" loading="lazy" src="/scripts/buttons.js"></script>
+    <script type="module" loading="lazy" src="scripts/closemenubutton.js"></script>
+    <script type="module" loading="lazy" src="scripts/maingamemenu.js"></script>
+    <script type="module" loading="lazy" src="scripts/charsettings.js"></script>
+    <script type="module" loading="lazy" src="/scripts/pxdiv.js"></script>
+    <script type="module" loading="lazy" src="/scripts/delmeter.js"></script>
+    <script type="module" loading="lazy" src="/scripts/articles.js"></script>
+    <script type="module" loading="lazy" src="/scripts/loadtext.js"></script>
+    <script type="module" loading="lazy" src="/scripts/dialoguebox.js"></script>
+    <script type="module" loading="lazy" src="/scripts/inventory.js"></script>
+    <script type="module" loading="lazy" src="/scripts/contextui.js"></script>
+    <script type="module" loading="lazy" src="/scripts/defaults.js"></script>
     <script>
       window.addEventListener("load", function () {
-          document.getElementById("loading").style.display = "none";
+          document.querySelector("loader").style.display = "none";
           document.querySelector("main").style.display = "grid";
           document.querySelector("header").style.display = "flex";
           document.querySelector("footer").style.display = "flex";
