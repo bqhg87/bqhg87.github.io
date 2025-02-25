@@ -1480,9 +1480,9 @@ function updateCharAngle() {
 
 function initialiseCharPosition() {
   let storedChar = localStorage.getItem("charMemory");
-  storedChar = storedChar ? JSON.parse(storedChar) : [...char];
-  char.x = storedChar.x;
-  char.y = storedChar.y;
+  storedChar = storedChar ? JSON.parse(storedChar) : {};
+  char.x = storedChar.x ?? char.x;
+  char.y = storedChar.y ?? char.y;
 }
 
 ////////////

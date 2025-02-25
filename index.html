@@ -28,7 +28,10 @@
     <title>ECHO GROVE</title>
   </head>
   <body>
-    <header>
+    <div id="loading">
+      <p id="loadingText">Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
+    </div>
+    <header loading="lazy">
       <img class="logo" src="./assets/logo.png"></img>
       <div class="headButtons">
         <button class="headButton" id="menuToggle" aria-label="Main Menu" data-sprite-y="0"></button>
@@ -44,7 +47,7 @@
         </button>
       </div>
     </header>
-    <main>
+    <main loading="lazy">
       <aside id="sideMenuWrapper">
         <div class="sideMenu">
           <ul>
@@ -113,16 +116,17 @@
               <div class="taskIcon"></div>
               <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
             </div>
+            <p class="taskLabel list">- Completed: -</p>
             <div class="pxDivWrapper taskItem">
-              <div class="taskIcon"></div>
+              <div class="taskIcon complete"></div>
               <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
             </div>
             <div class="pxDivWrapper taskItem">
-              <div class="taskIcon"></div>
+              <div class="taskIcon complete"></div>
               <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
             </div>
             <div class="pxDivWrapper taskItem">
-              <div class="taskIcon"></div>
+              <div class="taskIcon complete"></div>
               <p class="taskLabel">This is an example of a task that you may encounter in the game</p>
             </div>
           </div>
@@ -148,7 +152,7 @@
       </aside>
       <canvas id="game"></canvas>
     </main>
-    <footer>
+    <footer loading="lazy">
       <div id="mainGameMenuWrapper">
         <button class="mainGameMenu" id="mainGameMenuToggle" aria-label="Main Game Menu" data-sprite-y="0"></button>
         <div id="mainGameMenuCombiWrapper">
@@ -346,6 +350,7 @@
       </aside>
     </footer>
     <script type="module" src="/scripts/game.js"></script>
+    <script type="module" src="/scripts/tasks.js"></script>
     <script type="module" src="/scripts/buttons.js"></script>
     <script type="module" src="scripts/closemenubutton.js"></script>
     <script type="module" src="scripts/maingamemenu.js"></script>
@@ -358,5 +363,16 @@
     <script type="module" src="/scripts/inventory.js"></script>
     <script type="module" src="/scripts/contextui.js"></script>
     <script type="module" src="/scripts/defaults.js"></script>
+    <script>
+      window.addEventListener("load", function () {
+          document.getElementById("loading").style.display = "none";
+          document.querySelector("main").style.display = "grid";
+          document.querySelector("header").style.display = "flex";
+          document.querySelector("footer").style.display = "flex";
+          refreshAllButtons();
+          refreshVisibleCharMenus();
+          refreshAllCharButtons();
+      });
+    </script>
   </body>
 </html>

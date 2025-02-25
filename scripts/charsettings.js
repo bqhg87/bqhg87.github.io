@@ -285,7 +285,7 @@ function addCharMenuButtonEventListeners(buttonId) {
     }
 }
 
-function refreshVisibleCharMenus() {
+window.refreshVisibleCharMenus = function() {
     const bodySettings = document.getElementById('charBodySettings');
             const wardrobeSettings = document.getElementById('charWardrobeSettings');
             if (currentCharMenuTitle === "Body Settings") {
@@ -334,6 +334,20 @@ function initializeCharMenuButtons() {
         button.dataset.spriteY = spriteY; // Store spriteY value in data attribute
         setCharMenuButtonSprite(button.id, 0); // Set default spriteX to 0
         addCharMenuButtonEventListeners(button.id);
+    });
+}
+
+window.refreshAllCharButtons = function() {
+    setCharMenuButtonSprite('charSettingsTitleLeft', 0);
+    setCharMenuButtonSprite('charSettingsTitleRight', 0);
+    setCharMenuButtonSprite('autoEyesToggle', 0);
+    const basicToggle = document.querySelectorAll('.basicToggle');
+    const charSelectorArrows = document.querySelectorAll('.charSelectorArrow');
+    basicToggle.forEach(button => {
+        setCharMenuButtonSprite(button.id, 0); // Set default sprite (normal state)
+    });
+    charSelectorArrows.forEach(button => {
+        setCharMenuButtonSprite(button.id, 0); // Set default spriteX to 0
     });
 }
 

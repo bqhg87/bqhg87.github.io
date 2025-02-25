@@ -445,7 +445,7 @@ window.addEventListener('toggleCharMenu', () => {
   handleButtonClick('charToggle');
 });
 
-function refreshAllButtons() {
+window.refreshAllButtons = function() {
   const buttons = document.querySelectorAll('.headButton, .footButton, .mainGameMenu');
   
   buttons.forEach(button => {

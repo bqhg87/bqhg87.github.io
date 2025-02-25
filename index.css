@@ -6,6 +6,42 @@
   --c3: rgb(163, 123, 94);
 }
 
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background: #809f60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  cursor: default;
+  z-index: 10000000;
+}
+#loadingText {
+  color: #586460;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+@keyframes fade {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+.dot:nth-child(1) {
+  animation: fade 2s infinite;
+}
+.dot:nth-child(2) {
+  animation: fade 2s infinite 0.2s;
+}
+.dot:nth-child(3) {
+  animation: fade 2s infinite 0.4s;
+}
+
 html, body {
   touch-action: none; /* Disables all touch gestures, including pinch zoom */
   overflow: hidden; /* Prevents scrolling and zooming by accident */
@@ -55,7 +91,7 @@ canvas {
 }
 
 main {
-  display: grid;
+  display: none;
   overflow: hidden;
   z-index: 0;
 }
@@ -67,7 +103,7 @@ header {
   width: 100vw;
   min-width: 320px;
   height: calc(var(--pixelScale) * 20);
-  display: flex;
+  display: none;
   justify-content: space-between;
   opacity: 1;
   align-items: center; 
@@ -88,7 +124,7 @@ footer {
   width: 100vw;
   min-width: 320px;
   height: calc(var(--pixelScale) * 20);
-  display: flex;
+  display: none;
   justify-content: space-between;
   opacity: 1;
   align-items: center; 
@@ -479,6 +515,10 @@ span, li a {
   cursor: default;
   z-index: 1001;
 }
+.taskLabel.list {
+  padding-top: 15px;
+  text-align: center;
+}
 .taskIcon {
   position: relative;
   z-index: 10;
@@ -500,7 +540,9 @@ span, li a {
   transition: opacity 0.2s ease;
   opacity: 1;
 }
-
+.taskIcon.complete {
+  background-image: url('./assets/footButtons2.png');
+}
 
 
 #meterWrapper {
