@@ -93,7 +93,11 @@
         "unlockText": "This doesn't sound right. You should pay a visit to the ",
         "unlockStory": "blackHole",
         "unlock": "Astronomer",
-        "text": "That's what they want you to think. They hide behind big words and fancy experiments, but the truth is slipping through their fingers. When the sky cracks open and everything starts falling apart, don't say I didn't warn you!!"
+        "text": "That's what they want you to think. They hide behind big words and fancy experiments, but the truth is slipping through their fingers. When the sky cracks open and everything starts falling apart, don't say I didn't warn you!!",
+        "updateIndicators": {
+          "Tibbert": 2,
+          "Astronomer": 3
+        }
       },
 
       {
@@ -185,7 +189,12 @@
         "isNpcSpeaking": true,
         "finalPart": true,
         "topContext": "Visit the Library, find the LHC safety document and revisit Tibbert",
-        "text": "Go visit the Library and find the peer-reviewed paper on the LHC's safety. If Mister Tibbert sees it, he may calm down!"
+        "text": "Go visit the Library and find the peer-reviewed paper on the LHC's safety. If Mister Tibbert sees it, he may calm down!",
+        "taskCompleteId": "char_ul_astronomer",
+        "taskPushId": "bh_library",
+        "updateIndicators": {
+          "Astronomer": 2
+        }
       }
     ]
   }

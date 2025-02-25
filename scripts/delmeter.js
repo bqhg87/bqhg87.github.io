@@ -14,6 +14,49 @@ const meterBG = document.getElementById("meterBG");
     requestAnimationFrame(updateDelMeter);
 }*/
 
+window.updateDelMeter = function (increment, explicit = false, display = false, time = 3000) {
+  let startMeter = window.delMeter;
+  let targetMeter = explicit ? increment : window.delMeter + increment;
+  targetMeter = Math.max(0, Math.min(100, targetMeter)); // Clamp between 0 and 100
+  window.delMeter = targetMeter; // Instantly update global value
+  localStorage.setItem("delMeter", window.delMeter);
+
+  if (display) {
+    handleButtonClick("meterToggle")
+    window.blockButtonClick = true;
+    setTimeout(() => {
+      window.blockButtonClick = false;
+      handleButtonClick("meterToggle")
+    }, (time + 600))
+  }
+
+  let startTime = performance.now();
+
+  // Ease-in and ease-out cubic function with adjustable easing factor
+  function easeInOutCubic(t) {
+    return t < 0.5
+      ? 4 * t * t * t // Ease-in (accelerating)
+      : 1 - Math.pow(-2 * t + 2, 3) / 2; // Ease-out (decelerating)
+  }
+
+  function animate(currentTime) {
+    let elapsed = currentTime - startTime;
+    let progress = Math.min(elapsed / time, 1); // Ensure progress doesn't exceed 1
+
+    // Apply exponential easing to progress
+    let easedProgress = easeInOutCubic(progress);
+
+    meter = startMeter + (targetMeter - startMeter) * easedProgress; // Accelerate easing
+    updateMeterDisplay(); // Update UI
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  requestAnimationFrame(animate);
+};
+
 // Function to update the meter display in the DOM
 function updateMeterDisplay() {
     // Set the width of the foreground meter bar

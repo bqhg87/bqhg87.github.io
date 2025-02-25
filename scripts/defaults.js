@@ -19,10 +19,14 @@ document.addEventListener('gestureend', (event) => {
 });
 
 document.body.addEventListener('contextmenu', (event) => {
-  // Check if there is selected text
   const selectedText = window.getSelection().toString();
-  if (!selectedText) {
-    // Prevent the default context menu if no text is selected
-    event.preventDefault();
+  const target = event.target;
+
+  // Allow context menu if the target is an <a> element or if there is selected text
+  if (target.tagName.toLowerCase() === 'a' || selectedText) {
+    return; // Don't prevent the default context menu
   }
+
+  // Prevent the default context menu if no text is selected and it's not an <a> element
+  event.preventDefault();
 });

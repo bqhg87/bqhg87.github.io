@@ -1,6 +1,4 @@
 {
-    "task1": "Find the hidden message",
-    "task2": "Convince the scientist",
-    "task3": "Expose the conspiracy",
-    "task4": "Escape the lab"
-  }
+    "char_ul_astronomer": "Visit the astronomer",
+    "bh_library": "Visit the library"
+}

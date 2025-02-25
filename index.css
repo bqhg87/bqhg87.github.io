@@ -424,6 +424,11 @@ span, li a {
 #tasksWrapper.show {
   display: flex;
 }
+#tasksWrapper.reduced {
+  height: auto;
+  width: calc(var(--pixelScale) * 180);
+  padding-bottom: calc(var(--pixelScale) * 12);
+}
 
 #tasksHeadContainer {
   margin-top: calc(var(--pixelScale) * 5);
@@ -519,20 +524,24 @@ span, li a {
   padding-top: 15px;
   text-align: center;
 }
+.taskLabel.explain {
+  padding-top: 0px;
+  text-align: left;
+}
 .taskIcon {
   position: relative;
   z-index: 10;
-  top: 1px;
+  align-self: center;
   padding-left: calc(var(--pixelScale) * 2);
+  height: calc(var(--pixelScale) * 10); /* 18x20 sprites */
   min-width: calc(var(--pixelScale) * 14);  /* 18x20 sprites */
-  height: calc(var(--pixelScale) * 20); /* 18x20 sprites */
   margin: 0;
   border: none;
   background: transparent;
   background-image: url('./assets/footButtons.png');
   background-size: calc(var(--pixelScale) * 18 * 3) calc(var(--pixelScale) * 20 * 6);
   background-position-x: -5px;
-  background-position-y: calc(var(--pixelScale) * -40);
+  background-position-y: calc(var(--pixelScale) * -44.3);
   padding: 0;
   cursor: default;
   pointer-events: none;

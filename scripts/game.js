@@ -2,8 +2,13 @@ window.console.info("Booting HarmOS...");
 
 const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
-window.delMeter = 0;
-window.gamemode = "inform"; // inform or mislead
+window.delMeter = Number(localStorage.getItem("delMeter")) || 100;
+
+if (!localStorage.getItem("gamemode")) {
+  localStorage.setItem("gamemode", "inform");
+} else {
+  window.gamemode = localStorage.getItem("gamemode");
+}
 
 // Use a single image for all character parts, and draw different sections.
 const charSheet = new Image();
@@ -36,6 +41,8 @@ const cowpink = new Image();
 cowpink.src = './assets/animated/cowpink.png';
 const cowpurple = new Image();
 cowpurple.src = './assets/animated/cowpurple.png';
+const boat = new Image();
+boat.src = './assets/animated/boat.png';
 
 const objectsToDraw = [
   {
@@ -105,7 +112,7 @@ const objectsToDraw = [
     animationSpeed: 400,
     animationOffset: 2,
     animationFrames: 8,
-    feet: 0,
+    feet: 1,
     zIndex: 1
   },
   {
@@ -119,7 +126,7 @@ const objectsToDraw = [
     animationSpeed: 600,
     animationOffset: 0,
     animationFrames: 4,
-    feet: 0,
+    feet: 1,
     zIndex: 1
   },
   {
@@ -133,7 +140,7 @@ const objectsToDraw = [
     animationSpeed: 200,
     animationOffset: 1,
     animationFrames: 20,
-    feet: 0,
+    feet: 1,
     zIndex: 1
   },
   {
@@ -147,7 +154,21 @@ const objectsToDraw = [
     animationSpeed: 200,
     animationOffset: 5,
     animationFrames: 4,
-    feet: 0,
+    feet: 1,
+    zIndex: 1
+  },
+  {
+    image: boat,
+    x: 125,
+    y: 603,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 48,
+    frameHeight: 32,
+    animationSpeed: 1000,
+    animationOffset: 0,
+    animationFrames: 1,
+    feet: 1,
     zIndex: 1
   },
 ];
@@ -157,6 +178,7 @@ const cowbrownNPC = objectsToDraw[7];
 const cowlightNPC = objectsToDraw[8];
 const cowpinkNPC = objectsToDraw[9];
 const cowpurpleNPC = objectsToDraw[10];
+const boatAnimate = objectsToDraw[11];
 
 // Consolidated image loading
 const images = [charSheet, npcIndicators, groundImage, collisionMap, exampleHouse, shadow, blush, eyes];
@@ -287,7 +309,7 @@ function createNPC(npcData) {
     frameX: npcData.frameX || 0,
     frameY: npcData.frameY || 0,
     indicator: { // NPC Indicator Data
-      spriteX: 0,
+      spriteX: npcData.spriteX || 1, // using 1 cause storing in cache and im too lazy to write code for it to store 0
       spriteY: 0,
       offsetX: npcData.indicatorOffsetX || 13.5, // Default offset if not provided
       offsetY: npcData.indicatorOffsetY || -1,
@@ -320,7 +342,23 @@ function createNPC(npcData) {
 
   npc.image.onload = onImageLoad; // Call onImageLoad when NPC image loads
 
+  refreshNPCIndicator(npc);
+
   return npc;
+}
+
+
+function refreshNPCIndicator(npc) {
+  // Load cached spriteX if available
+const npcIndicatorStates = JSON.parse(localStorage.getItem('npcIndicatorStates')) || [];
+
+// Find the NPC's indicator state
+const npcState = npcIndicatorStates.find(state => state.npcName === npc.name);
+
+if (npcState) {
+  // If the NPC's state is found, use the stored spriteX
+  npc.indicator.spriteX = npcState.spriteX;
+}
 }
 
 window.npcs = [
@@ -337,6 +375,7 @@ window.npcs = [
     hairType: 5,
     indicatorSinSpeed: 6,
     indicatorSinOffset: 20,
+    spriteX: 3, // purple
   }),
   createNPC({
     name: 'Astronomer',
@@ -351,6 +390,7 @@ window.npcs = [
     hairType: 7,
     indicatorSinSpeed: 3,
     indicatorSinOffset: 80,
+    spriteX: 1, // white
   }),
 ];
 
@@ -373,7 +413,7 @@ window.currentStories = [ // Default
 
 // Load from cache or set defaults
 const cachedStories = JSON.parse(localStorage.getItem('currentStories'));
-if (cachedStories && !(1 === 1)) { // bypassing so it resets every time
+if (cachedStories) { // bypassing so it resets every time //&& !(1 === 1)
   currentStories = cachedStories;
 } else {
   localStorage.setItem('currentStories', JSON.stringify(currentStories));
@@ -387,6 +427,25 @@ window.updateStories = function(name, newStory) {
     localStorage.setItem('currentStories', JSON.stringify(currentStories));
   }
 }
+
+// Function to save NPC indicator spriteX to the npcIndicatorStates array
+window.updateNPCIndicator = function(npcName, spriteX) {
+  let npcIndicatorStates = JSON.parse(localStorage.getItem('npcIndicatorStates')) || [];
+
+  const npcIndex = npcIndicatorStates.findIndex(state => state.npcName === npcName);
+  
+  if (npcIndex !== -1) {
+    npcIndicatorStates[npcIndex].spriteX = spriteX;
+  } else {
+    npcIndicatorStates.push({ npcName, spriteX });
+  }
+
+  const npc = npcs.find(npc => npc.name === npcName);
+  npc.indicator.spriteX = spriteX;
+
+  // Save the updated array back to localStorage
+  localStorage.setItem('npcIndicatorStates', JSON.stringify(npcIndicatorStates));
+};
 
 ///////////////
 // RENDERING //
@@ -485,6 +544,9 @@ function drawNPC(npc) {
   }
 }
 
+let cowsVisible = false; 
+let boatVisible = false; 
+
 // Draw all objects
 function draw() {
   c.clearRect(0, 0, canvas.width, canvas.height);
@@ -505,6 +567,9 @@ function draw() {
     return (a.zIndex || 0) - (b.zIndex || 0);
   });
 
+  cowsVisible = false;
+  boatVisible = false;
+
   sortedObjects.forEach(obj => {
     if (obj === char) {
       drawCharacterWithClothing();
@@ -519,6 +584,13 @@ function draw() {
     
     const scaledX = (x * scale * globalScale) + translationX;
     const scaledY = (y * scale * globalScale) + translationY;
+
+    if ([cowbrown, cowlight, cowpink, cowpurple].includes(image) && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
+      cowsVisible = true;
+    }
+    if (image === boat && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
+      boatVisible = true;
+    }
 
     c.globalAlpha = opacity;
 
@@ -813,6 +885,7 @@ function checkNPC(npc, char, distance) {
   const distanceToNPC = proximityQuery(char, npc);
   const isNear = distanceToNPC <= distance;
   const wasNear = toggleNPCs[npc.name];
+  npc.indicator.spriteX = parseInt(localStorage.getItem(`npc_${npc.name}_spriteX`)) || npc.indicator.spriteX;
 
   if (isNear && !wasNear) {
     toggleNPCs[npc.name] = true;
@@ -936,7 +1009,7 @@ function startDialogue(npcName) {
   dialogueToggle.classList.remove('show');
   dialogueContextWrapper.classList.add('hidden');
   dialogueWrapper.classList.add('show');
-  npc.indicator.spriteX = -1;
+  npc.indicator.spriteY = -1;
   char.frameY = updateCharDirection((-directionQuery(npc, char)) * Math.PI / 180);
   //loadDialogue("concept", 1, npcName);
   lowCameraOffsetHistory = lowCameraOffset;
@@ -965,7 +1038,7 @@ function endDialogue(npcName) {
   dialogueToggle.classList.add('show');
   dialogueContextWrapper.classList.remove('hidden');
   dialogueWrapper.classList.remove('show');
-  npc.indicator.spriteX = 2;
+  npc.indicator.spriteY = 1;
   blockDirectionUpdate = false;
   lowCameraOffsetHistory = lowCameraOffset;
   handleZoom(4);
@@ -986,7 +1059,7 @@ window.breakDialogue = function(zoomOut) {
   window.currentPart = 1;
   console.log(npcMemory)
   const npc = npcs.find(npc => npc.name === npcMemory);
-  npc.indicator.spriteX = 2;
+  npc.indicator.spriteY = 1;
   const dialogueWrapper = document.getElementById('dialogueWrapper');
   bottomLabelWrapper.classList.add('show');
   dialogueToggle.classList.add('show');
@@ -1488,36 +1561,62 @@ function initialiseCharPosition() {
 ////////////
 // RANDOM //
 ////////////
+let animationId; // Store the requestAnimationFrame ID
+
+function animateAll() {
+  if (cowsVisible) {
+    animateCows(); // Ensures cow animations continue
+  }
+  if (boatVisible) {
+    animateBoat(); // Ensures boat animations continue
+  }
+  
+  animationId = requestAnimationFrame(animateAll); // Keep the loop running
+}
 
 function animateCows() {
+  if (!cowsVisible) return; // Stop if cows aren't visible
+
   const cows = [cowbrownNPC, cowlightNPC, cowpinkNPC, cowpurpleNPC];
+  cows.forEach(cow => animate(cow)); // Animate all cows
+}
 
-  cows.forEach(cow => {
-    // Initialize lastUpdate if it's undefined
-    if (cow.lastUpdate === undefined) {
-      cow.lastUpdate = Date.now();
-      cow.frameX = cow.animationOffset; // Start at the specified animationOffset
-    }
+function animateBoat() {
+  if (!boatVisible) return; // Stop if the boat isn't visible
 
-    const now = Date.now();
-    const elapsedTime = now - cow.lastUpdate;
+  animate(boatAnimate); // Animate the boat
+}
 
-    if (elapsedTime >= cow.animationSpeed) {
-      // Move to the next frame, looping back if necessary
-      cow.frameX = (cow.frameX + 1) % cow.animationFrames;
-      cow.lastUpdate = now; // Update the time of the last frame change
-    }
-  });
+function animate(obj) {
+  // Initialize lastUpdate if it's undefined
+  if (obj.lastUpdate === undefined) {
+    obj.lastUpdate = Date.now();
+    obj.frameX = obj.animationOffset; // Start at the specified animationOffset
+  }
 
-  requestAnimationFrame(animateCows);
+  const now = Date.now();
+  const elapsedTime = now - obj.lastUpdate;
+
+  if (elapsedTime >= obj.animationSpeed) {
+    // Move to the next frame, looping back if necessary
+    obj.frameX = (obj.frameX + 1) % obj.animationFrames;
+    obj.lastUpdate = now; // Update the time of the last frame change
+  }
 }
 
 window.onload = function () {
   initialiseCharPosition();
+  
   (function updateCharMovementLoop() {
     updateCharMovement();
-    animateCows();
-    requestAnimationFrame(updateCharMovementLoop);
+    requestAnimationFrame(updateCharMovementLoop); // Keep movement separate
     draw();
   })();
+
+  animateAll(); // Start animation loop separately
+};
+
+window.onbeforeunload = () => {
+  // Clean up resources
+  cancelAnimationFrame(animationId); // Stop animations properly
 };

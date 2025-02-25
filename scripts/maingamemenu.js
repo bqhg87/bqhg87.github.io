@@ -61,7 +61,7 @@ function addButtonEventListeners(buttonId) {
     if (buttonId === "inventoryToggle") {
         button.addEventListener('click', () => {
             openInventory();
-            handleButtonClick("mainGameMenuToggle");
+            handleButtonClick("mainGameMenuToggle", true);
             const inventoryLabel = document.getElementById('inventoryLabel')
             inventoryLabel.classList.remove('show');
             setCloseMenuButtonSprite("closeInventory", 0, 0);
@@ -71,7 +71,7 @@ function addButtonEventListeners(buttonId) {
     if (buttonId === "tasksToggle") {
         button.addEventListener('click', () => {
             openTasks();
-            handleButtonClick("mainGameMenuToggle");
+            handleButtonClick("mainGameMenuToggle", true);
             const tasksLabel = document.getElementById('tasksLabel')
             tasksLabel.classList.remove('show');
             setCloseMenuButtonSprite("closeTasks", 0, 0);
@@ -81,8 +81,9 @@ function addButtonEventListeners(buttonId) {
 }
 
 document.addEventListener('keydown', function(event) {
+    if (checkAnyButtonsToggled() || window.dialogueToggled) {return}
+
     if (event.key === 'I' || event.key === 'i') {
-        // logic to only register it if the game is open
         if (window.isInventoryOpen) {
             closeInventory();
         } else {
@@ -90,7 +91,6 @@ document.addEventListener('keydown', function(event) {
         }
     }
     if (event.key === 'T' || event.key === 't') {
-        // logic to only register it if the game is open
         if (window.isTasksOpen) {
             closeTasks();
         } else {
@@ -104,16 +104,21 @@ window.isInventoryOpen;
 window.openInventory = function() {
     window.isInventoryOpen = true;
     const inventoryWrapper = document.getElementById('inventoryWrapper');
+    const dialogueContextWrapper = document.getElementById('dialogueContextWrapper')
 
     inventoryWrapper.classList.add('show');
     setTimeout(() => {
         inventoryWrapper.classList.add('fade-in');
+        refreshCloseMenuButtons();
+        dialogueContextWrapper.classList.add('hidden');
     }, 10)
 }
 
 window.closeInventory = function() {
     window.isInventoryOpen = false;
     const inventoryWrapper = document.getElementById('inventoryWrapper');
+    dialogueContextWrapper.classList.remove('hidden');
+    checkNPCs();
 
     inventoryWrapper.classList.remove('fade-in');
     setTimeout(() => {

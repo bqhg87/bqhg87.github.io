@@ -6,8 +6,6 @@ let resetTimeout = 0
 window.broadcastTopContextMessage = function(message, time, image) {
     resetTimeout += 1;
 
-    console.log(image)
-
     if (image) {
         topContextLabel.classList.add('withImage')
         topContextImage.classList.add('show')

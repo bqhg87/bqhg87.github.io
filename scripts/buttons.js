@@ -78,9 +78,20 @@ window.closeMeter = function() {
 let lastClickedButton = null;
 let prev = false;
 
+window.blockButtonClick = false;
+
 // Function to handle button click, toggle visibility, and manage state
-window.handleButtonClick = function(buttonId) {
+window.handleButtonClick = function(buttonId, preventCloseMainGameMenus = false) {
   buttonClickedDuringTimeout = true;
+
+  if (window.blockButtonClick) {
+    return
+  }
+
+  if (!preventCloseMainGameMenus) {
+    closeInventory();
+    closeTasks();
+  }
 
   if (buttonId === "randomiseCharToggle") {
     randomiseCharAppearance();
@@ -123,10 +134,6 @@ window.handleButtonClick = function(buttonId) {
   if (buttonId === 'dialogueToggle') {
     toggleDialogueOpen();
     return
-  }
-
-  if (!(buttonId === "mainGameMenuToggle" || buttonId === "meterToggle")) {
-    closeInventory();
   }
 
   // If the clicked button is already toggled, untoggle it and hide all menus
@@ -366,6 +373,16 @@ window.checkButtonHover = function(buttonId) {
     indicator.style.opacity = 0.7;
     indicator.style.top = indicatorUp;
   }
+}
+
+window.checkAnyButtonsToggled = function() {
+  const buttons = document.querySelectorAll('.headButton, .footButton, .mainGameMenu');
+  for (let button of buttons) {
+    if (button.dataset.toggled === "true") {
+      return true;
+    }
+  }
+  return false;
 }
 
 // initialise sprites for each button and add the click event listener

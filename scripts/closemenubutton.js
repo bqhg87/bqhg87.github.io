@@ -57,6 +57,13 @@ function initializeCloseMenuButton() {
     tasksButton.addEventListener('click', () => {closeTasks();});
 }
 
+window.refreshCloseMenuButtons = function() {
+    setCloseMenuButtonSprite('closeArticle', 0, 0); // Regular state
+    setCloseMenuButtonSprite('closeMeter', 0, 0); // Regular state
+    setCloseMenuButtonSprite('closeInventory', 0, 0); // Regular state
+    setCloseMenuButtonSprite('closeTasks', 0, 0); // Regular state
+}
+
 // Initialize the closeMenuButton on page load
 document.addEventListener('DOMContentLoaded', () => {
     initializeCloseMenuButton();  // Initialize close menu button with sprite handling

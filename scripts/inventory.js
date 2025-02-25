@@ -53,7 +53,59 @@ function addButtonEventListeners(button, spriteY, item) {
 
 let itemWrappers = [];
 
-// Function to dynamically generate inventory item wrappers
+// Initialize inventory UI
+function initialiseInventory() {
+    // Generate the inventory item wrappers dynamically
+    generateInventoryItemWrappers(Math.max(8, inventory.length));  // Ensure at least 8 slots
+
+    itemWrappers = Array.from(document.querySelectorAll(".inventoryItemWrapper"));
+    updateInventory();
+}
+
+
+window.updateInventory = function() {
+    saveInventory();
+
+    // Filter out items with quantity 0, and sort by index
+    const validItems = inventory
+        .filter(item => item.quantity > 0)
+        .sort((a, b) => a.index - b.index);
+
+    // Adjust the number of inventory item wrappers if necessary
+    const requiredSlots = Math.max(8, validItems.length);  // Ensure at least 8 slots
+    if (itemWrappers.length < requiredSlots) {
+        generateInventoryItemWrappers(requiredSlots);  // Add more slots if needed
+        // Wait for DOM elements to be added before querying them again
+        requestAnimationFrame(() => {
+            itemWrappers = Array.from(document.querySelectorAll(".inventoryItemWrapper"));
+            updateInventory();  // Run update again once DOM is updated
+        });
+        return;  // Exit the current function to avoid updating while still adding elements
+    }
+
+    itemWrappers.forEach((wrapper, index) => {
+        const button = wrapper.querySelector(".inventoryItem");
+        const quantityText = wrapper.querySelector(".inventoryQuantityText");
+        const quantityWrapper = wrapper.querySelector(".inventoryQuantityWrapper");
+
+        if (index < validItems.length) {
+            const item = validItems[index];
+            setButtonSprite(button, 0, item.spriteY);
+            addButtonEventListeners(button, item.spriteY, item.item);
+            quantityText.textContent = item.quantity;
+            button.classList.add("show");
+            quantityWrapper.classList.add("show");
+        } else {
+            // Clear out empty inventory slots
+            setButtonSprite(button, null, null);
+            quantityText.textContent = "";
+            button.classList.remove("show");
+            quantityWrapper.classList.remove("show");
+        }
+    });
+}
+
+// Generate inventory item wrappers only after loading
 function generateInventoryItemWrappers(numItems) {
     const inventoryScrollWrapper = document.querySelector("#inventoryScrollWrapper");
     inventoryScrollWrapper.innerHTML = '';  // Clear the existing items
@@ -79,53 +131,10 @@ function generateInventoryItemWrappers(numItems) {
         wrapper.appendChild(quantityWrapper);
         inventoryScrollWrapper.appendChild(wrapper);
     }
-}
+    applyPxDivStyling();
 
-// Initialize inventory UI
-function initialiseInventory() {
-    // Generate the inventory item wrappers dynamically
-    generateInventoryItemWrappers(Math.max(8, inventory.length));  // Ensure at least 8 slots
-
-    itemWrappers = Array.from(document.querySelectorAll(".inventoryItemWrapper"));
-    updateInventory();
-}
-
-
-window.updateInventory = function() {
-    saveInventory();
-
-    // Filter out items with quantity 0, and sort by index
-    const validItems = inventory
-        .filter(item => item.quantity > 0)
-        .sort((a, b) => a.index - b.index);
-
-    // Adjust the number of inventory item wrappers if necessary
-    const requiredSlots = Math.max(8, validItems.length);  // Ensure at least 8 slots
-    if (itemWrappers.length < requiredSlots) {
-        generateInventoryItemWrappers(requiredSlots);  // Add more slots if needed
-        itemWrappers = Array.from(document.querySelectorAll(".inventoryItemWrapper"));
-    }
-
-    itemWrappers.forEach((wrapper, index) => {
-        const button = wrapper.querySelector(".inventoryItem");
-        const quantityText = wrapper.querySelector(".inventoryQuantityText");
-        const quantityWrapper = wrapper.querySelector(".inventoryQuantityWrapper");
-
-        if (index < validItems.length) {
-            const item = validItems[index];
-            setButtonSprite(button, 0, item.spriteY);
-            addButtonEventListeners(button, item.spriteY, item.item);
-            quantityText.textContent = item.quantity;
-            button.classList.add("show");
-            quantityWrapper.classList.add("show");
-        } else {
-            // Clear out empty inventory slots
-            setButtonSprite(button, null, null);
-            quantityText.textContent = "";
-            button.classList.remove("show");
-            quantityWrapper.classList.remove("show");
-        }
-    });
+    // Once wrappers are generated, we can update the inventory
+    requestAnimationFrame(updateInventory);  // Call updateInventory after items are rendered
 }
 
 // Initialize inventory on page load
