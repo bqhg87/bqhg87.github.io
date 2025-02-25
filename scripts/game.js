@@ -1131,7 +1131,7 @@ function endDialogue(npcName) {
   bottomLabelWrapper.classList.add('show');
   dialogueToggle.classList.add('show');
   dialogueWrapper.classList.remove('show');
-  document.getElementById('mainGameMenuWrapper').classList.remove('hidden');
+  updateFootButtonsVisibility();
   npc.indicator.spriteY = 1;
   blockDirectionUpdate = false;
   lowCameraOffsetHistory = lowCameraOffset;
