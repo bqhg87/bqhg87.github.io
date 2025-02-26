@@ -6,10 +6,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // List of valid articles
   const validArticles = ['about', 'credits', 'general1', 'general2', 'general3', 'article1', 'article2', 'article3', 'article4', 'article5'];
 
-  // Simulate fetching article content
+  const articleContents = {
+    about: `
+      <div id="articleContainer">
+        <div id="articleHead">
+          <h1 id="articleTitle">About:</h1>
+        </div>
+        <div id="articleBody">
+          <div class="articleItem wide">
+            <p>Quantum healing is a pseudoscience that uses and misinterprets the principles of quantum physics in order to promote supposed healing properties. Most – if not all – examples of this misuse of physics involve the spread of mis/disinformation for monetary gain – a motivation common in the spread of false information </p>
+          </div>
+          <div class="articleItem left2">
+            <p>The Chernobyl nuclear <span class="underline">accident</span> occurred in 1986, caused by a combination of faulty reactor design and poor personnel training. Following a shutdown test, reactor number  4 of the plant exploded and released smoke fission products and debris. The majority of material was deposited near the site, but lighter fission products were carried northwest by the wind. A fire broke out and firefighters called to put it out. The accident caused the largest uncontrolled radioactive release into the environment ever recorded for a civilian operation. The accident released radioactive substances into the air for around 10 days, with Iodine-131 and Casesium-137 contributing significantly to radiation doses. The accident killed 30 operators and firemen and 237 people onsite were diagnosed with acute radiation syndrome (ARS) and 28 died as a result.  </p>
+          </div>
+          <img class="articleItem right" src="./assets/test.png"></img>
+        </div>
+      </div>
+    `,
+    credits: `
+      <div id="articleContainer">
+        <div id="articleHead">
+          <h1 id="articleTitle">Credits:</h1>
+        </div>
+      </div>
+    `,
+  };
+  
   const fetchArticleContent = (article) => {
     return new Promise((resolve) => {
-      resolve(`<p style="height: fit-content;">${article}</p><p style="grid-column: span 2; height: fit-content;">This is content for the ${article} article. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam lobortis mattis tempor. Fusce quam nisi, malesuada sed sodales a, viverra sed neque. Proin ac fermentum lacus. In eu vehicula sapien, aliquam ultrices felis. Donec eget odio et turpis faucibus fermentum. Integer non ligula sed justo feugiat dignissim a quis sapien. Quisque sit amet neque at dolor sollicitudin molestie non vel odio. Suspendisse venenatis justo sed lectus aliquet tristique. Quisque sit amet ante ut nisi pharetra varius.</p><div class="reserved"></div>`);
+      resolve(articleContents[article] || `<p>Article not found.</p>`);
     });
   };
 

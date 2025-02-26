@@ -239,7 +239,7 @@ window.loadDialogue = function(story, chapter, bla) {
     const inventory = JSON.parse(localStorage.getItem("inventory")) || [];
 
     if (taskPushNext === "bh_library" ) {
-      const lhcPaper = inventory.find(item => item.item === "lhcPaper");
+      const lhcPaper = inventory.find(item => item.item ===  "lhcPaper");// This puts the item 'lhc paper' on the map
       if (lhcPaper && lhcPaper.quantity === 0) {
         createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
       }

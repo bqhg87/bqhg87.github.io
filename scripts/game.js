@@ -326,7 +326,6 @@ function removeItem(itemToRemove) {
   const index = items.indexOf(itemToRemove);
   if (index !== -1) {
     items.splice(index, 1); // Removes the item from the array
-    console.log(`Item removed: ${itemToRemove.item}`);
   } else {
     console.warn("Item not found in items array");
   }
@@ -355,12 +354,11 @@ function handleItemPickup() {
     const distance = Math.sqrt(Math.pow(charCenterX - itemCenterX, 2) + Math.pow(charCenterY - itemCenterY, 2));
 
     if (distance <= 10) {
-      console.log(item.spriteY);
+      //console.log(item.spriteY);
       
       // Find the item in the default inventory based on spriteY
       const foundItem = window.defaultInventory.find(inventoryItem => inventoryItem.spriteY === item.spriteY);
       if (foundItem) {
-        console.log(foundItem.item);
         addInventoryItems(foundItem.item, 1);
         updateChapter("Astronomer", 2);
         updateChapter("Tibbert", 2);
@@ -391,10 +389,6 @@ function initialiseItems() {
   if (taskStates.bh_library === "visible" && lhcPaper && lhcPaper.quantity === 0) {
     createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
   }
-
-  console.log(inventory);
-  console.log(taskStates);
-  console.log(lhcPaper);
 }
 
 
@@ -1355,7 +1349,6 @@ document.addEventListener('keydown', (event) => {
 
 window.breakDialogue = function(zoomOut) {
   window.currentPart = 1;
-  console.log(npcMemory)
   const npc = npcs.find(npc => npc.name === npcMemory);
   npc.indicator.spriteY = 1;
   const dialogueWrapper = document.getElementById('dialogueWrapper');
