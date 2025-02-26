@@ -91,13 +91,15 @@
         "npc": "Tibbert",
         "isNpcSpeaking": true,
         "finalPart": true,
-        "unlockText": "That doesn't sound right. You should pay a visit to the ",
-        "unlockStory": "blackHole",
-        "unlock": "Astronomer",
+        "topContext": "That doesn't sound right. You should pay a visit to the astronomer",
+        "taskPushId": "char_ul_astronomer",
         "text": "That's what they want you to think. They hide behind big words and fancy experiments, but the truth is slipping through their fingers. When the sky cracks open and everything starts falling apart, don't say I didn't warn you!!",
         "updateIndicators": {
           "Tibbert": 2,
           "Astronomer": 3
+        },
+        "updateStories": {
+          "Astronomer": "blackHole"
         }
       },
 
@@ -196,6 +198,830 @@
         "updateIndicators": {
           "Astronomer": 2
         }
+      },
+
+
+
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "I wonder what quantum mystery I'll investigate today..."
+      },
+
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Come buy our quantum healing bracelets!"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Hello there - are you interested in a quantum healing bracelet? They can cure all illnesses and fill you with energy! Get your special discount today, just for you!"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "They sure do sound like a great deal. But wait a second - 'quantum healing' doesn't sound like science. How do they work?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "It's all science-based. You see, quantum physics tells us that everything is made of energy, and the way we interact with this energy shapes our reality. These bracelets tap into that energy, helping you heal. They're great for emotional balance too! I've been wearing one for years and I feel amazing!"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I'm not so sure about that. You're saying 'quantum physics' helps with healing? How exactly does that work?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 6 ,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Look, science is complicated. You don't need to understand it all, just trust me. I wouldn't lie to you!"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 7,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "It does sound incredible"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 8,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "It really is! In fact, I'm so busy today, I could use an extra pair of hands. Would you be interested in helping me sell these? I'll pay you well!"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 9,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": true,
+        "topContext": "You need more information. Go and find the local quantum physics expert",
+        "taskPushId": "char_ul_quantum_expert",
+        "text": "Hmm, I'm not sure, let me think about it...",
+        "updateIndicators": {
+          "Market Trader": 2,
+          "Quantum Expert": 3
+        },
+        "updateStories": {
+          "Quantum Expert": "quantumHealing"
+        }
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1 ,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Oh hi, it's good to see you!"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2 ,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I met a market trader today selling quantum healing bracelets. She claims they work through quantum physics by tapping into energy fields. Do you think this could be real?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I've seen this before. Quantum mechanics is a fascinating field, but it deals with how particles behave at a very tiny scale. It has nothing to do with healing or wellness"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "The problem is, these sellers use scientific terms like 'quantum' and 'energy' because they sound impressive. But there's no real connection to health"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Could this just be a case of misunderstanding quantum physics? Maybe we haven't figured out how it works with healing yet?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 6,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "That's the trick! There's no evidence that quantum mechanics can heal the body. What they're doing is misleading people by using real terms in a fake context"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 7,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "topContext": "You've been had! Go back to the market and give that scammer a piece of your mind",
+        "taskCompleteId": "char_ul_quantum_expert",
+        "taskPushId": "qh_return",
+        "text": "If this were real, we'd see scientific papers backing it. Instead, it's just an opportunistic scam based on misunderstandings",
+        "updateIndicators": {
+          "Quantum Expert": 2,
+          "Market Trader": 3
+        },
+        "updateChapters": {
+          "Market Trader": 2
+        }
+      },
+
+
+
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 2,
+        "part": 1 ,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": " Hey quantum friend, good to see you again! You thought any more about my job offer? Just look at these sales - we could make so much money together. You'd be rich, just like me. People love them!!"
+      },      
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 2,
+        "part": 2 ,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I can't support this. These bracelets are a scam and I won't be a part of deceiving people. The science you're using is completely misrepresented and I'm going to make sure people know the truth"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 2,
+        "part": 3 ,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Ha! Come on, don't be a fool. In this world there are two types of people: hustlers and suckers. The dopes that fall for this deserve what they get. Suit yourself goody twoshoes"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 2,
+        "part": 4,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": true,
+        "topContext": "Go around the market and explain the actual physics to 3 people",
+        "taskCompleteId": "qh_return",
+        "taskPushId": "qh_explain",
+        "text": "I choose to do what's right and I value real physics. People need the truth, not these lies",
+        "updateIndicators": {
+          "Quantum Expert": 1
+        },
+        "updateChapters": {
+          "Quantum Expert": 2
+        },
+        "updateStories": {
+          "Carl": "quantumHealing",
+          "Agnet": "quantumHealing",
+          "Harold": "quantumHealing"
+        }
+      },
+
+
+
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Oh hey, it's great to see you again, how are you?"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Oh hi. Yeah sorry I've not been out the house much, I've been feeling really ill lately"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Oh that's awful, I hope you feel better soon"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Thanks. Well, I bought a bracelet from a lady in the market though. She said it may make me feel better"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Maybe you should go speak to her, she seems to know a lot about science. You'd be interested in that!"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 6,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": true,
+        "text": "Ok, I'll see if I can find her. See you around!"
+      },
+
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Hey, you know that special bracelet you have?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Yeah, it's supposed to help cure my illness. what about it?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I'm sorry to tell you that it's actually not going to help. The seller over there is a scammer and she lied to you to make you buy the bracelet"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "WHAT! Are you kidding me? Thanks for letting me know"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "If she's still around, I'm gonna have a word with her. This cost me 20 quid!!!",
+        "updateIndicators": {
+          "Carl": 4
+        },
+        "variableUpdates": {
+          "qhTracker": "carl"
+        }
+      },
+
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Agnet",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I'm new in town. This market seems pretty great but the prices are a bit much for me"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Agnet",
+        "isNpcSpeaking": false,
+        "finalPart": true,
+        "text": "Oh well"
+      },
+
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Agnet",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Hey did you run into the bracelet vendor here?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Agnet",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Oh yeah I did. Personally, I just think they're ugly. Not worth the cost"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Agnet",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "That's great. I'm just going round letting people know she's a scammer. She sells the idea that they have special healing properties by using scientific jargon about quantum physics, but it's untrue. I spoke to the expert about it"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Agnet",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Really... there's a quantum expert? This town is full of surprises"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Agnet",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "Thanks for letting me know, I might tell my friends to stay away from her",
+        "updateIndicators": {
+          "Agnet": 4
+        },
+        "variableUpdates": {
+          "qhTracker": "agnet"
+        }
+      },
+
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Do you know where the fruit stall is by any chance? This market is like a maze"
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Harold",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Uh, You're quite close actually, it's the one with the yellow and green stripy roof."
+      },
+      {
+        "story": "default",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "Oh great, I wonder if they have any apricots..."
+      },
+
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Harold",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Hi, did you meet a bracelet seller in the market today?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Why yes, I did. She was lovely and her bracelets were so beautiful"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Harold",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Well... she is actually a scammer"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "What do you mean?"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Harold",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "She's been telling people that the bracelets have special healing properties by marketing them as 'quantum healing' bracelets"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 6,
+        "npc": "Harold",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "It's called pseudoscience, it sounds scientific but it's really just a con"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 7,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Ah, well, I bought a few of them. She gave me a great idea to give some as presents to my family, but I think maybe I got ripped off. I'm such an idiot!"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 8,
+        "npc": "Harold",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Don't feel bad, it's not your fault. I'm trying my best to get this to stop so no more people get scammed too"
+      },
+      {
+        "story": "quantumHealing",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 9,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "That's very noble of you. I hope you manage to spread the word. She should just sell these braclets normally, they're still beautiful",
+        "updateIndicators": {
+          "Harold": 4
+        },
+        "variableUpdates": {
+          "qhTracker": "harold"
+        }
+      },
+
+
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1 ,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I can't believe you told everyone I'm a scammer"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2 ,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Nobody wants to buy from me anymore. Think of all the money we could have made!"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Serves you right. You're just lying to people to sell them for more"
+      },   
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Market Trader",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I know some people actually think they're nice bracelets though. Maybe apologise to people and sell them for a cheaper price, people will still buy them. Just don't lie about it"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Market Trader",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "I've had enough of this. I'm packing my things, there's no business in this market anymore!"
+      },
+
+
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1 ,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Hello, I just wanted to let you know I confronted the bracelet lady in the market"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2 ,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Oh, what happened?"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "She admitted it was all just a hustle. You were right!"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "I heard she's moving out of town now, probably finding somewhere else she can con people"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Quantum Expert",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "Hopefully if the word gets out, she'll have no luck anywhere else either!"
+      },
+
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Hi Carl, how are you feeling?"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I'm still pretty ill unfortunately"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I tried to get a refund from the bracelet seller but she refused and laughed at me. She was so nasty"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Oh my, that's so terrible!"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 5,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I gave my bracelet to some kid that was pestering her parents for one. I don't need it anyway. I let the parents know about the scam, they're glad they won't give any money away to it"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 6,
+        "npc": "Carl",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "That's very kind. I don't think the bracelet seller is going to be around for much longer"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 7,
+        "npc": "Carl",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "It's a good thing you found out about it. Thank you!"
+      },
+      
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Agnet",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Hi, I just told my friends about the quantum seller. Apparently the lady started screaming at one of my friends when she decided not to buy one"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Agnet",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "That sounds like her alright. Well, shes going out of business. We don't need people like her around here"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Agnet",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "Thank you for telling me about it. You seem like you really want to improve things in town"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 4,
+        "npc": "Agnet",
+        "isNpcSpeaking": false,
+        "finalPart": true,
+        "text": "No problem, Have a great day!"
+      },
+
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 1,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": false,
+        "text": "I finally found the fruit stall. Only took me an hour"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 2,
+        "npc": "Harold",
+        "isNpcSpeaking": false,
+        "finalPart": false,
+        "text": "Oh... great. I just wanted to tell you the bracelet seller is going out of business"
+      },
+      {
+        "story": "complete",
+        "gamemode": "inform",
+        "chapter": 1,
+        "part": 3,
+        "npc": "Harold",
+        "isNpcSpeaking": true,
+        "finalPart": true,
+        "text": "Is that so? Hmm, well that's good I suppose. I can't stand liars!"
       }
+
     ]
   }

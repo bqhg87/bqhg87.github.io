@@ -1,4 +1,14 @@
 {
     "char_ul_astronomer": "Ask the astronomer about black holes",
-    "bh_library": "Visit the Library, find the LHC safety document and revisit Tibbert"
+    "bh_library": "Visit the Library, find the LHC safety document and revisit Tibbert",
+    "char_ul_quantum_expert": "Ask the quantum expert about 'quantum healing'",
+    "qh_return": "Go back to the market and confront the bracelet vendor",
+    "qh_explain": "Go around the market and explain the actual physics to 3 people",
+
+    "haarp_libary": "Visit the Library, and find out more about HAARP",
+    "char_ul_haarp_professor": "Ask the geophysics professor about HAARP",
+    "5g_tower": "Visit the 5G tower and investigate",
+    "5g_fix": "Help fix the humming",
+    "nuclear_library":"Go to library and learn more about nuclear power"
 }
+

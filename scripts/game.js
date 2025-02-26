@@ -430,6 +430,7 @@ if (npcState) {
 }
 
 window.npcs = [
+  //BLACK HOLES
   createNPC({
     name: 'Tibbert',
     x: 100,
@@ -460,41 +461,158 @@ window.npcs = [
     indicatorSinOffset: 80,
     spriteX: 1, // white
   }),
+
+
+
+  //MARKET
+  createNPC({
+    name: 'Quantum Expert',
+    x: 350,
+    y: -100,
+    hair: 'buzzcut',
+    clothingTop: 'basic',
+    clothingBottom: 'trousers',
+    skinTone: 2,
+    bottomType: 4,
+    hairType: 6,
+    topType: 7,
+    spriteX: 1, // white
+  }),
+  createNPC({
+    name: 'Market Trader',
+    x: 438.5,
+    y: 154,
+    hair: 'braids',
+    clothingTop: 'floral',
+    skinTone: 3,
+    topType: 8,
+    hairType: 10,
+    indicatorSinSpeed: 2,
+    indicatorSinOffset: 20,
+    spriteX: 3, // purple
+  }),
+  createNPC({
+    name: 'Carl',
+    x: 205,
+    y: 162,
+    hair: 'buzzcut',
+    clothingTop: 'floral',
+    skinTone: 1,
+    topType: 5,
+    bottomTupe: 2,
+    hairType: 4,
+    indicatorSinSpeed: 2.5,
+    indicatorSinOffset: 50,
+    spriteX: 1, // white
+  }),
+  createNPC({
+    name: 'Agnet',
+    x: 265,
+    y: 62,
+    hair: 'bob',
+    clothingTop: 'floral',
+    clothingBottom: 'trousers',
+    skinTone: 1,
+    eyes: 2,
+    topType: 2,
+    bottomType: 2,
+    hairType: 4,
+    indicatorSinSpeed: 2.5,
+    indicatorSinOffset: 100,
+    spriteX: 1, // white
+  }),
+  createNPC({
+    name: 'Harold',
+    x: 334,
+    y: 100,
+    hair: 'buzzcut',
+    clothingTop: 'basic',
+    clothingBottom: 'trousers',
+    skinTone: 5,
+    topType: 7,
+    bottomType: 1,
+    hairType: 7,
+    indicatorSinSpeed: 2.5,
+    indicatorSinOffset: 150,
+    spriteX: 1, // white
+  })
 ];
 
 
-window.currentChapters = {
-  "default": 1,
-  "blackHole": 1,
-};
 
-window.currentStories = [ // Default
+// Default stories with individual chapters
+window.currentStories = [
   {
     name: 'Tibbert',
     story: 'blackHole',
+    chapter: 1,
   },
   {
     name: 'Astronomer',
     story: 'default',
+    chapter: 1,
+  },
+
+  
+  {
+    name: 'Quantum Expert',
+    story: 'default',
+    chapter: 1,
+  },
+  {
+    name: 'Market Trader',
+    story: 'quantumHealing',
+    chapter: 1,
+  },
+  {
+    name: 'Carl',
+    story: 'default',
+    chapter: 1,
+  },
+  {
+    name: 'Agnet',
+    story: 'default',
+    chapter: 1,
+  },
+  {
+    name: 'Harold',
+    story: 'default',
+    chapter: 1,
   }
 ];
 
 // Load from cache or set defaults
 const cachedStories = JSON.parse(localStorage.getItem('currentStories'));
-if (cachedStories) { // bypassing so it resets every time //&& !(1 === 1)
-  currentStories = cachedStories;
+if (cachedStories) { 
+  window.currentStories = cachedStories;
 } else {
-  localStorage.setItem('currentStories', JSON.stringify(currentStories));
+  localStorage.setItem('currentStories', JSON.stringify(window.currentStories));
 }
 
-// Function to update a story
-window.updateStories = function(name, newStory) {
-  const storyToUpdate = currentStories.find(story => story.name === name);
+// Function to update a character's story and chapter
+window.updateStory = function(name, newStory, newChapter = 1) {
+  const storyToUpdate = window.currentStories.find(story => story.name === name);
   if (storyToUpdate) {
     storyToUpdate.story = newStory;
-    localStorage.setItem('currentStories', JSON.stringify(currentStories));
+    storyToUpdate.chapter = newChapter;
+    localStorage.setItem('currentStories', JSON.stringify(window.currentStories));
   }
-}
+};
+
+// Function to update a character's chapter
+window.updateChapter = function(name, newChapter) {
+  const storyToUpdate = window.currentStories.find(story => story.name === name);
+  if (storyToUpdate) {
+    storyToUpdate.chapter = newChapter;
+    localStorage.setItem('currentStories', JSON.stringify(window.currentStories));
+  }
+};
+
+// Function to get a character's chapter
+window.getChapter = function(name) {
+  const story = window.currentStories.find(story => story.name === name);
+  return story ? story.chapter : null;
+};
 
 // Function to save NPC indicator spriteX to the npcIndicatorStates array
 window.updateNPCIndicator = function(npcName, spriteX) {
@@ -1051,7 +1169,7 @@ function getStoryForNPC(name) {
 
 function loadStory() {
   const npc = npcs.find(npc => npc.name === npcMemory);
-  loadDialogue(getStoryForNPC(npc.name), currentChapters[getStoryForNPC(npc.name)], npc.name); // LOAD STORY
+  loadDialogue(getStoryForNPC(npc.name), getChapter(npc.name), npc.name); // LOAD STORY
 }
 
 function clickDialogueToggle() {

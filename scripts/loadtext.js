@@ -15,12 +15,17 @@ let meterPushNext;
 let completeStoryNext;
 let currentNPC;
 let currentStory;
+let currentChapter;
+let chaptersPushNext;
+let storiesPushNext;
+let variablePushNext;
 window.currentLearnMoreArticle = null;
 window.learnMoreVisible = false;
 
 let textPart;
 
 function loadDialoguePart(story, gamemode, chapter, npc, part) {
+  console.log(`${story}, ${gamemode}, ${chapter}, ${npc}, ${part}`)
   fetch('./scripts/dialogue.json')
     .then(response => response.json())
     .then(data => {
@@ -35,6 +40,7 @@ function loadDialoguePart(story, gamemode, chapter, npc, part) {
         animateText(dialogues[0].text);
         currentStory = story;
         currentNPC = npc;
+        currentChapter = chapter;
 
         textPart = dialogues[0].text;
 
@@ -97,6 +103,24 @@ function loadDialoguePart(story, gamemode, chapter, npc, part) {
           window.learnMoreVisible = false;
           window.currentLearnMoreArticle = null;
           updateFootButtonsVisibility();
+        }
+
+        if (dialogues[0].updateChapters) {// closing the line completes the task (ends)
+          chaptersPushNext = dialogues[0].updateChapters;
+        } else {
+          chaptersPushNext = null
+        }
+
+        if (dialogues[0].updateStories) {
+          storiesPushNext = dialogues[0].updateStories
+        } else {
+          storiesPushNext = null
+        }
+
+        if (dialogues[0].variableUpdates) {
+          variablePushNext = dialogues[0].variableUpdates
+        } else {
+          variablePushNext = null
         }
       }
 
@@ -165,7 +189,7 @@ window.loadDialogue = function(story, chapter, bla) {
   if (unlockCharNext) {
     addTask(`char_ul_${unlockCharNext.toLowerCase().replace(/\s+/g, '_')}`)
     broadcastTopContextMessage(`${unlockText} ${unlockCharNext}`, 4000, 'task');
-    updateStories(unlockCharNext, unlockStory);
+    updateStory(unlockCharNext, unlockStory);
     unlockCharNext = null;
   }
 
@@ -203,17 +227,65 @@ window.loadDialogue = function(story, chapter, bla) {
   }
 
   if (completeStoryNext) {
+    completeStory(currentStory);
+    completeStoryNext = null;
+  }
+
+  function completeStory(storyToComplete) {
     const currentStories = JSON.parse(localStorage.getItem("currentStories")) || [];
     currentStories.forEach(character => {
       console.log(currentStory)
       console.log(character.story)
-      if (character.story === currentStory) {
-        updateStories(character.name, "complete");
+      if (character.story === storyToComplete) {
+        updateStory(character.name, "complete");
+        updateChapter(character.name, 1);
         updateNPCIndicator(character.name, 4);
       }
     });
-    console.log(currentStories)
   }
+
+  if (chaptersPushNext) {
+    for (const [name, chapter] of Object.entries(chaptersPushNext)) {
+      updateChapter(name, chapter);
+    }
+    chaptersPushNext = null;
+  }
+
+  if (storiesPushNext) {
+    for (const [name, story] of Object.entries(storiesPushNext)) {
+      updateStory(name, story);
+    }
+    storiesPushNext = null;
+  }
+
+  if (variablePushNext) {
+    for (const [variableName, value] of Object.entries(variablePushNext)) {
+
+      if (variableName === "qhTracker") {
+        const qhTracker = JSON.parse(localStorage.getItem("qhTracker")) || [];
+        const taskStates = JSON.parse(localStorage.getItem("taskStates")) || {};
+        // Check if the value already exists
+        if (!qhTracker.includes(value)) {
+          qhTracker.push(value); // Append new value
+          localStorage.setItem("qhTracker", JSON.stringify(qhTracker)); // Save updated array
+        }
+
+        if (qhTracker.length === 3 && taskStates.qh_explain === "visible") {
+          toggleTaskCompletion('qh_explain', true);
+          completeStory('quantumHealing');
+          updateDelMeter(-10, false, true);
+        }
+        return;
+      }
+
+
+
+        window[variableName] = value;
+    }
+
+
+    variablePushNext = null;
+}
 
   currentPart++;
   window.currentPart = currentPart;
