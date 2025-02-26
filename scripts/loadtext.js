@@ -19,6 +19,7 @@ let currentChapter;
 let chaptersPushNext;
 let storiesPushNext;
 let variablePushNext;
+let pushTopContextDuration;
 window.currentLearnMoreArticle = null;
 window.learnMoreVisible = false;
 
@@ -77,6 +78,12 @@ function loadDialoguePart(story, gamemode, chapter, npc, part) {
           taskPushNext = null
         }
 
+        if (dialogues[0].topContextDuration) {
+          pushTopContextDuration = dialogues[0].topContextDuration;
+        } else {
+          pushTopContextDuration = null;
+        }
+
         if (dialogues[0].updateIndicators) {// closing the line completes the task
           indicatorsPushNext = dialogues[0].updateIndicators;
         } else {
@@ -115,6 +122,19 @@ function loadDialoguePart(story, gamemode, chapter, npc, part) {
           storiesPushNext = dialogues[0].updateStories
         } else {
           storiesPushNext = null
+        }
+
+        if (dialogues[0].updateInventory) {
+          for (const [itemId, quantity] of Object.entries(dialogues[0].updateInventory)) {
+            const inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+              const itemToUpdate = inventory.find(item => item.item === itemId);
+              if (itemToUpdate) {
+                itemToUpdate.quantity = quantity;
+                localStorage.setItem("inventory", JSON.stringify(inventory));
+                window.inventory = inventory;  
+                updateInventory(window.inventory);
+              }
+          }
         }
 
         if (dialogues[0].variableUpdates) {
@@ -194,9 +214,13 @@ window.loadDialogue = function(story, chapter, bla) {
   }
 
   if (topContextNext) {
+    let topContextTime = 4000
     //its a task!
+    if (pushTopContextDuration) {
+      topContextTime = pushTopContextDuration;
+    }
     
-    broadcastTopContextMessage(topContextNext, 4000, 'task');
+    broadcastTopContextMessage(topContextNext, topContextTime, 'task');
     topContextNext = null;
   }
 
@@ -211,6 +235,27 @@ window.loadDialogue = function(story, chapter, bla) {
   if (taskPushNext) {
     addTask(taskPushNext);
     updateTaskList();
+
+    const inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+
+    if (taskPushNext === "bh_library" ) {
+      const lhcPaper = inventory.find(item => item.item === "lhcPaper");
+      if (lhcPaper && lhcPaper.quantity === 0) {
+        createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
+      }
+    }
+    if (taskPushNext === "micro_beans") {
+      const beans = inventory.find(item => item.item === "beans");
+      if (beans && beans.quantity === 0) {
+        beans.quantity = 1;
+        localStorage.setItem("inventory", JSON.stringify(inventory));
+        window.inventory = inventory;  
+        updateInventory(window.inventory);
+      }
+    }
+
+
+
     taskPushNext = null;
   }
 
@@ -228,6 +273,26 @@ window.loadDialogue = function(story, chapter, bla) {
 
   if (completeStoryNext) {
     completeStory(currentStory);
+
+    if (currentStory === "blackHole") {
+      const inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+      const lhcPaper = inventory.find(item => item.item === "lhcPaper");
+
+      console.log(lhcPaper)
+
+      if (lhcPaper && lhcPaper.quantity > 0) {
+        updateDelMeter(-10, false, true);
+        lhcPaper.quantity = 0;
+        localStorage.setItem("inventory", JSON.stringify(inventory));
+        window.inventory = inventory;  
+        updateInventory(window.inventory);
+      }
+    }
+
+    if (currentStory === "microwaves") {
+      updateDelMeter(-10, false, true);
+    }
+
     completeStoryNext = null;
   }
 

@@ -305,7 +305,7 @@ hair.buzzcut.src = './assets/char/buzzcut.png';
 const items = []; // Array to store ground items
 images.push(itemsSheet);
 
-function createItem(itemData) {
+window.createItem = function(itemData) {
   const item = {
     x: itemData.x,
     y: itemData.y,
@@ -319,6 +319,17 @@ function createItem(itemData) {
     feet: itemData.feet || 0, // Add feet property
   };
   items.push(item);
+}
+
+// Function to remove an item from the items array
+function removeItem(itemToRemove) {
+  const index = items.indexOf(itemToRemove);
+  if (index !== -1) {
+    items.splice(index, 1); // Removes the item from the array
+    console.log(`Item removed: ${itemToRemove.item}`);
+  } else {
+    console.warn("Item not found in items array");
+  }
 }
 
 function updateItemProximity() {
@@ -345,6 +356,20 @@ function handleItemPickup() {
 
     if (distance <= 10) {
       console.log(item.spriteY);
+      
+      // Find the item in the default inventory based on spriteY
+      const foundItem = window.defaultInventory.find(inventoryItem => inventoryItem.spriteY === item.spriteY);
+      if (foundItem) {
+        console.log(foundItem.item);
+        addInventoryItems(foundItem.item, 1);
+        updateChapter("Astronomer", 2);
+        updateChapter("Tibbert", 2);
+        
+        // Remove the item from the items array
+        removeItem(item);
+      } else {
+        console.warn("Item is undefined");
+      }
     }
   });
 }
@@ -356,7 +381,21 @@ window.addEventListener('keydown', event => {
   }
 });
 
-createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
+function initialiseItems() {
+  const inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+  const taskStates = JSON.parse(localStorage.getItem("taskStates")) || {};
+
+  // Directly use find on the inventory array
+  const lhcPaper = inventory.find(item => item.item === "lhcPaper");
+
+  if (taskStates.bh_library === "visible" && lhcPaper && lhcPaper.quantity === 0) {
+    createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
+  }
+
+  console.log(inventory);
+  console.log(taskStates);
+  console.log(lhcPaper);
+}
 
 
 //////////////////
@@ -535,7 +574,40 @@ window.npcs = [
     indicatorSinSpeed: 2.5,
     indicatorSinOffset: 150,
     spriteX: 1, // white
+  }), 
+
+
+  //MICROWAVES
+  createNPC({
+    name: 'Grandma',
+    x: 358.5,
+    y: 260,
+    hair: 'bob',
+    clothingTop: 'floral',
+    hairType: 7,
+    topType: 9,
+    clothingBottom: 'skirt',
+    bottomType: 9,
+    skinTone: 1,
+    blush: true,
+    indicatorSinSpeed: 2.3,
+    indicatorSinOffset: 52,
+    spriteX: 3, // purple
+  }),
+  createNPC({
+    name: 'Restaurant Worker',
+    x: -216,
+    y: 176,
+    hair: 'buzzcut',
+    clothingTop: 'skull',
+    hairType: 4,
+    topType: 0,
+    bottomType: 6,
+    indicatorSinSpeed: 2.7,
+    indicatorSinOffset: 140,
+    spriteX: 1, // white
   })
+
 ];
 
 
@@ -576,6 +648,16 @@ window.currentStories = [
   },
   {
     name: 'Harold',
+    story: 'default',
+    chapter: 1,
+  },
+  {
+    name: 'Grandma',
+    story: 'microwaves',
+    chapter: 1,
+  },
+  {
+    name: 'Restaurant Worker',
     story: 'default',
     chapter: 1,
   }
@@ -1092,6 +1174,8 @@ const bottomLabel = document.getElementById('bottomLabel');
 const bottomLabelWrapper = document.getElementById('bottomLabelWrapper');
 const dialogueToggle = document.getElementById('dialogueToggle');
 
+let isNearNPC;
+
 function checkNPC(npc, char, distance) {
   const distanceToNPC = proximityQuery(char, npc);
   const isNear = distanceToNPC <= distance;
@@ -1106,6 +1190,7 @@ function checkNPC(npc, char, distance) {
     dialogueToggle.classList.add('show');
     dialogueContextWrapper.classList.remove('hidden');
     npcMemory = npc.name;
+    isNearNPC = true;
   } else if (!isNear && wasNear) {
     toggleNPCs[npc.name] = false;
     npc.indicator.spriteY = 0;  // Revert spriteY when far
@@ -1113,6 +1198,7 @@ function checkNPC(npc, char, distance) {
     bottomLabelWrapper.classList.remove('show');
     dialogueToggle.classList.remove('show');
     dialogueContextWrapper.classList.add('hidden');
+    isNearNPC = false;
   }
 
   if (isNear !== wasNear) {
@@ -1133,7 +1219,7 @@ window.checkNPCs = function() {
 let spaceHeld = false; // Flag to track whether Space is held
 
 function spaceDialogueToggle(event) {
-  if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle) return; // Prevent repeated triggers
+  if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle || !isNearNPC) return; // Prevent repeated triggers
 
   spaceHeld = true; // Set flag to prevent retriggering
 
@@ -1818,6 +1904,7 @@ function animate(obj) {
 
 window.onload = function () {
   initialiseCharPosition();
+  initialiseItems();
   
   (function updateCharMovementLoop() {
     updateCharMovement();

@@ -9,6 +9,9 @@
     "char_ul_haarp_professor": "Ask the geophysics professor about HAARP",
     "5g_tower": "Visit the 5G tower and investigate",
     "5g_fix": "Help fix the humming",
-    "nuclear_library":"Go to library and learn more about nuclear power"
+    "nuclear_library":"Go to library and learn more about nuclear power", 
+
+    "micro_beans": "Go to the restaurant and microwave the beans",
+    "micro_return": "Deliver the microwaved beans back to grandma"
 }
 

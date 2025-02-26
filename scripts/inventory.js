@@ -1,17 +1,52 @@
 window.defaultInventory = [
     { 
-        item: "wateringCan", 
-        description: "If theres a drought, feel free to water the crops",
+        item: "telescope", 
+        description: "Maybe this telescope could be used somewhere...",
         quantity: 0, 
         spriteY: 0, 
         index: 1
     },
     { 
-        item: "apple",
-        description: "Use this apple to put in your mouth and chew on if you ever feel hungry",
+        item: "lhcPaper",
+        description: "This peer-reviewed paper about the Large Hadron Collider shows how it's actually completely safe!",
         quantity: 0, 
         spriteY: 1,
         index: 2
+    },
+    { 
+        item: "hammer",
+        description: "If something needs fixing, this hammer could come in handy!",
+        quantity: 0, 
+        spriteY: 2,
+        index: 3
+    },
+    { 
+        item: "map",
+        description: "Map",
+        quantity: 0, 
+        spriteY: 3,
+        index: 4
+    },
+    { 
+        item: "book",
+        description: "Book",
+        quantity: 0, 
+        spriteY: 4,
+        index: 5
+    },
+    { 
+        item: "beans",
+        description: "I'm pretty sure you can microwave these beans, microwaves are safe?",
+        quantity: 0, 
+        spriteY: 5,
+        index: 6
+    },
+    { 
+        item: "warmBeans",
+        description: "Oh these beans have clearly been in the microwave, they're really hot",
+        quantity: 0,
+        spriteY: 6,
+        index: 7
     },
 ];
 
@@ -63,7 +98,8 @@ function initialiseInventory() {
 }
 
 
-window.updateInventory = function() {
+window.updateInventory = function(specificInventory) {
+    if (Array.isArray(specificInventory) && specificInventory.every(item => typeof item === "object")) {inventory = specificInventory}
     saveInventory();
 
     // Filter out items with quantity 0, and sort by index
