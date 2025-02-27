@@ -193,15 +193,18 @@ window.skipDialogue = function() {
   }
 }
 
-window.bypassMovementCheck = false;
+let isDialogueLoading = false;
 
-// Function to load the next part
 window.loadDialogue = function(story, chapter, bla) {
+  if (isDialogueLoading) {
+    return; // Prevent multiple calls
+  }
+
+  isDialogueLoading = true;
 
   currentPart = window.currentPart;
   const gamemode = window.gamemode;
 
-  //autoClose(2000);
   window.bypassMovementCheck = true;
   loadDialoguePart(story, gamemode, chapter, bla, currentPart);
   
@@ -350,8 +353,27 @@ window.loadDialogue = function(story, chapter, bla) {
 
 
     variablePushNext = null;
-}
+  }
 
   currentPart++;
   window.currentPart = currentPart;
+
+
+  // Add an event listener to the dialogueLoaded event.
+  const dialogueLoadedListener = () => {
+    isDialogueLoading = false;
+    window.removeEventListener('dialogueLoaded', dialogueLoadedListener);
+  }
+  window.addEventListener('dialogueLoaded', dialogueLoadedListener);
+};
+
+
+// Example of debouncing (using a simple timeout)
+let loadDialogueTimeout;
+
+window.debouncedLoadDialogue = function(story, chapter, bla) {
+  clearTimeout(loadDialogueTimeout);
+  loadDialogueTimeout = setTimeout(() => {
+    window.loadDialogue(story, chapter, bla);
+  }, 100); // Adjust delay as needed
 }

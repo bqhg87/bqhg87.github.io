@@ -47,6 +47,8 @@ const cowpurple = new Image();
 cowpurple.src = './assets/animated/cowpurple.png';
 const boat = new Image();
 boat.src = './assets/animated/boat.png';
+const tower5g = new Image();
+tower5g.src = './assets/animated/5gtower.png';
 const itemsSheet = new Image();
 itemsSheet.src = './assets/items.png';
 
@@ -91,7 +93,12 @@ const objectsToDraw = [
     frameWidth: 85,
     frameHeight: 94,
     feet: 4,
-    zIndex: 1
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 15,
+    fadeHead: 71,
+    fadeLeft: 34,
+    fadeRight: 34
   },
   {
     image: overlap,
@@ -178,6 +185,20 @@ const objectsToDraw = [
     feet: 1,
     zIndex: 1
   },
+  {
+    image: tower5g,
+    x: -300,
+    y: 450,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 54,
+    frameHeight: 96,
+    animationSpeed: 200,
+    animationOffset: 0,
+    animationFrames: 10,
+    feet: -1,
+    zIndex: 1
+  },
 ];
 window.char = objectsToDraw[0]; // this is the character
 const collisionMapOffset = objectsToDraw[2];
@@ -186,6 +207,7 @@ const cowlightNPC = objectsToDraw[8];
 const cowpinkNPC = objectsToDraw[9];
 const cowpurpleNPC = objectsToDraw[10];
 const boatAnimate = objectsToDraw[11];
+const animate5G = objectsToDraw[12];
 
 // Consolidated image loading
 const images = [charSheet, npcIndicators, groundImage, collisionMap, exampleHouse, shadow, blush, eyes];
@@ -827,6 +849,7 @@ function drawItem(item) {
 
 let cowsVisible = false; 
 let boatVisible = false; 
+let towerVisible = false; 
 
 // Draw all objects
 function draw() {
@@ -851,6 +874,7 @@ function draw() {
 
   cowsVisible = false;
   boatVisible = false;
+  towerVisible = false
 
   // Draw the sorted objects (including items).
   sortedObjects.forEach(obj => {
@@ -866,10 +890,17 @@ function draw() {
       return;
     }
     if (obj.image) {
-      const { image, x, y, opacity = 1, scale = 1, frameX = 0, frameY = 0, frameWidth = image.width, frameHeight = image.height } = obj;
+      const { image, x, y, opacity = 1, scale = 1, frameX = 0, frameY = 0, frameWidth = image.width, frameHeight = image.height, fadeBehind, feet, fadeFeet, fadeHead, fadeLeft, fadeRight } = obj;
 
       const scaledX = (x * scale * globalScale) + translationX;
       const scaledY = (y * scale * globalScale) + translationY;
+      const charFeetY = char.y + char.frameHeight - char.feet;
+      const objFeetY = (y || 0) + (frameHeight || 0) - (feet || 0);
+      const objFeetYFade = (y || 0) + (frameHeight || 0) - (fadeFeet || 0);
+      const objHeadYFade = (y || 0) + (frameHeight || 0) - (fadeHead || 0);
+      const charFadeX = char.x + (char.frameWidth / 2);
+      const objLeftXFade = (x || 0) + ((frameWidth / 2) || 0) - (fadeLeft || 0);
+      const objRightXFade = (x || 0) + ((frameWidth / 2) || 0) + (fadeRight || 0);
 
       if ([cowbrown, cowlight, cowpink, cowpurple].includes(image) && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
         cowsVisible = true;
@@ -877,8 +908,17 @@ function draw() {
       if (image === boat && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
         boatVisible = true;
       }
+      if (image === tower5g && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
+        towerVisible = true;
+      }
 
-      c.globalAlpha = opacity;
+      let drawOpacity = opacity;
+
+      if (fadeBehind && charFeetY < objFeetYFade && charFeetY > objHeadYFade && charFadeX > objLeftXFade && charFadeX < objRightXFade) {
+        drawOpacity = 0.5;
+      }
+
+      c.globalAlpha = drawOpacity;
 
       const scaledImgWidth = frameWidth * scale * globalScale;
       const scaledImgHeight = frameHeight * scale * globalScale;
@@ -1861,6 +1901,9 @@ function animateAll() {
   if (boatVisible) {
     animateBoat(); // Ensures boat animations continue
   }
+  if (towerVisible) {
+    animateTower()
+  }
   
   animationId = requestAnimationFrame(animateAll); // Keep the loop running
 }
@@ -1876,6 +1919,12 @@ function animateBoat() {
   if (!boatVisible) return; // Stop if the boat isn't visible
 
   animate(boatAnimate); // Animate the boat
+}
+
+function animateTower() {
+  if (!towerVisible) return; // Stop if the tower isn't visible
+
+  animate(animate5G); // Animate the tower
 }
 
 function animate(obj) {
