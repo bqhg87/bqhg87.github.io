@@ -30,3 +30,21 @@ document.body.addEventListener('contextmenu', (event) => {
   // Prevent the default context menu if no text is selected and it's not an <a> element
   event.preventDefault();
 });
+
+document.getElementById("resetGame").addEventListener("click", function() {
+  const confirmation = confirm("Are you sure you would like to reset the game? This will reset all your progress.");
+  
+  if (confirmation) {
+      // Clear localStorage and sessionStorage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Clear cookies (optional)
+      document.cookie.split(";").forEach(cookie => {
+          document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/");
+      });
+
+      // Force a hard refresh (bypasses cache)
+      location.reload(true);
+  }
+});
