@@ -150,14 +150,19 @@ body {
 }
 
 h1, h2, h3, p, a, span {
-  all: unset;
   margin: 0;
   font-family: 'mcPixel', sans-serif;
 }
 h1 {
+  all: unset;
+  margin: 0;
+  font-family: 'mcPixel', sans-serif;
   font-size: calc(12px * 1.2); 
 }
 h2 {
+  all: unset;
+  margin: 0;
+  font-family: 'mcPixel', sans-serif;
   font-size: calc(12px * 1); 
   color: rgb(97, 70, 60);
 }
