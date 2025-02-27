@@ -150,17 +150,16 @@ body {
 }
 
 h1, h2, h3, p, a, span {
+  all: unset;
   margin: 0;
   font-family: 'mcPixel', sans-serif;
 }
 h1 {
-  all: unset;
-  margin: 0;
-  font-family: 'mcPixel', sans-serif;
-  font-size: calc(12px * 1); 
+  font-size: calc(12px * 1.2); 
 }
 h2 {
-  font-size: 24.1px; 
+  font-size: calc(12px * 1); 
+  color: rgb(97, 70, 60);
 }
 h3 {
   display: inline-block;
@@ -392,6 +391,7 @@ span, li a {
   color: rgb(97, 70, 60);
   cursor: default;
   z-index: 1001;
+  padding-right: 30px;
 }
 
 
