@@ -28,9 +28,41 @@ overlap.src = './assets/overlap.png';
 const pearTree = new Image();
 pearTree.src = './assets/pearTree1.png';
 const exampleHouse = new Image();
-exampleHouse.src = './assets/buildings/hsst1a.png';
+exampleHouse.src = './assets/buildings/hsst2a.png';
+const hswd3a = new Image();
+hswd3a.src = './assets/buildings/hswd3a.png'
 const mdar1 = new Image();
 mdar1.src = './assets/buildings/mdar1.png';
+const mdtw2 = new Image();
+mdtw2.src = './assets/buildings/mdtw2.png';
+const mdel1 = new Image();
+mdel1.src = './assets/buildings/mdel1.png';
+const mdel2 = new Image();
+mdel2.src = './assets/buildings/mdel2.png';
+const wellSand = new Image();
+wellSand.src = './assets/buildings/wellSand.png';
+const mkst1 = new Image();
+const mkst2 = new Image();
+const mkst3 = new Image();
+const mkst4 = new Image();
+const mkst5 = new Image();
+const mkst6 = new Image();
+const mkst7 = new Image();
+const mkst8 = new Image();
+const mkst9 = new Image();
+const mkst10 = new Image();
+const mkst11 = new Image();
+mkst1.src = './assets/buildings/mkst1.png';
+mkst2.src = './assets/buildings/mkst2.png';
+mkst3.src = './assets/buildings/mkst3.png';
+mkst4.src = './assets/buildings/mkst4.png';
+mkst5.src = './assets/buildings/mkst5.png';
+mkst6.src = './assets/buildings/mkst6.png';
+mkst7.src = './assets/buildings/mkst7.png';
+mkst8.src = './assets/buildings/mkst8.png';
+mkst9.src = './assets/buildings/mkst9.png';
+mkst10.src = './assets/buildings/mkst10.png';
+mkst11.src = './assets/buildings/mkst11.png';
 const shadow = new Image();
 shadow.src = './assets/char/shadow.png';
 const blush = new Image();
@@ -87,18 +119,207 @@ const objectsToDraw = [
     zIndex: 1
   },
   {
+    image: hswd3a,
+    x: 340,
+    y: 209,
+    frameWidth: 62,
+    frameHeight: 63,
+    feet: 1,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 25,
+    fadeHead: 48,
+    fadeLeft: 20,
+    fadeRight: 10
+  },
+  {
     image: mdar1,
     x: -43,
     y: 226,
     frameWidth: 85,
     frameHeight: 94,
     feet: 4,
-    zIndex: 1,
+    zIndex: 6,
     fadeBehind: true,
     fadeFeet: 15,
     fadeHead: 71,
     fadeLeft: 34,
     fadeRight: 34
+  },
+  {
+    image: mdtw2,
+    x: -98,
+    y: 217,
+    frameWidth: 54,
+    frameHeight: 104,
+    feet: 4,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 15,
+    fadeHead: 88,
+    fadeLeft: 23,
+    fadeRight: 24
+  },
+  {
+    image: mdel1,
+    x: 20,
+    y: 185,
+    frameWidth: 109,
+    frameHeight: 71,
+    feet: 20,
+    zIndex: 1,
+  },
+  {
+    image: mdel2,
+    x: 33,
+    y: 91,
+    frameWidth: 57,
+    frameHeight: 77,
+    feet: 51,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 51,
+    fadeHead: 61,
+    fadeLeft: 16,
+    fadeRight: 27
+  },
+  {
+    image: wellSand,
+    x: 48,
+    y: 241,
+    frameWidth: 31,
+    frameHeight: 29,
+    feet: 2,
+    zIndex: 1,
+  },
+  {
+    image: mkst1,
+    x: 96,
+    y: 104,
+    frameWidth: 49,
+    frameHeight: 48,
+    feet: 2,
+    zIndex: 1,
+  },
+  {
+    image: mkst2,
+    x: 158,
+    y: 173,
+    frameWidth: 49,
+    frameHeight: 43,
+    feet: 2,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 18,
+    fadeHead: 32,
+    fadeLeft: 24,
+    fadeRight: 24
+  },
+  {
+    image: mkst3,
+    x: 165,
+    y: 128,
+    frameWidth: 90,
+    frameHeight: 43,
+    feet: 2,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 18,
+    fadeHead: 30,
+    fadeLeft: 45,
+    fadeRight: 45
+  },
+  {
+    image: mkst4,
+    x: 181,
+    y: 223,
+    frameWidth: 44,
+    frameHeight: 67,
+    feet: 2,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 37,
+    fadeHead: 55,
+    fadeLeft: 15,
+    fadeRight: 24
+  },
+  {
+    image: mkst5,
+    x: 250,
+    y: 157,
+    frameWidth: 49,
+    frameHeight: 48,
+    feet: 2,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 18,
+    fadeHead: 36,
+    fadeLeft: 24,
+    fadeRight: 24
+  },
+  {
+    image: mkst6,
+    x: 272,
+    y: 112,
+    frameWidth: 49,
+    frameHeight: 48,
+    feet: 2,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 18,
+    fadeHead: 36,
+    fadeLeft: 24,
+    fadeRight: 24
+  },
+  {
+    image: mkst7,
+    x: 323,
+    y: 128,
+    frameWidth: 74,
+    frameHeight: 96,
+    feet: 2,
+    zIndex: 1,
+  },
+  {
+    image: mkst8,
+    x: 304,
+    y: 60,
+    frameWidth: 49,
+    frameHeight: 43,
+    feet: 2,
+    zIndex: 1,
+  },
+  {
+    image: mkst9,
+    x: 426,
+    y: 128,
+    frameWidth: 49,
+    frameHeight: 43,
+    feet: 2,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 18,
+    fadeHead: 32,
+    fadeLeft: 24,
+    fadeRight: 24
+  },
+  {
+    image: mkst10,
+    x: 405,
+    y: 21,
+    frameWidth: 44,
+    frameHeight: 71,
+    feet: 2,
+    zIndex: 1,
+  },
+  {
+    image: mkst11,
+    x: 192,
+    y: 34,
+    frameWidth: 44,
+    frameHeight: 83,
+    feet: 2,
+    zIndex: 1,
   },
   {
     image: overlap,
@@ -409,7 +630,7 @@ function initialiseItems() {
   const lhcPaper = inventory.find(item => item.item === "lhcPaper");
 
   if (taskStates.bh_library === "visible" && lhcPaper && lhcPaper.quantity === 0) {
-    createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
+    createItem({ x: 252, y: -94, spriteX: 0, spriteY: 1, visible: true });
   }
 }
 
@@ -857,18 +1078,20 @@ function draw() {
   centerCamera();
   updateItemProximity();
 
-  // Include items in the sortedObjects array
   const sortedObjects = [...objectsToDraw, ...npcs, ...items].sort((a, b) => {
     const charFeet = char.y + char.frameHeight - char.feet;
     const aFeet = (a.y || 0) + (a.frameHeight || 0) - (a.feet || 0);
     const bFeet = (b.y || 0) + (b.frameHeight || 0) - (b.feet || 0);
-
-    if (charFeet < aFeet) {
-      return 1;
+  
+    // Directly compare feet values for sorting
+    if (aFeet > bFeet) {
+      return 1; // a is further down (behind), should be drawn later
     }
-    if (charFeet < bFeet) {
-      return -1;
+    if (aFeet < bFeet) {
+      return -1; // a is higher up (in front), should be drawn earlier
     }
+  
+    // If feet are the same, use zIndex
     return (a.zIndex || 0) - (b.zIndex || 0);
   });
 
@@ -915,7 +1138,7 @@ function draw() {
       let drawOpacity = opacity;
 
       if (fadeBehind && charFeetY < objFeetYFade && charFeetY > objHeadYFade && charFadeX > objLeftXFade && charFadeX < objRightXFade) {
-        drawOpacity = 0.5;
+        drawOpacity = 0.75;
       }
 
       c.globalAlpha = drawOpacity;
