@@ -1512,7 +1512,7 @@ function getStoryForNPC(name) {
 }
 
 function loadStory() {
-  console.log('loadStory function gameJS')
+  console.log('loadStory function gameJS 2')
   const npc = npcs.find(npc => npc.name === npcMemory);
   loadDialogue(getStoryForNPC(npc.name), getChapter(npc.name), npc.name); // LOAD STORY
 }
