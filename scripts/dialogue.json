@@ -1114,7 +1114,8 @@
       "npc": "Astronomer",
       "isNpcSpeaking": false,
       "finalPart": false,
-      "text": "But he told me it would create black holes!?"
+      "text": "But he told me it would create black holes!?", 
+      "learnMore": "lhc2"
     },
     {
       "story": "blackHole",
@@ -1224,7 +1225,8 @@
       "npc": "Tibbert",
       "isNpcSpeaking": false,
       "finalPart": false,
-      "text": "I saw how worried you were about the Large Hadron Collider, so I went to see the astronomer about it"
+      "text": "I saw how worried you were about the Large Hadron Collider, so I went to see the astronomer about it",
+      "learnMore": "lhc3"
     },
     {
       "story": "blackHole",
@@ -1403,7 +1405,8 @@
       "npc": "Market Trader",
       "isNpcSpeaking": true,
       "finalPart": false,
-      "text": "Hello there - are you interested in a quantum healing bracelet? They can cure all illnesses and fill you with energy! Get your special discount today, just for you!"
+      "text": "Hello there - are you interested in a quantum healing bracelet? They can cure all illnesses and fill you with energy! Get your special discount today, just for you!",
+      "learnMore": "qh3"
     },
     {
       "story": "quantumHealing",
@@ -1423,7 +1426,8 @@
       "npc": "Market Trader",
       "isNpcSpeaking": true,
       "finalPart": false,
-      "text": "It's all science-based. You see, quantum physics tells us that everything is made of energy, and the way we interact with this energy shapes our reality. These bracelets tap into that energy, helping you heal. They're great for emotional balance too! I've been wearing one for years and I feel amazing!"
+      "text": "It's all science-based. You see, quantum physics tells us that everything is made of energy, and the way we interact with this energy shapes our reality. These bracelets tap into that energy, helping you heal. They're great for emotional balance too! I've been wearing one for years and I feel amazing!",
+      "learnMore": "qh1"
     },
     {
       "story": "quantumHealing",
@@ -1443,7 +1447,8 @@
       "npc": "Market Trader",
       "isNpcSpeaking": true,
       "finalPart": false,
-      "text": "Look, science is complicated. You don't need to understand it all, just trust me. I wouldn't lie to you!"
+      "text": "Look, science is complicated. You don't need to understand it all, just trust me. I wouldn't lie to you!",
+      "learnMore": "qh2"
     },
     {
       "story": "quantumHealing",
@@ -1595,7 +1600,8 @@
       "npc": "Market Trader",
       "isNpcSpeaking": true,
       "finalPart": false,
-      "text": "Ha! Come on, don't be a fool. In this world there are two types of people: hustlers and suckers. The dopes that fall for this deserve what they get. Suit yourself goody twoshoes"
+      "text": "Ha! Come on, don't be a fool. In this world there are two types of people: hustlers and suckers. The dopes that fall for this deserve what they get. Suit yourself goody twoshoes",
+      "learnMore": "qh4"
     },
     {
       "story": "quantumHealing",
@@ -1609,6 +1615,7 @@
       "taskCompleteId": "qh_return",
       "taskPushId": "qh_explain",
       "text": "I choose to do what's right and I value real physics. People need the truth, not these lies",
+      "learnMore": "qh5",
       "updateIndicators": {
         "Quantum Expert": 1,
         "Market Trader": 2,
@@ -1981,7 +1988,8 @@
       "npc": "Grandma",
       "isNpcSpeaking": true,
       "finalPart": false,
-      "text": "The man next door has been saying all this about microwaves; I am so glad I never bought one now. All you children trying to make me buy one all these years, now look!"
+      "text": "The man next door has been saying all this about microwaves; I am so glad I never bought one now. All you children trying to make me buy one all these years, now look!",
+      "learnMore": "micro2"
     },
     {
       "story": "microwaves",
@@ -2021,7 +2029,8 @@
       "npc": "Grandma",
       "isNpcSpeaking": true,
       "finalPart": false,
-      "text": "He also put a fork in and it exploded! How can that be safe?!"
+      "text": "He also put a fork in and it exploded! How can that be safe?!",
+      "learnMore": "micro1"
     },
     {
       "story": "microwaves",
@@ -2147,7 +2156,8 @@
       "npc": "Grandma",
       "isNpcSpeaking": true,
       "finalPart": false,
-      "text": "That is reassuring, thank you dear. I will have to let the neighbour know, I am sure he will be thrilled to find out! Who would spread such things, honestly... "
+      "text": "That is reassuring, thank you dear. I will have to let the neighbour know, I am sure he will be thrilled to find out! Who would spread such things, honestly... ",
+      "learnMore": "micro3"
     },
     {
       "story": "microwaves",

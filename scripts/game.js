@@ -116,7 +116,8 @@ const objectsToDraw = [
     frameWidth: 38,
     frameHeight: 38,
     feet: 1,
-    zIndex: 1
+    zIndex: 1,
+    opacity: 0
   },
   {
     image: hswd3a,

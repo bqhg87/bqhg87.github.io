@@ -37,9 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><p><span class="darkened">George Scott</span> - Introductory article, LHC script, 5G script, LHG article and 5G article.</p></li>
             <li><p><span class="darkened">Zahra Wilkinson</span> - Quantum healing script, Gamma Ray Bursts script, Weather control script, Quantum healing article, Nuclear Energy article,playtesting and credits.</p></li>
           <ul>
-          <h2>Assets</h2>
+          <h2>Game Assets and Images</h2>
           <ul class="wide-spacing bulleted">
-            <li>
+            <li><p><a href="https://cupnooble.itch.io/sprout-lands-asset-pack">Sprout Lands Asset Pack</a>, Licensed for non-commerical use from <a href="https://cupnooble.itch.io/">Cup Nooble</a> <br> (Note: while some sprites were used, others were simply inspired by the original style.)</p></li>
+            <li><p><a href="https://shubibubi.itch.io/cozy-people">Cozy Town Asset Pack</a>, Licensed for non-commercial reuse from <a href="https://shubibubi.itch.io/">shubibubi</a> <br> (Note: no character sprites were used. This resource was just used as a primary reference.)</p></li>
+            <li><p><a href="https://commons.wikimedia.org/wiki/File:Microwave_oven_(interior).jpg">Mk2010</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>, via Wikimedia Commons</p></li>
+            <li><p><a href="GRB080319B illustration NASA.jpg">Mk2010</a>, <a href="https://www.nasa.gov/nasa-brand-center/images-and-media/">Licensed under NASA image policy</a>, via Wikimedia Commons</p></li>
+            <li><p><a href="https://commons.wikimedia.org/wiki/File:High_Frequency_Active_Auroral_Research_Program_site.jpg">United States Federal Government</a>, Public domain, via Wikimedia Commons</p></li>
+            <li><p><a href="https://commons.wikimedia.org/wiki/File:Aurora_borealis_above_Lyngenfjorden,_2012_March.jpg">Ximonic (Simo Räsänen)</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>, via Wikimedia Commons</p></li>
+            <li><p><a href="https://commons.wikimedia.org/wiki/File:SPDC_figure.png">SPDC figure</a>, <a href="http://www.gnu.org/copyleft/fdl.html">GFDL</a>, via Wikimedia Commons</p></li>
+            <li><p><a href="https://picryl.com/media/pripyat-chernobyl-free-photos-8b2dad">Pripyat Chernobyl Free Photos</a>, <a href="https://web.archive.org/web/20161229043156/https://pixabay.com/en/service/terms/">Pixabay License</a>, via Pixabay</p></li>
+            <li><p><a href="https://www.flickr.com/photos/nrcgov/52827364534">Nuclear Fission</a>, <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons CC BY 2.0</a>, via Flickr</p></li>
           </ul>
           <p>Special thanks to Dr Paul Mackay for his invaluable advice and guidance throughout the creation and development of this project.</p>
         </div>
@@ -49,11 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
     references:`
       <div id="articleContainer">
         <div id="articleHead">
-          <h1 id="articleTitle">References</h1>
+          <h1 id="articleTitle">References:</h1>
         </div>
         <div id="articleBody">
           <div class="articleItem wide">
-            <h2>Quantum Healing</h2>
+            <h2>Quantum Healing:</h2>
             <ol>
               <li>United Kingdom. Parliamentary Office of Science and Technology (2024). Disinformation: sources, spread and impact (POSTnote 719). doi: 10.58248/PN719.</li>
               <li>Amanda Jesenska (2025) 7 February. Available at: <a href="https://www.facebook.com/AmandaIntuitiveConsultant" title="https://www.facebook.com/AmandaIntuitiveConsultant" target="blank">https://www.facebook.com/AmandaIntuitiveConsultant</a>. (Accessed: 21 February 2025)</li>
@@ -71,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <li>European Commission (no date). Fighting disinformation. Available at: <a href="https://commission.europa.eu/strategy-and-policy/coronavirus-response/fighting-disinformation_en" title="https://commission.europa.eu/strategy-and-policy/coronavirus-response/fighting-disinformation_en" target="blank">https://commission.europa.eu/strategy-and-policy/coronavirus-response/fighting-disinformation_en</a>. (Accessed: 21 February 2025).</li>
               <li>van der Linden, S., Albarracín, D., Fazio, L., Freelon, D., Roozenbeek, J., Swire-Thompson, B. and Van Bavel, J. (2023). Using psychology to understand and fight health misinformation. Washington, DC: American Psychological Association. Available at: <a href="https://www.apa.org/pubs/reports/misinformation-consensus-statement.pdf" title="https://www.apa.org/pubs/reports/misinformation-consensus-statement.pdf" target="blank">https://www.apa.org/pubs/reports/misinformation-consensus-statement.pdf</a>. (Accessed: 21 February 2025).</li>
             </ol>
-            <h2>Weather Control Conspiracy Theories</h2>
+            <h2>Weather Control Conspiracy Theories:</h2>
             <ol>
               <li>Check, R.F. (2024). Fact Check: Northern Lights were not man-made, contrary to social media claims. Reuters. [online] 20 May. Available at: https://www.reuters.com/fact-check/northern-lights-were-not-man-made-contrary-social-media-claims-2024-05-20/.</li>
               <li>Full Fact (2024). HAARP research facility was not behind recent UK Northern Lights sightings - Full Fact. [online] Full Fact. Available at: https://fullfact.org/online/haarp-northern-lights/ [Accessed 28 Feb. 2025].</li>
@@ -80,13 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <li>Morrow, B. (2021). Facebook reportedly gave the angry emoji 5 times as much weight as a 'like'. [online] The Week. Available at: https://theweek.com/facebook/1006422/facebook-reportedly-gave-the-angry-emoji-5-times-as-much-weight-as-a-like [Accessed 28 Feb. 2025].</li>
               <li>published, B.C. (2010). Chavez: US 'Tectonic Weapon' Caused Haiti Quake. [online] livescience.com. Available at: https://www.livescience.com/8071-chavez-tectonic-weapon-caused-haiti-quake.html.</li>
             </ol>
-            <h2>Microwaves</h2>
+            <h2>Microwaves:</h2>
             <ol>
               <li>published, B.C. (2010). Chavez: US 'Tectonic Weapon' Caused Haiti Quake. [online] livescience.com. Available at: https://www.livescience.com/8071-chavez-tectonic-weapon-caused-haiti-quake.html.</li>
               <li>Cercone, Jeff. “Colon Cancer Not Linked to Cooking in Microwave Ovens.” @Politifact, 2024, www.politifact.com/factchecks/2023/feb/01/instagram-posts/microwave-ovens-arent-causing-colon-cancer-despite/. Accessed 12 Feb. 2025.</li>
               <li>“Microwave Ovens.” Microwave Ovens, U.S. Food and Drug Administration, 20 Mar. 2023, www.fda.gov/radiation-emitting-products/resources-you-radiation-emitting-products/microwave-ovens#Cooking_with_Microwaves. Accessed 14 Feb. 2025.</li>
             </ol>
-            <h2>Black Holes at the LHC</h2>
+            <h2>Black Holes at the LHC:</h2>
             <ol>
               <li>Park, S.C. (2012). Black holes and the LHC: A review. Progress in Particle and Nuclear Physics, 67(3), pp.617-650. doi:https://doi.org/10.1016/j.ppnp.2012.03.004.</li>
               <li>Dorman, L. (2009). Cosmic Rays in Magnetospheres of the Earth and other Planets. Astrophysics and space science library. Springer Nature (Netherlands). doi:https://doi.org/10.1007/978-1-4020-9239-8.</li>
@@ -94,38 +102,39 @@ document.addEventListener('DOMContentLoaded', () => {
               <li>Ellis, J., Giudice, G., Mangano, M., Tkachev, I. and Wiedemann, U. (2008). Review of the safety of LHC collisions. Journal of Physics G: Nuclear and Particle Physics, [online] 35(11), p.115004. doi:https://doi.org/10.1088/0954-3899/35/11/115004.</li>
               <li>Koch, B., Bleicher, M. and Horst Stöcker (2009). Exclusion of black hole disaster scenarios at the LHC. Physics Letters B, [online] 672(1), pp.71-76. doi:https://doi.org/10.1016/j.physletb.2009.01.003.</li>
               <li>Lewandowsky, S. and Cook, J. (2023). The Conspiracy Theory Handbook - Center for Climate Change Communication. [online] Center for Climate Change Communication. Available at: https://www.climatechangecommunication.org/all/the-conspiracy-theory-handbook/.</li>
-            <h2>Nuclear Energy</h2>
-              <ol>
-                <li> Scheer, D., Konrad, W. and Wassermann, S. (2017). The good, the bad, and the ambivalent: A qualitative study of public perceptions towards energy technologies and portfolios in Germany. Energy Policy, [online] 100, pp.89-100. doi: 10.1016/j.enpol.2016.09.061.</li>
-                <li>Gupta, K., Nowlin, M.C., Ripberger, J.T., Jenkins-Smith, H.C. and Silva, C.L. (2019). Tracking the nuclear 'mood' in the United States: Introducing a long term measure of public opinion about nuclear energy using aggregate survey data. Energy Policy, 133, p.110888. doi: 10.1016/j.enpol.2019.110888.</li>
-                <li>World Nuclear Association (2025). Chernobyl Accident 1986. Available at: https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/chernobyl-accident (Accessed: 26 February 2025).</li>
-                <li>Bourguignon, D. and Scholz, N. (2016). Chernobyl 30 years on: Environmental and health effects. Brussels: European Parliamentary Research Service. Available at: https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2016)581972 (Accessed: 26 February 2025).</li>
-                <li>Chernobyl Forum (2005). Chernobyl's Legacy: Health, Environmental and Socio-economic Impacts and Recommendations to the Governments of Belarus, the Russian Federation and Ukraine. 2nd rev. ed. Vienna: United Nations. Available at: https://www.iaea.org/sites/default/files/chernobyl.pdf (Accessed: 26 February 2025).</li>
-                <li>Gray, R. (2019). 'The true toll of the Chernobyl disaster', BBC Future, 26 July. Available at: https://www.bbc.co.uk/future/article/20190725-will-we-ever-know-chernobyls-true-death-toll (Accessed: 26 February 2025).</li>
-                <li>BBC News (2023). 'Fukushima disaster: What happened at the nuclear plant', BBC News, 23 August. Available at: https://www.bbc.co.uk/news/world-asia-56252695 (Accessed: 26 February 2025).</li>
-                <li>Cantwell, M. (2021). Ten years later, here's what Fukushima's damaged reactors look like today. Science. doi: 10.1126/science.abi5976.</li>
-                <li>World Nuclear Association (2024). Fukushima Daiichi Accident. Available at: https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/fukushima-daiichi-accident#:~:text=Official%20figures%20show%20that%20there,by%20the%20earthquake%20or%20tsunami (Accessed: 26 February 2025).</li>
-                <li>Chughtai, A. (2021). 'The Fukushima disaster in maps and charts', Al Jazeera, 10 March. Available at: https://www.aljazeera.com/news/2021/3/10/fukushima-disaster-in-maps-and-charts (Accessed: 26 February 2025).</li>
-                <li>Duda, A. and Takamitsu Jimura (2024). Nuclear accident sites and tourism: a comparative analysis of the Chernobyl and Fukushima exclusion zones. Current Issues in Tourism, pp.1-18. doi: 10.1080/13683500.2023.2298344.</li>
-                <li>Bradley, S. (2025). 6 February. Available at: https://www.facebook.com/thesusanbradley/. (Accessed: 26 February 2025).</li>
-                <li>World Nuclear Association (2024). Radioactive Waste - Myths and Realities. Available at: https://world-nuclear.org/information-library/nuclear-fuel-cycle/nuclear-waste/radioactive-wastes-myths-and-realities (Accessed: 26 February 2025).</li>
-                <li>Australian Radiation Protection and Nuclear Safety Agency (2017). What is ionising radiation? Available at: https://www.arpansa.gov.au/understanding-radiation/what-is-radiation/ionising-radiation (Accessed: 26 February 2025).</li>
-                <li>World Health Organization (2020). Radiation: Ionizing radiation. Available at: https://www.who.int/news-room/questions-and-answers/item/radiation-ionizing-radiation (Accessed: 26 February 2025). </li>
-                <li>Natural Resources Defence Council (2022). Nuclear Power 101. Available at: https://www.nrdc.org/stories/nuclear-power-101 (Accessed: 26 February 2025).</li>
-                <li>International Atomic Energy Agency (2024). International Day of Clean Energy: Why Nuclear Power? Available at: https://www.iaea.org/newscenter/news/international-day-of-clean-energy-why-nuclear-power (Accessed: 26 February 2025).</li>
-                <li>Office of Nuclear Energy, U.S. Department of Energy (2025). Nuclear Power is the Most Reliable Energy Source and It's Not Even Close. Available at: https://www.energy.gov/ne/articles/nuclear-power-most-reliable-energy-source-and-its-not-even-close (Accessed: 26 February 2025).</li>
-                <li>United Kingdom. Parliamentary Office of Science and Technology (2024). Disinformation: sources, spread and impact (POSTnote 719). doi: 10.58248/PN719.</li>
-                <li>Martel, C., Pennycook, G. and Rand, D.G. (2020). Reliance on Emotion Promotes Belief in Fake News. Cognitive Research: Principles and Implications, 5(1), pp.1-20. doi: 10.1186/s41235-020-00252-3.</li>
-                <li>American Psychological Association (2024). 8 recommendations for countering misinformation. Available at: https://www.apa.org/topics/journalism-facts/misinformation-recommendations (Accessed: 26 February 2025).</li>
-                <li>Lewandowsky, S. and Cook, J. (2020). The Conspiracy Theory Handbook. Available at: https://www.climatechangecommunication.org/all/the-conspiracy-theory-handbook/. (Accessed: 21 February 2025).</li>
-              </ol>
-            <h2>Gamma Ray Bursts</h2>
+            </ol>
+            <h2>Nuclear Energy:</h2>
+            <ol>
+              <li> Scheer, D., Konrad, W. and Wassermann, S. (2017). The good, the bad, and the ambivalent: A qualitative study of public perceptions towards energy technologies and portfolios in Germany. Energy Policy, [online] 100, pp.89-100. doi: 10.1016/j.enpol.2016.09.061.</li>
+              <li>Gupta, K., Nowlin, M.C., Ripberger, J.T., Jenkins-Smith, H.C. and Silva, C.L. (2019). Tracking the nuclear 'mood' in the United States: Introducing a long term measure of public opinion about nuclear energy using aggregate survey data. Energy Policy, 133, p.110888. doi: 10.1016/j.enpol.2019.110888.</li>
+              <li>World Nuclear Association (2025). Chernobyl Accident 1986. Available at: https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/chernobyl-accident (Accessed: 26 February 2025).</li>
+              <li>Bourguignon, D. and Scholz, N. (2016). Chernobyl 30 years on: Environmental and health effects. Brussels: European Parliamentary Research Service. Available at: https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2016)581972 (Accessed: 26 February 2025).</li>
+              <li>Chernobyl Forum (2005). Chernobyl's Legacy: Health, Environmental and Socio-economic Impacts and Recommendations to the Governments of Belarus, the Russian Federation and Ukraine. 2nd rev. ed. Vienna: United Nations. Available at: https://www.iaea.org/sites/default/files/chernobyl.pdf (Accessed: 26 February 2025).</li>
+              <li>Gray, R. (2019). 'The true toll of the Chernobyl disaster', BBC Future, 26 July. Available at: https://www.bbc.co.uk/future/article/20190725-will-we-ever-know-chernobyls-true-death-toll (Accessed: 26 February 2025).</li>
+              <li>BBC News (2023). 'Fukushima disaster: What happened at the nuclear plant', BBC News, 23 August. Available at: https://www.bbc.co.uk/news/world-asia-56252695 (Accessed: 26 February 2025).</li>
+              <li>Cantwell, M. (2021). Ten years later, here's what Fukushima's damaged reactors look like today. Science. doi: 10.1126/science.abi5976.</li>
+              <li>World Nuclear Association (2024). Fukushima Daiichi Accident. Available at: https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/fukushima-daiichi-accident#:~:text=Official%20figures%20show%20that%20there,by%20the%20earthquake%20or%20tsunami (Accessed: 26 February 2025).</li>
+              <li>Chughtai, A. (2021). 'The Fukushima disaster in maps and charts', Al Jazeera, 10 March. Available at: https://www.aljazeera.com/news/2021/3/10/fukushima-disaster-in-maps-and-charts (Accessed: 26 February 2025).</li>
+              <li>Duda, A. and Takamitsu Jimura (2024). Nuclear accident sites and tourism: a comparative analysis of the Chernobyl and Fukushima exclusion zones. Current Issues in Tourism, pp.1-18. doi: 10.1080/13683500.2023.2298344.</li>
+              <li>Bradley, S. (2025). 6 February. Available at: https://www.facebook.com/thesusanbradley/. (Accessed: 26 February 2025).</li>
+              <li>World Nuclear Association (2024). Radioactive Waste - Myths and Realities. Available at: https://world-nuclear.org/information-library/nuclear-fuel-cycle/nuclear-waste/radioactive-wastes-myths-and-realities (Accessed: 26 February 2025).</li>
+              <li>Australian Radiation Protection and Nuclear Safety Agency (2017). What is ionising radiation? Available at: https://www.arpansa.gov.au/understanding-radiation/what-is-radiation/ionising-radiation (Accessed: 26 February 2025).</li>
+              <li>World Health Organization (2020). Radiation: Ionizing radiation. Available at: https://www.who.int/news-room/questions-and-answers/item/radiation-ionizing-radiation (Accessed: 26 February 2025). </li>
+              <li>Natural Resources Defence Council (2022). Nuclear Power 101. Available at: https://www.nrdc.org/stories/nuclear-power-101 (Accessed: 26 February 2025).</li>
+              <li>International Atomic Energy Agency (2024). International Day of Clean Energy: Why Nuclear Power? Available at: https://www.iaea.org/newscenter/news/international-day-of-clean-energy-why-nuclear-power (Accessed: 26 February 2025).</li>
+              <li>Office of Nuclear Energy, U.S. Department of Energy (2025). Nuclear Power is the Most Reliable Energy Source and It's Not Even Close. Available at: https://www.energy.gov/ne/articles/nuclear-power-most-reliable-energy-source-and-its-not-even-close (Accessed: 26 February 2025).</li>
+              <li>United Kingdom. Parliamentary Office of Science and Technology (2024). Disinformation: sources, spread and impact (POSTnote 719). doi: 10.58248/PN719.</li>
+              <li>Martel, C., Pennycook, G. and Rand, D.G. (2020). Reliance on Emotion Promotes Belief in Fake News. Cognitive Research: Principles and Implications, 5(1), pp.1-20. doi: 10.1186/s41235-020-00252-3.</li>
+              <li>American Psychological Association (2024). 8 recommendations for countering misinformation. Available at: https://www.apa.org/topics/journalism-facts/misinformation-recommendations (Accessed: 26 February 2025).</li>
+              <li>Lewandowsky, S. and Cook, J. (2020). The Conspiracy Theory Handbook. Available at: https://www.climatechangecommunication.org/all/the-conspiracy-theory-handbook/. (Accessed: 21 February 2025).</li>
+            </ol>
+            <h2>Gamma Ray Bursts:</h2>
               <ol>
                 <li>Cain, F. and Today, U. (2015). Are gamma ray bursts dangerous? [online] phys.org. Available at: https://phys.org/news/2015-01-gamma-ray-dangerous.html [Accessed 21 Feb. 2025].</li>
                 <li>Gronstal, A. (2016). NASA Astrobiology. [online] astrobiology.nasa.gov. Available at: https://astrobiology.nasa.gov/news/how-deadly-would-a-nearby-gamma-ray-burst-be/ [Accessed 21 Feb. 2025].</li>
                 <li>Thomas, B.C. (2009). Gamma-ray bursts as a threat to life on Earth. International Journal of Astrobiology, 8(3), pp.183-186. doi:https://doi.org/10.1017/s1473550409004509.</li>
               </ol>
-            <h2>5G</h2>
+            <h2>5G:</h2>
               <ol>
                 <li>Gultekin, D.H. and Siegel, P.H. (2020). Absorption of 5G Radiation in Brain Tissue as a Function of Frequency, Power and Time. IEEE Access, [online] 8, pp.115593-115612. doi:https://doi.org/10.1109/ACCESS.2020.3002183.</li>
                 <li>Di Ciaula, A. (2018). Towards 5G communication systems: Are there health implications? International Journal of Hygiene and Environmental Health, [online] 221(3), pp.367-375. doi:https://doi.org/10.1016/j.ijheh.2018.01.011.</li>
@@ -220,10 +229,16 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div id="articleBody">
         <div class="articleItem wide">
-          <p>In many discussions surrounding this topic, there appears to be a lack of foundational arguments, leading some writers to rely on various manipulation tactics instead.<br>
+          <p>In many discussions surrounding this topic, there appears to be a lack of foundational arguments, leading some writers to rely on various manipulation tactics instead.<p>
+        </div>
+        <div class="aricleItem right1">
+          <img src="/assets/articleImages/High_Frequency_Active_Auroral_Research_Program_site.jpg" alt="HAARP research station">
+        </div>
+        <div class="articleItem left1">
           Often, rather than presenting facts, writers frame their posts as questions. For instance, a post asking, "What's going on in Houston, Texas?" over an image that may otherwise not raise too many questions, but the presence of the question means it begins to seem suspicious. By not stating their own theories, they may aim to foster curiosity among those who are unfamiliar with the issue, while allowing the imaginations of those already engaged to run rampant.<br><br>
-          Phrases such as "if you know... you know!" exploit human nature's tendency to fear exclusion. This approach creates an impression of an insider group, enticing individuals to explore further.<br><br>
-          The inclusion of emojis in these posts can enhance relatability, with the 'thinking' emoji frequently used to project a sense of reliability—suggesting that the writer is engaging in critical thinking and thereby establishing trustworthiness.<br><br>
+          Phrases such as "if you know... you know!" exploit human nature's tendency to fear exclusion. This approach creates an impression of an insider group, enticing individuals to explore further.<br><br>The inclusion of emojis in these posts can enhance relatability, with the 'thinking' emoji frequently used to project a sense of reliability—suggesting that the writer is engaging in critical thinking and thereby establishing trustworthiness.
+        </div>
+        <div class="articleItem wide">
           Often, precise numbers are quoted without appropriate sourcing. By being specific with what they claim to be facts or data they create a feeling of trust, as if they know exactly what is happening. This is similar to a common issue in statistical representation, where data is cited with greater precision than warranted, knowingly or not misrepresenting the inherent uncertainty in measurements and calculations, which can lead to a false sense of security regarding the certainty of the value.</p>
       </div>
     </div>
@@ -268,7 +283,17 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div id="articleBody">
         <div class="articleItem wide">
-          <p>Inaccurate information is frequently spread on sites such as Medical Daily and Instagram, utilizing various techniques to mislead the audience.<br>One common method is the use of false source links. When individuals encounter a claim that cites a source, accompanied by a link, it can enhance their perception of the claim's legitimacy. In many cases, consumers may not take the time to verify the link, leading them to trust that credible information supports the claim. This strategy allows the creators of such content to cite sources that are unrelated to the topic at hand.<br>Another technique involves leveraging respected figures within society to build trust in their assertions. For example, references to unnamed 'doctors' making claims, without providing further identification or context, can manipulate public perception.<br>Additionally, the use of scientific terminology, such as 'toxins' and 'carcinogens,' can exploit individuals' inherent fear of the unknown. If a person does not fully understand the terminology, they may be more susceptible to persuasion, especially as the source presents itself with confidence. Fearmongering regarding topics like 'colon cancer' further preys on concerns about carcinogens—of which many exist in varying degrees and are not entirely understood. This can lead individuals to seek information from confident sources, often overlooking more balanced and nuanced literature. </p>
+          <p>Inaccurate information is frequently spread on sites such as Medical Daily and Instagram, utilizing various techniques to mislead the audience.</p>
+        </div>
+        <div class="articleItem left">
+          <img src="./assets/articleImages/microwave.jpg" alt="A domestic microwave">
+        </div>
+        <div class="articleItem right">
+          <p>One common method is the use of false source links. When individuals encounter a claim that cites a source, accompanied by a link, it can enhance their perception of the claim's legitimacy. In many cases, consumers may not take the time to verify the link, leading them to trust that credible information supports the claim. This strategy allows the creators of such content to cite sources that are unrelated to the topic at hand.
+        </div>
+        <div class="articleItem wide">
+          <p>Another technique involves leveraging respected figures within society to build trust in their assertions. For example, references to unnamed 'doctors' making claims, without providing further identification or context, can manipulate public perception.<br><br> Additionally, the use of scientific terminology, such as 'toxins' and 'carcinogens,' can exploit individuals' inherent fear of the unknown. If a person does not fully understand the terminology, they may be more susceptible to persuasion, especially as the source presents itself with confidence. Fearmongering regarding topics like 'colon cancer' further preys on concerns about carcinogens—of which many exist in varying degrees and are not entirely understood. This can lead individuals to seek information from confident sources, often overlooking more balanced and nuanced literature.</p>
+        </div> 
       </div>
     </div>
   `,

@@ -172,6 +172,11 @@ ul.bulleted li::before {
   flex-shrink: 0; /* Prevent bullet from resizing */
 }
 
+ol {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
 span.darkened {
   all: unset;
   color: rgb(97, 70, 60); /* Darker color for 'Hamish Campbell' */
