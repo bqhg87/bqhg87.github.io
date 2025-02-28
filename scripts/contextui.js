@@ -2,17 +2,13 @@ const topContextWrapper = document.getElementById('topContextWrapper');
 const topContextLabel = document.getElementById('topContextLabel');
 const topContextImage = document.getElementById('topContextImage');
 let resetTimeout = 0
-
 window.broadcastTopContextMessage = function(message, time, image) {
     resetTimeout += 1;
-
     if (image) {
         topContextLabel.classList.add('withImage')
         topContextImage.classList.add('show')
-
         const foundItem = window.defaultInventory.find(obj => obj.item === image);
-
-        if (foundItem) { // if it is an item in the inventory
+        if (foundItem) { 
             topContextImage.style.backgroundImage = "url('./assets/items.png')";
             topContextImage.style.backgroundSize = "calc(var(--pixelScale) * 16 * 3) calc(var(--pixelScale) * 16 * 8)";
             topContextImage.style.width = "calc(var(--pixelScale) * 16)";
@@ -26,12 +22,10 @@ window.broadcastTopContextMessage = function(message, time, image) {
             topContextImage.style.backgroundPositionY = "calc(var(--pixelScale) * -40)";
             topContextImage.style.backgroundPositionX = `-2.5px`;
         }
-
     } else {
         topContextLabel.classList.remove('withImage')
         topContextImage.classList.remove('show')
     }
-
     topContextWrapper.classList.add('show');
     updateHeadButtonsVisibility();
     topContextLabel.textContent = message;
@@ -43,21 +37,15 @@ window.broadcastTopContextMessage = function(message, time, image) {
         resetTimeout -= 1;
     }, time)
 }
-
-
 const bottomContextWrapper = document.getElementById('bottomContextWrapper');
 const bottomContextImage = document.getElementById('bottomContextImage');
 let bottomResetTimeout = 0;
-
 window.broadcastBottomContextMessage = function(image, time) {
     bottomResetTimeout += 1;
-
     if (image) {
         bottomContextImage.classList.add('show');
-
         const foundItem = window.defaultInventory.find(obj => obj.item === image);
-
-        if (foundItem) { // if it is an item in the inventory
+        if (foundItem) { 
             bottomContextImage.style.backgroundImage = "url('./assets/items.png')";
             bottomContextImage.style.backgroundSize = "calc(var(--pixelScale) * 16 * 3) calc(var(--pixelScale) * 16 * 8)";
             bottomContextImage.style.width = "calc(var(--pixelScale) * 16)";
@@ -67,9 +55,7 @@ window.broadcastBottomContextMessage = function(image, time) {
     } else {
         bottomContextImage.classList.remove('show');
     }
-
     bottomContextWrapper.classList.add('show');
-
     setTimeout(() => {
         if (bottomResetTimeout <= 1) {
             bottomContextWrapper.classList.remove('show');

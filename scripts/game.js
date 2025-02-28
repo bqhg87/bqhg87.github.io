@@ -1,20 +1,14 @@
 window.console.info("Booting HarmOS...");
-
 const canvas = document.getElementById('game');
 const c = canvas.getContext('2d');
 window.delMeter = Number(localStorage.getItem("delMeter")) || 100;
-
 function refreshGamemode() {
   if (localStorage.getItem("gamemode") === null) {
     localStorage.setItem("gamemode", "inform");
   }
   window.gamemode = localStorage.getItem("gamemode");
 }
-
-// Ensure this runs after the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", refreshGamemode);
-
-// Use a single image for all character parts, and draw different sections.
 const charSheet = new Image();
 charSheet.src = './assets/char/base.png';
 const npcIndicators = new Image();
@@ -97,8 +91,6 @@ const tower5g = new Image();
 tower5g.src = './assets/animated/5gtower.png';
 const itemsSheet = new Image();
 itemsSheet.src = './assets/items.png';
-
-
 const objectsToDraw = [
   {
     image: charSheet,
@@ -525,7 +517,7 @@ const objectsToDraw = [
     zIndex: 1
   },
 ];
-window.char = objectsToDraw[0]; // this is the character
+window.char = objectsToDraw[0]; 
 const collisionMapOffset = objectsToDraw[2];
 const cowbrownNPC = objectsToDraw[7];
 const cowlightNPC = objectsToDraw[8];
@@ -533,12 +525,9 @@ const cowpinkNPC = objectsToDraw[9];
 const cowpurpleNPC = objectsToDraw[10];
 const boatAnimate = objectsToDraw[11];
 const animate5G = objectsToDraw[13];
-
-// Consolidated image loading
 const images = [charSheet, npcIndicators, groundImage, collisionMap, exampleHouse, shadow, blush, eyes];
 let imagesLoaded = 0;
 const totalImages = images.length;
-
 function onImageLoad() {
     imagesLoaded++;
     if (imagesLoaded === totalImages) {
@@ -546,18 +535,10 @@ function onImageLoad() {
         draw();
     }
 }
-
 images.forEach(img => img.onload = onImageLoad);
-
-
-///////////////////
-// CHAR SETTINGS //
-///////////////////
-
-// Character appearance properties with defaults
 let charAppearance = {
   skinTone: 0,
-  eyes: 8, // (auto)
+  eyes: 8, 
   blush: false,
   beard: false,
   glasses: false,
@@ -569,47 +550,38 @@ let charAppearance = {
   bottomType: 8,
   shadow: false,
 };
-
-// Load from cache or set defaults
 const cachedAppearance = JSON.parse(localStorage.getItem('charAppearance'));
 if (cachedAppearance) {
   charAppearance = cachedAppearance;
 } else {
   localStorage.setItem('charAppearance', JSON.stringify(charAppearance));
 }
-
-// Function to update character appearance and save to cache
 window.updateCharAppearance = function(newProperties) {
-  Object.assign(charAppearance, newProperties); // Merge new properties
+  Object.assign(charAppearance, newProperties); 
   localStorage.setItem('charAppearance', JSON.stringify(charAppearance));
   updateDisplayedCharSettings();
-  draw(); // Redraw the character
+  draw(); 
 }
-
-// Function to randomise character appearance (except shadow)
 window.randomiseCharAppearance = function() {
-  const skinTones = 8; // Number of skin tones
-  const hairTypes = 14; // Number of hair types (0-13)
-  const topTypes = 10; // Number of top types (0-9)
-  const bottomTypes = 10; // Number of bottom types (0-9)
+  const skinTones = 8; 
+  const hairTypes = 14; 
+  const topTypes = 10; 
+  const bottomTypes = 10; 
   const hairs = Object.keys(hair);
   const topsNames = Object.keys(tops);
   const bottomsNames = Object.keys(bottoms);
-
   let newEyes;
-
   if (charAppearance.eyes === 8) {
-    newEyes = 8 // stays auto if already auto
+    newEyes = 8 
   } else {
-    newEyes = Math.floor(Math.random() * 8); // random except won't set to auto
+    newEyes = Math.floor(Math.random() * 8); 
   }
-
   updateCharAppearance({
     skinTone: Math.floor(Math.random() * skinTones),
-    eyes: newEyes, // (keep auto when randomising)
-    blush: Math.random() < 0.5, // 50% chance of blush
-    beard: Math.random() < 0.5, // 50% chance of beard
-    glasses: Math.random() < 0.5, // 50% chance of glasses
+    eyes: newEyes, 
+    blush: Math.random() < 0.5, 
+    beard: Math.random() < 0.5, 
+    glasses: Math.random() < 0.5, 
     hair: hairs[Math.floor(Math.random() * hairs.length)],
     hairType: Math.floor(Math.random() * hairTypes),
     clothingTop: topsNames[Math.floor(Math.random() * topsNames.length)],
@@ -618,7 +590,6 @@ window.randomiseCharAppearance = function() {
     bottomType: Math.floor(Math.random() * bottomTypes),
   });
 }
-
 window.tops = {
   floral: new Image(),
   basic: new Image(),
@@ -627,14 +598,12 @@ window.tops = {
 tops.floral.src = './assets/char/floral.png';
 tops.basic.src = './assets/char/basic.png';
 tops.skull.src = './assets/char/skull.png';
-
 window.bottoms = {
   trousers: new Image(),
   skirt: new Image(),
 };
 bottoms.trousers.src = './assets/char/trousers.png';
 bottoms.skirt.src = './assets/char/skirt.png';
-
 window.hair = {
   bob: new Image(),
   braids: new Image(),
@@ -643,15 +612,8 @@ window.hair = {
 hair.bob.src = './assets/char/bob.png';
 hair.braids.src = './assets/char/braids.png';
 hair.buzzcut.src = './assets/char/buzzcut.png';
-
-
-///////////
-// ITEMS //
-///////////
-
-const items = []; // Array to store ground items
+const items = []; 
 images.push(itemsSheet);
-
 window.createItem = function(itemData) {
   const item = {
     x: itemData.x,
@@ -663,54 +625,41 @@ window.createItem = function(itemData) {
     zIndex: itemData.zIndex || 1,
     frameWidth: 16,
     frameHeight: 16,
-    feet: itemData.feet || 0, // Add feet property
+    feet: itemData.feet || 0, 
   };
   items.push(item);
 }
-
-// Function to remove an item from the items array
 function removeItem(itemToRemove) {
   const index = items.indexOf(itemToRemove);
   if (index !== -1) {
-    items.splice(index, 1); // Removes the item from the array
+    items.splice(index, 1); 
   } else {
     console.warn("Item not found in items array");
   }
 }
-
 function updateItemProximity() {
   items.forEach(item => {
     const charCenterX = char.x + char.frameWidth / 2;
     const charCenterY = char.y + char.frameHeight / 2;
     const itemCenterX = item.x + item.frameWidth / 2;
     const itemCenterY = item.y + item.frameHeight / 2;
-
     const distance = Math.sqrt(Math.pow(charCenterX - itemCenterX, 2) + Math.pow(charCenterY - itemCenterY, 2));
     item.spriteX = distance <= 10 ? 1 : 0;
   });
 }
-
-// Function to handle item pickup
 function handleItemPickup() {
   items.forEach(item => {
     const charCenterX = char.x + char.frameWidth / 2;
     const charCenterY = char.y + char.frameHeight / 2;
     const itemCenterX = item.x + item.frameWidth / 2;
     const itemCenterY = item.y + item.frameHeight / 2;
-
     const distance = Math.sqrt(Math.pow(charCenterX - itemCenterX, 2) + Math.pow(charCenterY - itemCenterY, 2));
-
     if (distance <= 10) {
-      //console.log(item.spriteY);
-      
-      // Find the item in the default inventory based on spriteY
       const foundItem = window.defaultInventory.find(inventoryItem => inventoryItem.spriteY === item.spriteY);
       if (foundItem) {
         addInventoryItems(foundItem.item, 1);
         updateChapter("Astronomer", 2);
         updateChapter("Tibbert", 2);
-        
-        // Remove the item from the items array
         removeItem(item);
       } else {
         console.warn("Item is undefined");
@@ -718,37 +667,23 @@ function handleItemPickup() {
     }
   });
 }
-
-// Event listener for spacebar press
 window.addEventListener('keydown', event => {
   if (event.code === 'Space') {
     handleItemPickup();
   }
 });
-
 function initialiseItems() {
   const inventory = JSON.parse(localStorage.getItem("inventory")) || [];
   const taskStates = JSON.parse(localStorage.getItem("taskStates")) || {};
-
-  // Directly use find on the inventory array
   const lhcPaper = inventory.find(item => item.item === "lhcPaper");
-
   if (taskStates.bh_library === "visible" && lhcPaper && lhcPaper.quantity === 0) {
-    createItem({ x: 252, y: -94, spriteX: 0, spriteY: 1, visible: true });
+    createItem({ x: 240, y: -60, spriteX: 0, spriteY: 1, visible: true });
   }
 }
-
-
-//////////////////
-// NPC SETTINGS //
-//////////////////
-
-const npcImages = {}; // Store NPC image data
-
-// Function to create a new NPC
+const npcImages = {}; 
 function createNPC(npcData) {
   let npc = {
-    ...npcData, // Spread the provided data
+    ...npcData, 
     image: new Image(),
     frameWidth: 32,
     frameHeight: 32,
@@ -756,18 +691,18 @@ function createNPC(npcData) {
     zIndex: 1,
     frameX: npcData.frameX || 0,
     frameY: npcData.frameY || 0,
-    indicator: { // NPC Indicator Data
-      spriteX: npcData.spriteX || 1, // using 1 cause storing in cache and im too lazy to write code for it to store 0
+    indicator: { 
+      spriteX: npcData.spriteX || 1, 
       spriteY: 0,
-      offsetX: npcData.indicatorOffsetX || 13.5, // Default offset if not provided
+      offsetX: npcData.indicatorOffsetX || 13.5, 
       offsetY: npcData.indicatorOffsetY || -1,
-      animate: npcData.indicatorAnimate !== undefined ? npcData.indicatorAnimate : true, // Default to true if not specified
+      animate: npcData.indicatorAnimate !== undefined ? npcData.indicatorAnimate : true, 
       sinDistance: npcData.indicatorSinDistance || 5,
       sinSpeed: npcData.indicatorSinSpeed || 4.4,
       sinOffset: npcData.indicatorSinOffset || 0,
-      visible: npcData.indicatorVisible !== undefined ? npcData.indicatorVisible : true, // Set visibility property
+      visible: npcData.indicatorVisible !== undefined ? npcData.indicatorVisible : true, 
     },
-    appearance: { // NPC Appearance Data
+    appearance: { 
       skinTone: npcData.skinTone || 0,
       eyes: npcData.eyes || 9,
       blush: npcData.blush || false,
@@ -782,35 +717,22 @@ function createNPC(npcData) {
       shadow: npcData.shadow || true,
     },
   };
-
-  npc.image.src = `./assets/char/base.png`; // All NPCs use the same base
-  npc.tops = { ...tops }; // Clone tops
-  npc.bottoms = { ...bottoms }; // Clone bottoms
-  npc.hair = { ...hair }; // Clone hair
-
-  npc.image.onload = onImageLoad; // Call onImageLoad when NPC image loads
-
+  npc.image.src = `./assets/char/base.png`; 
+  npc.tops = { ...tops }; 
+  npc.bottoms = { ...bottoms }; 
+  npc.hair = { ...hair }; 
+  npc.image.onload = onImageLoad; 
   refreshNPCIndicator(npc);
-
   return npc;
 }
-
-
 function refreshNPCIndicator(npc) {
-  // Load cached spriteX if available
 const npcIndicatorStates = JSON.parse(localStorage.getItem('npcIndicatorStates')) || [];
-
-// Find the NPC's indicator state
 const npcState = npcIndicatorStates.find(state => state.npcName === npc.name);
-
 if (npcState) {
-  // If the NPC's state is found, use the stored spriteX
   npc.indicator.spriteX = npcState.spriteX;
 }
 }
-
 window.npcs = [
-  //BLACK HOLES
   createNPC({
     name: 'Tibbert',
     x: 100,
@@ -824,7 +746,7 @@ window.npcs = [
     hairType: 5,
     indicatorSinSpeed: 6,
     indicatorSinOffset: 20,
-    spriteX: 3, // purple
+    spriteX: 3, 
   }),
   createNPC({
     name: 'Astronomer',
@@ -839,12 +761,8 @@ window.npcs = [
     hairType: 7,
     indicatorSinSpeed: 3,
     indicatorSinOffset: 80,
-    spriteX: 1, // white
+    spriteX: 1, 
   }),
-
-
-
-  //MARKET
   createNPC({
     name: 'Quantum Expert',
     x: 350,
@@ -856,7 +774,7 @@ window.npcs = [
     bottomType: 4,
     hairType: 6,
     topType: 7,
-    spriteX: 1, // white
+    spriteX: 1, 
   }),
   createNPC({
     name: 'Market Trader',
@@ -869,7 +787,7 @@ window.npcs = [
     hairType: 10,
     indicatorSinSpeed: 2,
     indicatorSinOffset: 20,
-    spriteX: 3, // purple
+    spriteX: 3, 
   }),
   createNPC({
     name: 'Carl',
@@ -883,7 +801,7 @@ window.npcs = [
     hairType: 4,
     indicatorSinSpeed: 2.5,
     indicatorSinOffset: 50,
-    spriteX: 1, // white
+    spriteX: 1, 
   }),
   createNPC({
     name: 'Agnet',
@@ -899,7 +817,7 @@ window.npcs = [
     hairType: 4,
     indicatorSinSpeed: 2.5,
     indicatorSinOffset: 100,
-    spriteX: 1, // white
+    spriteX: 1, 
   }),
   createNPC({
     name: 'Harold',
@@ -914,13 +832,8 @@ window.npcs = [
     hairType: 7,
     indicatorSinSpeed: 2.5,
     indicatorSinOffset: 150,
-    spriteX: 1, // white
+    spriteX: 1, 
   }), 
-
-  
-
-
-  //MICROWAVES
   createNPC({
     name: 'Grandma',
     x: 358.5,
@@ -935,12 +848,12 @@ window.npcs = [
     blush: true,
     indicatorSinSpeed: 2.3,
     indicatorSinOffset: 52,
-    spriteX: 3, // purple
+    spriteX: 3, 
   }),
   createNPC({
     name: 'Restaurant Worker',
-    x: -216,
-    y: 176,
+    x: -156,
+    y: 186,
     hair: 'buzzcut',
     clothingTop: 'skull',
     hairType: 4,
@@ -948,14 +861,9 @@ window.npcs = [
     bottomType: 6,
     indicatorSinSpeed: 2.7,
     indicatorSinOffset: 140,
-    spriteX: 1, // white
+    spriteX: 1, 
   })
-
 ];
-
-
-
-// Default stories with individual chapters
 window.currentStories = [
   {
     name: 'Tibbert',
@@ -967,8 +875,6 @@ window.currentStories = [
     story: 'default',
     chapter: 1,
   },
-
-  
   {
     name: 'Quantum Expert',
     story: 'default',
@@ -1005,16 +911,12 @@ window.currentStories = [
     chapter: 1,
   }
 ];
-
-// Load from cache or set defaults
 const cachedStories = JSON.parse(localStorage.getItem('currentStories'));
 if (cachedStories) { 
   window.currentStories = cachedStories;
 } else {
   localStorage.setItem('currentStories', JSON.stringify(window.currentStories));
 }
-
-// Function to update a character's story and chapter
 window.updateStory = function(name, newStory, newChapter = 1) {
   const storyToUpdate = window.currentStories.find(story => story.name === name);
   if (storyToUpdate) {
@@ -1023,8 +925,6 @@ window.updateStory = function(name, newStory, newChapter = 1) {
     localStorage.setItem('currentStories', JSON.stringify(window.currentStories));
   }
 };
-
-// Function to update a character's chapter
 window.updateChapter = function(name, newChapter) {
   const storyToUpdate = window.currentStories.find(story => story.name === name);
   if (storyToUpdate) {
@@ -1032,180 +932,128 @@ window.updateChapter = function(name, newChapter) {
     localStorage.setItem('currentStories', JSON.stringify(window.currentStories));
   }
 };
-
-// Function to get a character's chapter
 window.getChapter = function(name) {
   const story = window.currentStories.find(story => story.name === name);
   return story ? story.chapter : null;
 };
-
-// Function to save NPC indicator spriteX to the npcIndicatorStates array
 window.updateNPCIndicator = function(npcName, spriteX) {
   let npcIndicatorStates = JSON.parse(localStorage.getItem('npcIndicatorStates')) || [];
-
   const npcIndex = npcIndicatorStates.findIndex(state => state.npcName === npcName);
-  
   if (npcIndex !== -1) {
     npcIndicatorStates[npcIndex].spriteX = spriteX;
   } else {
     npcIndicatorStates.push({ npcName, spriteX });
   }
-
   const npc = npcs.find(npc => npc.name === npcName);
   npc.indicator.spriteX = spriteX;
-
-  // Save the updated array back to localStorage
   localStorage.setItem('npcIndicatorStates', JSON.stringify(npcIndicatorStates));
 };
-
-///////////////
-// RENDERING //
-///////////////
-
 window.addEventListener('resize', adjustForRetina);
 let canvasWidth, canvasHeight;
-
 function updateCanvasDimensions() {
   canvasWidth = canvas.width / dpr;
   canvasHeight = canvas.height / dpr;
 }
-
 function drawCharacterWithClothing() {
   const { x, y, frameWidth, frameHeight, scale = 1 } = char;
-
   const scaledX = (x * scale * globalScale) + translationX;
   const scaledY = (y * scale * globalScale) + translationY;
   const scaledWidth = frameWidth * scale * globalScale;
   const scaledHeight = frameHeight * scale * globalScale;
-
   const skinToneOffsetX = charAppearance.skinTone * 8;
   const topOffsetX = charAppearance.topType * 8;
   const bottomOffsetX = charAppearance.bottomType * 8;
   const hairOffsetX = charAppearance.hairType * 8;
   const eyesOffsetX = charAppearance.eyes * 8;
-
-  // Draw character shadow
   if (charAppearance.shadow) {
     c.drawImage(shadow, 0, 0, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
-  // Draw base character
   c.drawImage(charSheet, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   c.drawImage(eyes, (char.frameX + eyesOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   if (charAppearance.blush) {
     c.drawImage(blush, (char.frameX + skinToneOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
   let selectedTop = tops[charAppearance.clothingTop];
   if (selectedTop) {
     c.drawImage(selectedTop, (char.frameX + topOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
   let selectedBottom = bottoms[charAppearance.clothingBottom];
   if (selectedBottom) {
     c.drawImage(selectedBottom, (char.frameX + bottomOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
   let selectedHair = hair[charAppearance.hair];
   if (selectedHair) {
     c.drawImage(selectedHair, (char.frameX + hairOffsetX) * frameWidth, char.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 }
-
 function drawNPC(npc) {
   const { x, y, frameWidth, frameHeight, scale = 1 } = npc;
-
   const scaledX = (x * scale * globalScale) + translationX;
   const scaledY = (y * scale * globalScale) + translationY;
   const scaledWidth = frameWidth * scale * globalScale;
   const scaledHeight = frameHeight * scale * globalScale;
-
   const skinToneOffsetX = npc.appearance.skinTone * 8;
   const topOffsetX = npc.appearance.topType * 8;
   const bottomOffsetX = npc.appearance.bottomType * 8;
   const hairOffsetX = npc.appearance.hairType * 8;
   const eyesOffsetX = npc.appearance.eyes * 8;
-
-  // Draw character shadow
   if (npc.appearance.shadow) {
     c.drawImage(shadow, 0, 0, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
-  // Draw base character - Use npc.frameX and npc.frameY
   c.drawImage(npc.image, (npc.frameX + skinToneOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   c.drawImage(eyes, (npc.frameX + eyesOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
-  
   if (npc.appearance.blush) {
     c.drawImage(blush, (npc.frameX + skinToneOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
   let selectedTop = npc.tops[npc.appearance.clothingTop];
   if (selectedTop) {
     c.drawImage(selectedTop, (npc.frameX + topOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
   let selectedBottom = npc.bottoms[npc.appearance.clothingBottom];
   if (selectedBottom) {
     c.drawImage(selectedBottom, (npc.frameX + bottomOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
-
   let selectedHair = npc.hair[npc.appearance.hair];
   if (selectedHair) {
     c.drawImage(selectedHair, (npc.frameX + hairOffsetX) * frameWidth, npc.frameY * frameHeight, frameWidth, frameHeight, scaledX, scaledY, scaledWidth, scaledHeight);
   }
 }
-
 function drawItem(item) {
   if (!item.visible) return;
-
   const scaledX = (item.x * item.scale * globalScale) + translationX;
   const scaledY = (item.y * item.scale * globalScale) + translationY;
   const scaledWidth = item.frameWidth * item.scale * globalScale;
   const scaledHeight = item.frameHeight * item.scale * globalScale;
-
   const spriteX = item.spriteX * item.frameWidth;
   const spriteY = item.spriteY * item.frameHeight;
-
   c.drawImage(
     itemsSheet,
     spriteX, spriteY, item.frameWidth, item.frameHeight,
     scaledX, scaledY, scaledWidth, scaledHeight
   );
 }
-
-
 let cowsVisible = false; 
 let boatVisible = false; 
 let towerVisible = false; 
-
-// Draw all objects
 function draw() {
   c.clearRect(0, 0, canvas.width, canvas.height);
   centerCamera();
   updateItemProximity();
-
   const sortedObjects = [...objectsToDraw, ...npcs, ...items].sort((a, b) => {
     const charFeet = char.y + char.frameHeight - char.feet;
     const aFeet = (a.y || 0) + (a.frameHeight || 0) - (a.feet || 0);
     const bFeet = (b.y || 0) + (b.frameHeight || 0) - (b.feet || 0);
-  
-    // Directly compare feet values for sorting
     if (aFeet > bFeet) {
-      return 1; // a is further down (behind), should be drawn later
+      return 1; 
     }
     if (aFeet < bFeet) {
-      return -1; // a is higher up (in front), should be drawn earlier
+      return -1; 
     }
-  
-    // If feet are the same, use zIndex
     return (a.zIndex || 0) - (b.zIndex || 0);
   });
-
   cowsVisible = false;
   boatVisible = false;
   towerVisible = false
-
-  // Draw the sorted objects (including items).
   sortedObjects.forEach(obj => {
     if (obj === char) {
       drawCharacterWithClothing();
@@ -1220,7 +1068,6 @@ function draw() {
     }
     if (obj.image) {
       const { image, x, y, opacity = 1, scale = 1, frameX = 0, frameY = 0, frameWidth = image.width, frameHeight = image.height, fadeBehind, feet, fadeFeet, fadeHead, fadeLeft, fadeRight } = obj;
-
       const scaledX = (x * scale * globalScale) + translationX;
       const scaledY = (y * scale * globalScale) + translationY;
       const charFeetY = char.y + char.frameHeight - char.feet;
@@ -1230,7 +1077,6 @@ function draw() {
       const charFadeX = char.x + (char.frameWidth / 2);
       const objLeftXFade = (x || 0) + ((frameWidth / 2) || 0) - (fadeLeft || 0);
       const objRightXFade = (x || 0) + ((frameWidth / 2) || 0) + (fadeRight || 0);
-
       if ([cowbrown, cowlight, cowpink, cowpurple].includes(image) && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
         cowsVisible = true;
       }
@@ -1240,18 +1086,13 @@ function draw() {
       if (image === tower5g && scaledX + frameWidth * scale * globalScale > 0 && scaledX < canvas.width && scaledY + frameHeight * scale * globalScale > 0 && scaledY < canvas.height) {
         towerVisible = true;
       }
-
       let drawOpacity = opacity;
-
       if (fadeBehind && charFeetY < objFeetYFade && charFeetY > objHeadYFade && charFadeX > objLeftXFade && charFadeX < objRightXFade) {
         drawOpacity = 0.75;
       }
-
       c.globalAlpha = drawOpacity;
-
       const scaledImgWidth = frameWidth * scale * globalScale;
       const scaledImgHeight = frameHeight * scale * globalScale;
-
       c.drawImage(
         image,
         frameX * frameWidth, frameY * frameHeight,
@@ -1259,103 +1100,73 @@ function draw() {
         scaledX, scaledY,
         scaledImgWidth, scaledImgHeight
       );
-
       c.globalAlpha = 1;
     } else if (items.includes(obj)) {
       drawItem(obj);
     }
   });
-
-  // Draw NPC indicators.
   npcs.forEach(npc => {
     const indicatorData = npc.indicator;
-
     if (indicatorData.visible) {
       const baseIndicatorX = ((npc.x + indicatorData.offsetX) * globalScale) + translationX;
       let baseIndicatorY = ((npc.y + indicatorData.offsetY) * globalScale) + translationY;
-
       if (indicatorData.animate) {
         const time = Date.now() / 1000;
         baseIndicatorY += indicatorData.sinDistance * Math.sin(time * indicatorData.sinSpeed + indicatorData.sinOffset);
       }
-
       const spriteX = indicatorData.spriteX * 4;
       const spriteY = indicatorData.spriteY * 4;
-
       c.drawImage(npcIndicators, spriteX, spriteY, 4, 4, baseIndicatorX, baseIndicatorY, 4 * globalScale, 4 * globalScale);
     }
   });
 }
-
-////////////
-// CAMERA //
-////////////
-
 let lowCamera = false;
-
-let centerOnLoad = false; // Initially not centered (Variable to track it only centers on load)
-let globalScale = 4; // Set this scale globally, it will affect size and positioning
+let centerOnLoad = false; 
+let globalScale = 4; 
 const dpr = window.devicePixelRatio || 1;
-
 let translationX = 0;
 let translationY = 0;
-
 function easeInOut(t) {
   return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 }
 let zoomStartTime = null;
 let zoomStartScale = globalScale;
 let zoomTargetScale = globalScale;
-let zoomDuration = 500; // Duration for zoom animation in milliseconds
-let zoomProgress = 0; // Progress of zoom (0 to 1)
-
-let zoomingInProgress = false; // Flag to check if zooming is currently in progress
-
+let zoomDuration = 500; 
+let zoomProgress = 0; 
+let zoomingInProgress = false; 
 function animateZoom() {
   const currentTime = Date.now();
-  
-  // If no start time, initialize it
   if (!zoomStartTime) zoomStartTime = currentTime;
-
   const elapsedTime = currentTime - zoomStartTime;
-  const progress = Math.min(elapsedTime / zoomDuration, 1); // Progress ranges from 0 to 1
-
-  // Apply easing function to smooth the transition
+  const progress = Math.min(elapsedTime / zoomDuration, 1); 
   const easedProgress = easeInOut(progress);
-
-  // Update the global scale based on the easing progress
   globalScale = zoomStartScale + (zoomTargetScale - zoomStartScale) * easedProgress;
   lerpLowCamera = lowCameraOffsetHistory + (lowCameraOffset - lowCameraOffsetHistory) * easedProgress;
-
-  draw(); // Redraw the canvas with the updated scale
-
-  // If the zoom animation is not complete, request the next frame
+  draw(); 
   if (progress < 1) {
     requestAnimationFrame(animateZoom);
   } else {
-    zoomingInProgress = false; // Animation is complete
-    zoomStartTime = null; // Reset start time for the next animation
+    zoomingInProgress = false; 
+    zoomStartTime = null; 
     lowCameraOffsetHistory = lowCameraOffset;
   }
 }
-
 let blockMotion;
 let blockDirectionUpdate = false;
 let blockSpaceDialogueToggle = false;
 window.charMenuOpen = false;
-
 const charSettingsWrapper = document.getElementById('charSettingsWrapper');
 const randomiseCharButton = document.getElementById('randomiseCharToggle');
 const hairPairToggles = document.getElementById('charPairArrowsHair');
 const topsPairToggles = document.getElementById('charPairArrowsTops');
 const bottomsPairToggles = document.getElementById('charPairArrowsBottoms');
 const charMenuButtonPairs = document.getElementsByClassName('charSelectorArrowsPairWrapper')
-
 window.updateArrowPairVisibility = function(override) {
   if (override === false) {
-    hairPairToggles.classList.remove('show'); // hide them all
-    topsPairToggles.classList.remove('show'); // hide them all
-    bottomsPairToggles.classList.remove('show'); // hide them all
+    hairPairToggles.classList.remove('show'); 
+    topsPairToggles.classList.remove('show'); 
+    bottomsPairToggles.classList.remove('show'); 
     return
   }
   if (override || charMenuOpen) {
@@ -1376,9 +1187,7 @@ window.updateArrowPairVisibility = function(override) {
     }
   }
 }
-
 const dialogueContextWrapper = document.getElementById('dialogueContextWrapper');
-
 window.addEventListener('openCharMenu', () => {
   Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = 'opacity 0.5s ease';});
   charSettingsWrapper.classList.add('show');
@@ -1391,10 +1200,9 @@ window.addEventListener('openCharMenu', () => {
   updateLowCamera();
   char.frameY = updateCharDirection(Math.PI / 2);
   if (zoomingInProgress && zoomTargetScale === 4) {
-    // If zooming is in progress and we're zooming out, reverse the zoom direction
     zoomStartScale = globalScale;
-    zoomTargetScale = 6; // Zoom in
-    zoomStartTime = null; // Reset start time to handle the smooth reverse
+    zoomTargetScale = 6; 
+    zoomStartTime = null; 
     setTimeout(() => {
       blockMotion = true;
       blockDirectionUpdate = true;
@@ -1403,10 +1211,9 @@ window.addEventListener('openCharMenu', () => {
       dialogueContextWrapper.classList.add('hidden');
     }, (zoomDuration))
   } else if (!zoomingInProgress) {
-    // If no zooming is in progress, start the zoom-in transition
     zoomStartScale = globalScale;
-    zoomTargetScale = 6; // Zoom in
-    zoomingInProgress = true; // Set zooming in progress
+    zoomTargetScale = 6; 
+    zoomingInProgress = true; 
     animateZoom();
     setTimeout(() => {
       blockMotion = true;
@@ -1414,14 +1221,13 @@ window.addEventListener('openCharMenu', () => {
       bottomLabelWrapper.classList.remove('show');
       dialogueToggle.classList.remove('show');
       dialogueContextWrapper.classList.add('hidden');
-    }, (0)) // Will be better once i code the character movement better with decelertation
+    }, (0)) 
   }
   setTimeout(() => {
     window.charMenuOpen = true;
-    Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = '';}); // Remove the transition
+    Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = '';}); 
   }, (zoomDuration))
 });
-
 window.addEventListener('closeCharMenu', () => {
   Array.from(charMenuButtonPairs).forEach(pair => {pair.style.transition = 'opacity 0.5s ease';});
   charSettingsWrapper.classList.remove('show');
@@ -1432,21 +1238,18 @@ window.addEventListener('closeCharMenu', () => {
   blockMotion = false;
   blockSpaceDialogueToggle = false;
   window.charMenuOpen = false;
-
   if (zoomingInProgress && zoomTargetScale === 6) {
-    // If zooming is in progress and we're zooming in, reverse the zoom direction
     zoomStartScale = globalScale;
-    zoomTargetScale = 4; // Zoom out
-    zoomStartTime = null; // Reset start time to handle the smooth reverse
+    zoomTargetScale = 4; 
+    zoomStartTime = null; 
     setTimeout(() => {
       blockMotion = false;
       blockDirectionUpdate = false;
     }, (0)) 
   } else if (!zoomingInProgress) {
-    // If no zooming is in progress, start the zoom-out transition
     zoomStartScale = globalScale;
-    zoomTargetScale = 4; // Zoom out
-    zoomingInProgress = true; // Set zooming in progress
+    zoomTargetScale = 4; 
+    zoomingInProgress = true; 
     animateZoom();
     setTimeout(() => {
       blockMotion = false;
@@ -1454,59 +1257,38 @@ window.addEventListener('closeCharMenu', () => {
     }, (zoomDuration))
   }
 });
-
-// Adjust canvas for Retina scaling and fit the viewport
 function adjustForRetina() {
-
-  // Set canvas size to match the window's inner width and height
   canvas.width = window.innerWidth * dpr;
   canvas.height = window.innerHeight * dpr;
-
-  // Set CSS size to match the canvas size (so it scales appropriately)
   canvas.style.width = `${window.innerWidth}px`;
   canvas.style.height = `${window.innerHeight}px`;
-
-  // Scale the drawing context to match the device pixel ratio
   c.scale(dpr, dpr);
-
   if (!centerOnLoad) {
     centerCamera();
     centerOnLoad = true;
   }
-
-  // Disable image smoothing for sharp rendering
   c.imageSmoothingEnabled = false;
-
-  draw();  // Redraw images after resizing
+  draw();  
 }
-
 let lerpLowCamera = 0;
 let lowCameraOffset = 0;
 let lowCameraOffsetHistory = 0;
-
 function centerCamera() {
-    // Ensure the character is always centered by adjusting translation
     const charWidth = (char.frameWidth) * globalScale;
     const charHeight = (char.frameHeight) * globalScale;
-  
-    // Calculate the center of the canvas in world coordinates
     const canvasCenterX = canvas.width / 2 / dpr;
     const canvasCenterY = canvas.height / 2 / dpr;
-  
     translationX = canvasCenterX - (round(char.x, 8) * globalScale + charWidth / 2) + 4;
     if (!zoomingInProgress) {
       lerpLowCamera = lowCameraOffset
     }
     translationY = canvasCenterY - (round(char.y, 8) * globalScale + charHeight / 2 - lerpLowCamera);
 }
-
 function updateLowCamera() {
-  const dialogueHeight = dialogueWrapper.offsetHeight; // Get the height of the dialogue element
+  const dialogueHeight = dialogueWrapper.offsetHeight; 
   const windowHeight = window.innerHeight;
-
   const lowAngleAdjust = window.lowAngleAdjust;
   const wholeHeight = 100.5 - lowAngleAdjust * 4 * 2.5;
-
   if (!lowCamera) {
     lowCameraOffset = 0;
   } else if ((dialogueHeight + wholeHeight) >= (windowHeight * 0.3)) {
@@ -1514,40 +1296,28 @@ function updateLowCamera() {
   } else {
     lowCameraOffset = (wholeHeight + 56) / 2;
   }
-
   window.lowCameraOffset = lowCameraOffset;
   centerCamera();
 }
-
 window.addEventListener('resize', updateLowCamera);
 window.addEventListener('typeLetter', updateLowCamera);
 window.addEventListener('dialogueLoaded', updateLowCamera);
-
-
-//////////
-// NPCS //
-//////////
-
-let toggleNPCs = {}; // Store states for multiple NPCs
+let toggleNPCs = {}; 
 const npcUpdateEvent = new Event('npcUpdate');
 let dialogueToggled = false;
 window.dialogueToggled = dialogueToggled;
-
 const bottomLabel = document.getElementById('bottomLabel');
 const bottomLabelWrapper = document.getElementById('bottomLabelWrapper');
 const dialogueToggle = document.getElementById('dialogueToggle');
-
 let isNearNPC;
-
 function checkNPC(npc, char, distance) {
   const distanceToNPC = proximityQuery(char, npc);
   const isNear = distanceToNPC <= distance;
   const wasNear = toggleNPCs[npc.name];
   npc.indicator.spriteX = parseInt(localStorage.getItem(`npc_${npc.name}_spriteX`)) || npc.indicator.spriteX;
-
   if (isNear && !wasNear) {
     toggleNPCs[npc.name] = true;
-    npc.indicator.spriteY = 1;  // Change spriteY when near
+    npc.indicator.spriteY = 1;  
     bottomLabel.textContent = `Talk to ${npc.name}`;
     bottomLabelWrapper.classList.add('show');
     dialogueToggle.classList.add('show');
@@ -1556,80 +1326,63 @@ function checkNPC(npc, char, distance) {
     isNearNPC = true;
   } else if (!isNear && wasNear) {
     toggleNPCs[npc.name] = false;
-    npc.indicator.spriteY = 0;  // Revert spriteY when far
+    npc.indicator.spriteY = 0;  
     npc.frameY = updateCharDirection(Math.PI / 2);
     bottomLabelWrapper.classList.remove('show');
     dialogueToggle.classList.remove('show');
     dialogueContextWrapper.classList.add('hidden');
     isNearNPC = false;
   }
-
   if (isNear !== wasNear) {
     window.dispatchEvent(npcUpdateEvent);
     updateFootButtonsVisibility();
   }
 }
-
 function refreshCheckNPC() {
   if (!npcMemory) {return}
   toggleNPCs[npcMemory] = false;
 }
-
 window.checkNPCs = function() {
   npcs.forEach((npc) => checkNPC(npc, char, 20));
 }
-
-let spaceHeld = false; // Prevents rapid triggers
-
+let spaceHeld = false; 
 function spaceDialogueToggle(event) {
   if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle || !isNearNPC) return;
-
-  setTimeout(() => { spaceHeld = true }, 50); // Lock the trigger until Space is released
-
+  setTimeout(() => { spaceHeld = true }, 10); 
   if (window.isTextAnimating) {
-    skipDialogue(); // Allow skipping mid-animation
+    skipDialogue(); 
     return;
   }
-
   loadStory();
   handleStartEndDialogue();
 }
-
-// Reset the flag when Space is released
 function resetSpaceHeld(event) {
   if (event.code === "Space") {
-    spaceHeld = false; // Allow Space to be pressed again
+    spaceHeld = false; 
   }
 }
-
 window.addEventListener("keydown", spaceDialogueToggle);
 window.addEventListener("keyup", resetSpaceHeld);
-
 window.toggleDialogueOpen = function () {
   loadStory();
   handleStartEndDialogue();
 }
-
 function getStoryForNPC(name) {
   const npc = window.currentStories.find(npc => npc.name === name);
-  return npc ? npc.story : null;  // Return the story or null if not found
+  return npc ? npc.story : null;  
 }
-
 function loadStory() {
   console.log('loadStory function gameJS 2')
   const npc = npcs.find(npc => npc.name === npcMemory);
-  loadDialogue(getStoryForNPC(npc.name), getChapter(npc.name), npc.name); // LOAD STORY
+  loadDialogue(getStoryForNPC(npc.name), getChapter(npc.name), npc.name); 
 }
-
 function clickDialogueToggle() {
   if (!dialogueToggled) {return}
   if (window.isTextAnimating) {
     skipDialogue();
     return
   };
-
   loadStory();
-
   for (let npcName in toggleNPCs) {
     if (toggleNPCs[npcName]) {
       if (window.finalPart === true) {
@@ -1643,7 +1396,6 @@ function clickDialogueToggle() {
 }
 canvas.addEventListener("mousedown", clickDialogueToggle);
 canvas.addEventListener("touchstart", clickDialogueToggle);
-
 window.handleStartEndDialogue = function() {
   for (let npcName in toggleNPCs) {
     if (toggleNPCs[npcName]) {
@@ -1658,9 +1410,7 @@ window.handleStartEndDialogue = function() {
     }
   }
 }
-
 let npcMemory = false;
-
 function startDialogue(npcName) {
   const npc = npcs.find(npc => npc.name === npcName);
   npcMemory = npc.name;
@@ -1686,10 +1436,8 @@ function startDialogue(npcName) {
     lowCamera = true;
   }
 }
-
 let dialogueEnding = false;
 window.dialogueEnding = dialogueEnding;
-
 function endDialogue(npcName) {
   window.currentPart = 1;
   const npc = npcs.find(npc => npc.name === npcName);
@@ -1708,13 +1456,11 @@ function endDialogue(npcName) {
   dialogueToggled = false;
   window.dialogueToggled = dialogueToggled;
 }
-
 document.addEventListener('keydown', (event) => {
   if (event.code === 'Escape' && dialogueToggled) {
     breakDialogue(true);
   } 
 })
-
 window.breakDialogue = function(zoomOut) {
   window.currentPart = 1;
   const npc = npcs.find(npc => npc.name === npcMemory);
@@ -1733,7 +1479,6 @@ window.breakDialogue = function(zoomOut) {
   dialogueToggled = false;
   window.dialogueToggled = dialogueToggled;
 }
-
 function handleZoom(targetScale) {
   if (zoomingInProgress) {
     zoomTargetScale = targetScale;
@@ -1745,10 +1490,8 @@ function handleZoom(targetScale) {
     zoomingInProgress = true;
     animateZoom();
   }
-
   setTimeout(() => blockMotion = (targetScale === 5), zoomDuration);
 }
-
 function teleportToNPC(npc, direction) {
   const teleportDistance = 3.5;
   const angleRad = direction * (Math.PI / 180);
@@ -1756,25 +1499,19 @@ function teleportToNPC(npc, direction) {
   char.y = (npc.y + npc.frameHeight / 2) - Math.sin(angleRad) * teleportDistance * 5 - char.frameHeight / 2;
   draw();
 }
-
 function snapToValidDirection(direction) {
   const validRanges = [
     { min: 150, max: 180 },
     { min: -180, max: -150 },
     { min: -30, max: 30 }
   ];
-
-  // Check if direction is already in a valid range
   for (const range of validRanges) {
     if (direction >= range.min && direction <= range.max) {
-      return direction; // Keep it as is
+      return direction; 
     }
   }
-
-  // If not in a valid range, snap to the closest boundary
   let closestAngle = direction;
   let minDiff = Infinity;
-
   for (const range of validRanges) {
     for (const boundary of [range.min, range.max]) {
       const diff = Math.abs(direction - boundary);
@@ -1784,65 +1521,46 @@ function snapToValidDirection(direction) {
       }
     }
   }
-  
   return closestAngle;
 }
-
 function proximityQuery(object1, object2) {
   const dx = object2.x + object2.frameWidth / 2 - (object1.x + object1.frameWidth / 2);
   const dy = object2.y + object2.frameHeight / 2 - (object1.y + object1.frameHeight / 2);
   return Math.sqrt(dx * dx + dy * dy);
 }
-
 function directionQuery(object1, object2) {
   const dx = object2.x + object2.frameWidth / 2 - (object1.x + object1.frameWidth / 2);
   const dy = object2.y + object2.frameHeight / 2 - (object1.y + object1.frameHeight / 2);
-  return Math.atan2(dy, -dx) * (180 / Math.PI); // Convert to degrees
+  return Math.atan2(dy, -dx) * (180 / Math.PI); 
 }
-
-
-
-////////////////
-// COLLISIONS //
-////////////////
-
 const collisionMapCanvas = document.createElement('canvas');
 const c2 = collisionMapCanvas.getContext('2d');
-let collisionMapData; // Store collision map data
-
-// Initialize collision map data (do this ONCE when the image loads)
+let collisionMapData; 
 collisionMap.onload = () => {
     collisionMapCanvas.width = collisionMap.width;
     collisionMapCanvas.height = collisionMap.height;
     c2.drawImage(collisionMap, 0, 0);
     collisionMapData = c2.getImageData(0, 0, collisionMap.width, collisionMap.height).data;
 };
-
 function checkCollisions() {
-    if (!collisionMapData) return { top: false, bottom: false, left: false, right: false }; // Return if data not loaded yet
-
+    if (!collisionMapData) return { top: false, bottom: false, left: false, right: false }; 
     const charMapX = Math.floor((char.x + 16) - collisionMapOffset.x);
     const charMapY = Math.floor((char.y + 26) - collisionMapOffset.y);
-
     const requiredConsistency = 0.5;
-
     const collidingSides = {
         top: false,
         bottom: false,
         left: false,
         right: false,
     };
-
     const checkSide = (side, startX, startY, endX, endY) => {
         let collisionCount = 0;
         let totalChecks = 0;
-
         for (let y = startY; y < endY; y++) {
             for (let x = startX; x < endX; x++) {
                 if (x >= 0 && x < collisionMap.width && y >= 0 && y < collisionMap.height) {
                     const pixelIndex = (y * collisionMap.width + x) * 4;
                     const a = collisionMapData[pixelIndex + 3];
-
                     if (a > 0) {
                         collisionCount++;
                     }
@@ -1852,32 +1570,19 @@ function checkCollisions() {
         }
         return totalChecks > 0 && collisionCount / totalChecks >= requiredConsistency;
     };
-
-
     collidingSides.top = checkSide("top", charMapX - 4, charMapY - 2, charMapX + 4, charMapY);
     collidingSides.bottom = checkSide("bottom", charMapX - 4, charMapY, charMapX + 4, charMapY + 2);
     collidingSides.left = checkSide("left", charMapX - 4, charMapY - 2, charMapX, charMapY + 2);
     collidingSides.right = checkSide("right", charMapX, charMapY - 2, charMapX + 4, charMapY + 2);
-
     return collidingSides;
 }
-
-
-//////////////
-// MOVEMENT //
-//////////////
-
 let mouseRadius = 0;
 let mouseAngle = 0;
-
 let stoppedMoving = true;
-
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
-
 let keysPressed = [];
-
 document.addEventListener('keydown', (event) => {
   if (event.key === 'w' || event.key === 'a' || event.key === 's' || event.key === 'd' || event.key === 'W' || event.key === 'A' || event.key === 'S' || event.key === 'D' || event.shiftKey && event.key === 'W' || event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 'D' || event.key === 'ArrowUp' || event.key === 'ArrowLeft' || event.key === 'ArrowDown' || event.key === 'ArrowRight') {
     if (!keysPressed.includes(event.key)) {
@@ -1894,18 +1599,17 @@ document.addEventListener('keyup', (event) => {
   keysPressed = keysPressed.filter(word => word !== event.key);
   updateCharAngle();
 })
-
 canvas.addEventListener('mousedown', (event) => {
-  if (event.button === 0) { // Left clicks only
+  if (event.button === 0) { 
     isDragging = true;
     dragStartX = event.clientX;
     dragStartY = event.clientY;
   }
 });
 canvas.addEventListener('touchstart', (event) => {
-  event.preventDefault(); // Prevent default to avoid issues with scrolling or zooming
+  event.preventDefault(); 
   isDragging = true;
-  dragStartX = event.touches[0].clientX; // First touch point
+  dragStartX = event.touches[0].clientX; 
   dragStartY = event.touches[0].clientY;
 });
 document.addEventListener('mouseup', () => {
@@ -1915,41 +1619,33 @@ document.addEventListener('mouseup', () => {
 document.addEventListener('touchend', () => {
   isDragging = false;
 });
-
 canvas.addEventListener('mousemove', (event) => {updateMouseData(event)});
 canvas.addEventListener('touchmove', (event) => {
-  event.preventDefault(); // Prevent scrolling / zooming during touchmove
+  event.preventDefault(); 
   updateMouseData(event);
 });
-
 function updateMouseData(event) {
   let mouseXInGameCoords, mouseYInGameCoords;
-
   if (event.type === "mousemove") {
     mouseXInGameCoords = (event.clientX - translationX) / globalScale;
     mouseYInGameCoords = (event.clientY - translationY) / globalScale;
   } else if (event.type === "touchmove" || event.type === "touchstart") {
     mouseXInGameCoords = (event.touches[0].clientX - translationX) / globalScale;
     mouseYInGameCoords = (event.touches[0].clientY - translationY) / globalScale;
-  } else { // Handle other event types if necessary
+  } else { 
     return;
   }
-
   const charCenterX = char.x + 15.5;
   const charCenterY = char.y + 19;
-
   const dx = mouseXInGameCoords - charCenterX;
   const dy = mouseYInGameCoords - charCenterY;
-
   mouseRadius = Math.sqrt(dx * dx + dy * dy);
   mouseAngle = Math.atan2(dy, dx);
 }
-
 let angle = 0;
 let keyDominance;
 let blockMouse = false;
 let charSpeed = 0;
-
 document.addEventListener('keydown', (event) => {
   if ((event.code === 'Space' || event.code === 'Escape' || keysPressed.length !== 0) && charMenuOpen) {
     const toggleCharMenuEvent = new Event('toggleCharMenu');
@@ -1960,12 +1656,11 @@ document.addEventListener('keydown', (event) => {
     autoClose(0, true);
   }
 })
-
 function updateCharMovement() {
   if (blockDirectionUpdate) {
     char.frameX = 0;
     if (!dialogueToggled) {
-      char.frameY = updateCharDirection(Math.PI / 2); // Look down
+      char.frameY = updateCharDirection(Math.PI / 2); 
     }
     return;
   } else {
@@ -1983,8 +1678,8 @@ function updateCharMovement() {
     updateAnimation(80, true);
     return
   } else if (isDragging) {
-    maxSpeed = limitCharMovement(mouseRadius, maxSpeed); // Adjust the 2nd argument to change the maximum speed
-    angle = mouseAngle // limitAngle(mouseAngle, 8);
+    maxSpeed = limitCharMovement(mouseRadius, maxSpeed); 
+    angle = mouseAngle 
     keyDominance = false;
   }
   if (keyDominance && isDragging) {
@@ -1992,9 +1687,7 @@ function updateCharMovement() {
   }
   const charAcceleration = 0.1;
   const charDeceleration = 0.25;
-
   let animationSpeed = 80 / (Math.max(0.6, maxSpeed) / 1.1)
-
   if ((isDragging || keysPressed.length !== 0) && maxSpeed >= 0.125 && !blockMotion) {
     moving(true);
     charSpeed += charAcceleration;
@@ -2010,9 +1703,7 @@ function updateCharMovement() {
       char.frameY = updateCharDirection(angle);
     }
   }
-
   const charCollisions = checkCollisions();
-
   if (!(keyDominance && (hKeys === 0))) {
     if (   !(((charSpeed * Math.cos(angle)) <= 0) && charCollisions.left)   &&   !(((charSpeed * Math.cos(angle)) >= 0) && charCollisions.right  )) {
       char.x += (charSpeed * Math.cos(angle));
@@ -2023,19 +1714,14 @@ function updateCharMovement() {
       char.y += (charSpeed * Math.sin(angle));
     }
   }
-
   char.x = round(char.x, 100);
   char.y = round(char.y, 100);
-
   localStorage.setItem("charMemory", JSON.stringify(char));
-
   checkNPCs();
 }
-
 function round(input, div) {
   return Math.round(input * div) / div;
 }
-
 function confirmBlockMouse(time) {
   setTimeout(() => {
     if (keyDominance && isDragging) {
@@ -2043,7 +1729,6 @@ function confirmBlockMouse(time) {
     }
   }, time);
 }
-
 function moving(isMoving) {
   if (isMoving === true) {
     stoppedMoving = false;
@@ -2061,21 +1746,16 @@ function moving(isMoving) {
     window.stoppedMoving = stoppedMoving;
   }
 }
-
 function limitAngle(angle, divisions) {
   const choppedPi = Math.PI / divisions;
   return Math.round(angle / choppedPi) * choppedPi;
 }
-
 let lastUpdate = 0;
-
-let charFrameX = 0; // Store frameX separately
-
+let charFrameX = 0; 
 function updateAnimation(speed, stop) {
   const now = performance.now();
   if (now - lastUpdate >= speed) {
-    lastUpdate = now; // Update this first to avoid skipping frames
-
+    lastUpdate = now; 
     if (stop) {
       if (charFrameX === 0 || charFrameX === 1 || charFrameX === 4 || charFrameX === 5) {
         charFrameX = 0;
@@ -2089,51 +1769,45 @@ function updateAnimation(speed, stop) {
     } else {
       charFrameX = (charFrameX + 1) % 8;
     }
-    char.frameX = charFrameX; // Update char.frameX only once per animation frame
+    char.frameX = charFrameX; 
   }
 }
-
 function limitCharMovement(radius, maxSpeed) {
   let maxRadius = 60;
   let minRadius = 30;
-
   const leastVPDimension = Math.min(window.innerWidth, window.innerHeight);
   if (leastVPDimension <= 320) {
     maxRadius = minRadius;
   } else if (!(leastVPDimension >= 1000)) {
     maxRadius = minRadius + (maxRadius - minRadius) * ((leastVPDimension - 320) / (1000 - 320));
   }
-
   let limitFactor = Math.min(radius / maxRadius, 1);
   let limitedMaxSpeed = maxSpeed * limitFactor;
   return limitedMaxSpeed;
 }
-
 function updateCharDirection(angle) {
-  angle = angle * (180 / Math.PI); // Convert to degrees
-  if (angle <= -67.5 && angle >= -112.5) { // N
+  angle = angle * (180 / Math.PI); 
+  if (angle <= -67.5 && angle >= -112.5) { 
     return 1;
-  } else if (angle >= -157.5 && angle <= -112.5) { // NW
+  } else if (angle >= -157.5 && angle <= -112.5) { 
     return 7;
-  } else if (angle >= -67.5 && angle <= -22.5) { // NE
+  } else if (angle >= -67.5 && angle <= -22.5) { 
     return 6;
-  } else if (angle >= 157.5 || angle <= -157.5) { // W
+  } else if (angle >= 157.5 || angle <= -157.5) { 
     return 5;
-  } else if (angle >= -22.5 && angle <= 22.5) { // E
+  } else if (angle >= -22.5 && angle <= 22.5) { 
     return 4;
-  } else if (angle >= 22.5 && angle <= 67.5) { // SE
+  } else if (angle >= 22.5 && angle <= 67.5) { 
     return 3;
-  } else if (angle >= 67.5 && angle <= 112.5) { // S
+  } else if (angle >= 67.5 && angle <= 112.5) { 
     return 0;
-  } else if (angle >= 112.5 && angle <= 157.5) { // SW
+  } else if (angle >= 112.5 && angle <= 157.5) { 
     return 2;
   }
 }
-
 let vKeys = 0;
 let hKeys = 0;
 let angleHistory = 0
-
 function updateCharAngle() {
   const keyAcceleration = 0.1;
   const keyDeceleration = 0.2;
@@ -2141,21 +1815,20 @@ function updateCharAngle() {
   let hBoth = false;
   let anyV = false;
   let anyH = false;
-
   if ((keysPressed.includes('w') || keysPressed.includes('W') || keysPressed.includes('ArrowUp')) && !((keysPressed.includes('s') || keysPressed.includes('S') || keysPressed.includes('ArrowDown')))) {
     if (vKeys < 0) {
       charSpeed = 0;
       vKeys = 0
     }
     anyV = true;
-    vKeys = Math.min(vKeys + keyAcceleration, 1); // Up Exclusive
+    vKeys = Math.min(vKeys + keyAcceleration, 1); 
   } else if (!(keysPressed.includes('w') || keysPressed.includes('W') || keysPressed.includes('ArrowUp')) && ((keysPressed.includes('s') || keysPressed.includes('S') || keysPressed.includes('ArrowDown')))) {
     if (vKeys > 0) {
       charSpeed = 0;
       vKeys = 0
     }
     anyV = true
-    vKeys = Math.max(vKeys - keyAcceleration, -1); // Down Exclusive
+    vKeys = Math.max(vKeys - keyAcceleration, -1); 
   } else {
     if (vKeys > 0) {
       vKeys = Math.max(vKeys - keyDeceleration, 0);
@@ -2167,21 +1840,20 @@ function updateCharAngle() {
     vBoth = true;
     anyV = true;
   }
-
   if ((keysPressed.includes('d') || keysPressed.includes('D') || keysPressed.includes('ArrowRight')) && !(keysPressed.includes('a') || keysPressed.includes('A') || keysPressed.includes('ArrowLeft'))) {
     if (hKeys < 0) {
       charSpeed = 0;
       hKeys = 0
     }
     anyH = true;
-    hKeys = Math.min(hKeys + keyAcceleration, 1); // Right Exclusive
+    hKeys = Math.min(hKeys + keyAcceleration, 1); 
   } else if (!(keysPressed.includes('d') || keysPressed.includes('D') || keysPressed.includes('ArrowRight')) && (keysPressed.includes('a') || keysPressed.includes('A') || keysPressed.includes('ArrowLeft'))) {
     if (hKeys > 0) {
       charSpeed = 0;
       hKeys = 0
     }
     anyH = true;
-    hKeys = Math.max(hKeys - keyAcceleration, -1); // Left Exclusive
+    hKeys = Math.max(hKeys - keyAcceleration, -1); 
   } else {
     if (hKeys > 0) {
       hKeys = Math.max(hKeys - keyDeceleration, 0);
@@ -2193,12 +1865,10 @@ function updateCharAngle() {
     hBoth = true;
     anyH = true;
   }
-
   if (keysPressed.length === 0) {
     vKeys = 0;
     hKeys = 0;
   }
-
   if ((vBoth && hBoth) || (vBoth && !anyH) || (hBoth && !anyV)) {
     charSpeed = 0;
     blockMotion = true;
@@ -2209,83 +1879,60 @@ function updateCharAngle() {
     return angleHistory;
   }
 }
-
 function initialiseCharPosition() {
   let storedChar = localStorage.getItem("charMemory");
   storedChar = storedChar ? JSON.parse(storedChar) : {};
   char.x = storedChar.x ?? char.x;
   char.y = storedChar.y ?? char.y;
 }
-
-////////////
-// RANDOM //
-////////////
-let animationId; // Store the requestAnimationFrame ID
-
+let animationId; 
 function animateAll() {
   if (cowsVisible) {
-    animateCows(); // Ensures cow animations continue
+    animateCows(); 
   }
   if (boatVisible) {
-    animateBoat(); // Ensures boat animations continue
+    animateBoat(); 
   }
   if (towerVisible) {
     animateTower()
   }
-  
-  animationId = requestAnimationFrame(animateAll); // Keep the loop running
+  animationId = requestAnimationFrame(animateAll); 
 }
-
 function animateCows() {
-  if (!cowsVisible) return; // Stop if cows aren't visible
-
+  if (!cowsVisible) return; 
   const cows = [cowbrownNPC, cowlightNPC, cowpinkNPC, cowpurpleNPC];
-  cows.forEach(cow => animate(cow)); // Animate all cows
+  cows.forEach(cow => animate(cow)); 
 }
-
 function animateBoat() {
-  if (!boatVisible) return; // Stop if the boat isn't visible
-
-  animate(boatAnimate); // Animate the boat
+  if (!boatVisible) return; 
+  animate(boatAnimate); 
 }
-
 function animateTower() {
-  if (!towerVisible) return; // Stop if the tower isn't visible
-
-  animate(animate5G); // Animate the tower
+  if (!towerVisible) return; 
+  animate(animate5G); 
 }
-
 function animate(obj) {
-  // Initialize lastUpdate if it's undefined
   if (obj.lastUpdate === undefined) {
     obj.lastUpdate = Date.now();
-    obj.frameX = obj.animationOffset; // Start at the specified animationOffset
+    obj.frameX = obj.animationOffset; 
   }
-
   const now = Date.now();
   const elapsedTime = now - obj.lastUpdate;
-
   if (elapsedTime >= obj.animationSpeed) {
-    // Move to the next frame, looping back if necessary
     obj.frameX = (obj.frameX + 1) % obj.animationFrames;
-    obj.lastUpdate = now; // Update the time of the last frame change
+    obj.lastUpdate = now; 
   }
 }
-
 window.onload = function () {
   initialiseCharPosition();
   initialiseItems();
-  
   (function updateCharMovementLoop() {
     updateCharMovement();
-    requestAnimationFrame(updateCharMovementLoop); // Keep movement separate
+    requestAnimationFrame(updateCharMovementLoop); 
     draw();
   })();
-
-  animateAll(); // Start animation loop separately
+  animateAll(); 
 };
-
 window.onbeforeunload = () => {
-  // Clean up resources
-  cancelAnimationFrame(animationId); // Stop animations properly
+  cancelAnimationFrame(animationId); 
 };

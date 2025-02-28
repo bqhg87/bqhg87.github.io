@@ -432,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>Within this storyline, we see an example of mis/disinformation being spread in order to further a political aim. Such motives are surprisingly common and although in this case the political volunteer is unaware of the misinformation he is spreading, people often intentionally share disinformation in order to achieve social or political aims, despite knowing the information they are sharing is false<sup><a href="https://doi.org/10.58248/PN719" title="https://doi.org/10.58248/PN719" target="blank" >[19]</a></sup>.</p>
       </div>
-      <div class="articleItem left">
+      <div class="articleItem wide">
           <p>In this scenario, the political volunteer uses words that evoke upsetting and destructive imagery. His repeated use of 'poisonous' and 'weaponry' implies situations of death and terror, and whilst nuclear power plants do use fission - the same process used in nuclear bombs - the production of nuclear weapons is in fact strictly controlled. Similarly, nuclear power plants operate with extremely strict safety controls that make nuclear power the second safest form of energy<sup><a href="https://www.iaea.org/newscenter/news/international-day-of-clean-energy-why-nuclear-power" title="https://www.iaea.org/newscenter/news/international-day-of-clean-energy-why-nuclear-power" target="blank" >[17]</a></sup>. While the radiation produced can have harmful impacts on the human body, these safety controls mean no 'poisonous' effects can result from the presence of a well-functioning nuclear power plant.</p>
       </div>
       <div class="articleItem wide">
@@ -630,19 +630,16 @@ document.addEventListener('DOMContentLoaded', () => {
     loadArticle(initialArticle, false); // Avoid updating URL on initial load
   }
 
-  // Function to hide sidebar
   const hideSidebar = () => {
     if (!sideMenu.classList.contains('fade-out')) {
       sideMenu.classList.add('fade-out');
       setTimeout(() => {
         sideMenu.classList.remove('fade-out', 'show');
-      }, 200); // 200ms delay to match the fade-out duration
+      }, 200);
     }
   };
 
-  // Function to show sidebar
   const showSidebar = () => {
-    // Only add 'show' class if it's not already there and if the article is open
     if (!sideMenu.classList.contains('show') && articleWrapper.classList.contains('show')) {
       sideMenu.classList.remove('fade-out');
       sideMenu.classList.add('show');

@@ -1,27 +1,23 @@
 window.currentCharMenuTitle = 'Body Settings';
 const charMenuTitles = ['Body Settings', 'Wardrobe'];
-
 function setCharMenuButtonSprite(buttonId, spriteX) {
     const button = document.getElementById(buttonId);
     const buttonWidth = button.offsetWidth;
     const buttonHeight = button.offsetHeight;
     const spriteY = parseInt(button.dataset.spriteY) || 0;
-
     const backgroundPositionX = -spriteX * buttonWidth;
     const backgroundPositionY = -spriteY * buttonHeight;
-
     if (buttonId === 'charSettingsTitleLeft' || buttonId === 'charSettingsTitleRight') {
         button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
         button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 2}px`;
     } else if (button.classList.contains('charSelectorArrow')) {
         button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
-        button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 2}px`;  // Scale the sprite to fit the button
+        button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 2}px`;  
     } else {    
         button.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
         button.style.backgroundSize = `${buttonWidth * 3}px ${buttonHeight * 3}px`;
     }
 }
-
 let charAppearance;
 function refreshCachedAppearance() {
     const cachedAppearance = JSON.parse(localStorage.getItem('charAppearance'));
@@ -29,74 +25,57 @@ function refreshCachedAppearance() {
         charAppearance = cachedAppearance;
     }
 }
-
 let shiftHeld = false;
 let ctrlHeld = false;
 let cmdHeld = false;
-
 function addCharMenuButtonEventListeners(buttonId) {
     const button = document.getElementById(buttonId);
-
     button.isHovered = false;
-
     button.addEventListener('mouseover', () => {
         button.isHovered = true;
         updateDisplayedCharSettings();
         setCharMenuButtonSprite(buttonId, 1);
     });
-
     button.addEventListener('mousedown', () => {
         updateDisplayedCharSettings();
         setCharMenuButtonSprite(buttonId, 2);
     });
-
     button.addEventListener('mouseout', () => {
         button.isHovered = false;
         updateDisplayedCharSettings();
         setCharMenuButtonSprite(buttonId, 0);
     });
-
-    button.addEventListener('mouseup', () => {  // Combined mouseup logic
+    button.addEventListener('mouseup', () => {  
         updateDisplayedCharSettings();
         setCharMenuButtonSprite(buttonId, button.isHovered ? 1 : 0);
     });
-
-    // Listen for shift key press
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Shift') {shiftHeld = true;}
         if (event.key === 'Control' || event.key === 'Meta') {ctrlHeld = true; cmdHeld = true;}
     });
-
-    // Listen for shift key release
     document.addEventListener('keyup', (event) => {
         if (event.key === 'Shift') {shiftHeld = false;}
         if (event.key === 'Control' || event.key === 'Meta') {ctrlHeld = false; cmdHeld = false;}
     });
-
     if (buttonId === 'charSettingsTitleLeft' || buttonId === 'charSettingsTitleRight') {
         button.addEventListener('click', () => {
             const titleElement = document.getElementById('charSettingsTitle');
             const currentIndex = charMenuTitles.indexOf(currentCharMenuTitle);
-
             let newIndex;
             if (buttonId === 'charSettingsTitleLeft') {
-                newIndex = (currentIndex - 1 + charMenuTitles.length) % charMenuTitles.length; // Cycle backwards
+                newIndex = (currentIndex - 1 + charMenuTitles.length) % charMenuTitles.length; 
             } else if (buttonId === 'charSettingsTitleRight') {
-                newIndex = (currentIndex + 1) % charMenuTitles.length; // Cycle forwards
+                newIndex = (currentIndex + 1) % charMenuTitles.length; 
             }
-
             window.currentCharMenuTitle = charMenuTitles[newIndex];
-            titleElement.textContent = currentCharMenuTitle; // Update the displayed title
-
+            titleElement.textContent = currentCharMenuTitle; 
             refreshVisibleCharMenus();
-
             updateArrowPairVisibility();
         });
     } else if (button.id === "hairToggle") {
         button.addEventListener('click', () => {
             refreshCachedAppearance();
             if (charAppearance) {
-                //console.log(charAppearance);
                 charAppearance.hairType = (charAppearance.hairType + 1) % 14;
                 updateCharAppearance(charAppearance);
             } else {
@@ -107,7 +86,6 @@ function addCharMenuButtonEventListeners(buttonId) {
         button.addEventListener('click', () => {
             refreshCachedAppearance();
             if (charAppearance) {
-                //console.log(charAppearance);
                 if (shiftHeld || ctrlHeld || cmdHeld) {
                     charAppearance.eyes = 8;
                 } else {
@@ -140,7 +118,7 @@ function addCharMenuButtonEventListeners(buttonId) {
         });
     }   else if (button.id === "blushToggle") {
             button.addEventListener('click', () => {
-                refreshCachedAppearance(); // Get the latest charAppearance
+                refreshCachedAppearance(); 
                 if (charAppearance) {
                     if (charAppearance.blush) {
                         charAppearance.blush = false;
@@ -154,7 +132,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             });
     }   else if (button.id === "beardToggle") {
             button.addEventListener('click', () => {
-                refreshCachedAppearance(); // Get the latest charAppearance
+                refreshCachedAppearance(); 
                 if (charAppearance) {
                     if (charAppearance.beard) {
                         charAppearance.beard = false;
@@ -168,7 +146,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             });
     }   else if (button.id === "glassesToggle") {
         button.addEventListener('click', () => {
-            refreshCachedAppearance(); // Get the latest charAppearance
+            refreshCachedAppearance(); 
             if (charAppearance) {
                 if (charAppearance.glasses) {
                     charAppearance.glasses = false;
@@ -186,11 +164,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             if (charAppearance) {
                 const hairs = Object.keys(window.hair);
                 let currentIndex = hairs.indexOf(charAppearance.hair);
-                
-                // Move to the previous index, looping to the last item if at the start
                 let prevIndex = (currentIndex - 1 + hairs.length) % hairs.length;
-    
-                // Update the hair selection
                 charAppearance.hair = hairs[prevIndex];
                 updateCharAppearance(charAppearance);
             } else {
@@ -203,11 +177,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             if (charAppearance) {
                 const hairs = Object.keys(window.hair);
                 let currentIndex = hairs.indexOf(charAppearance.hair);
-                
-                // Move to the next index, looping back to 0 if at the end
                 let nextIndex = (currentIndex + 1) % hairs.length;
-    
-                // Update the hair selection
                 charAppearance.hair = hairs[nextIndex];
                 updateCharAppearance(charAppearance);
             } else {
@@ -220,11 +190,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             if (charAppearance) {
                 const tops = Object.keys(window.tops);
                 let currentIndex = tops.indexOf(charAppearance.clothingTop);
-                
-                // Move to the previous index, looping to the last item if at the start
                 let prevIndex = (currentIndex - 1 + tops.length) % tops.length;
-    
-                // Update the hair selection
                 charAppearance.clothingTop = tops[prevIndex];
                 updateCharAppearance(charAppearance);
             } else {
@@ -237,11 +203,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             if (charAppearance) {
                 const tops = Object.keys(window.tops);
                 let currentIndex = tops.indexOf(charAppearance.clothingTop);
-                
-                // Move to the next index, looping back to 0 if at the end
                 let nextIndex = (currentIndex + 1) % tops.length;
-    
-                // Update the hair selection
                 charAppearance.clothingTop = tops[nextIndex];
                 updateCharAppearance(charAppearance);
             } else {
@@ -254,11 +216,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             if (charAppearance) {
                 const bottoms = Object.keys(window.bottoms);
                 let currentIndex = bottoms.indexOf(charAppearance.clothingBottom);
-                
-                // Move to the previous index, looping to the last item if at the start
                 let prevIndex = (currentIndex - 1 + bottoms.length) % bottoms.length;
-    
-                // Update the hair selection
                 charAppearance.clothingBottom = bottoms[prevIndex];
                 updateCharAppearance(charAppearance);
             } else {
@@ -271,11 +229,7 @@ function addCharMenuButtonEventListeners(buttonId) {
             if (charAppearance) {
                 const bottoms = Object.keys(window.bottoms);
                 let currentIndex = bottoms.indexOf(charAppearance.clothingBottom);
-                
-                // Move to the next index, looping back to 0 if at the end
                 let nextIndex = (currentIndex + 1) % bottoms.length;
-    
-                // Update the hair selection
                 charAppearance.clothingBottom = bottoms[nextIndex];
                 updateCharAppearance(charAppearance);
             } else {
@@ -284,7 +238,6 @@ function addCharMenuButtonEventListeners(buttonId) {
         });
     }
 }
-
 window.refreshVisibleCharMenus = function() {
     const bodySettings = document.getElementById('charBodySettings');
             const wardrobeSettings = document.getElementById('charWardrobeSettings');
@@ -299,44 +252,34 @@ window.refreshVisibleCharMenus = function() {
                 wardrobeSettings.classList.add('hidden');
             }
 }
-
-
 function initializeCharMenuButtons() {
     const basicToggle = document.querySelectorAll('.basicToggle');
     const charSelectorArrows = document.querySelectorAll('.charSelectorArrow');
-
-    const titleElement = document.getElementById('charSettingsTitle'); // Get title element
-    titleElement.textContent = currentCharMenuTitle; // Set initial title text
-
+    const titleElement = document.getElementById('charSettingsTitle'); 
+    titleElement.textContent = currentCharMenuTitle; 
     setCharMenuButtonSprite('charSettingsTitleLeft', 0);
     setCharMenuButtonSprite('charSettingsTitleRight', 0);
     addCharMenuButtonEventListeners('charSettingsTitleLeft');
     addCharMenuButtonEventListeners('charSettingsTitleRight');
-
     setCharMenuButtonSprite('autoEyesToggle', 0);
     addCharMenuButtonEventListeners('autoEyesToggle');
-
     addCharMenuButtonEventListeners('hairToggle');
     addCharMenuButtonEventListeners('eyesToggle');
     addCharMenuButtonEventListeners('topToggle');
     addCharMenuButtonEventListeners('bottomToggle');
     addCharMenuButtonEventListeners('shoeToggle');
-
     basicToggle.forEach(button => {
-        setCharMenuButtonSprite(button.id, 0); // Set default sprite (normal state)
-        addCharMenuButtonEventListeners(button.id); // Add event listeners for interaction
+        setCharMenuButtonSprite(button.id, 0); 
+        addCharMenuButtonEventListeners(button.id); 
     });
-
     charSelectorArrows.forEach(button => {
         const isLeft = button.classList.contains('Left');
         const spriteY = isLeft ? 0 : 1;
-        
-        button.dataset.spriteY = spriteY; // Store spriteY value in data attribute
-        setCharMenuButtonSprite(button.id, 0); // Set default spriteX to 0
+        button.dataset.spriteY = spriteY; 
+        setCharMenuButtonSprite(button.id, 0); 
         addCharMenuButtonEventListeners(button.id);
     });
 }
-
 window.refreshAllCharButtons = function() {
     setCharMenuButtonSprite('charSettingsTitleLeft', 0);
     setCharMenuButtonSprite('charSettingsTitleRight', 0);
@@ -344,16 +287,14 @@ window.refreshAllCharButtons = function() {
     const basicToggle = document.querySelectorAll('.basicToggle');
     const charSelectorArrows = document.querySelectorAll('.charSelectorArrow');
     basicToggle.forEach(button => {
-        setCharMenuButtonSprite(button.id, 0); // Set default sprite (normal state)
+        setCharMenuButtonSprite(button.id, 0); 
     });
     charSelectorArrows.forEach(button => {
-        setCharMenuButtonSprite(button.id, 0); // Set default spriteX to 0
+        setCharMenuButtonSprite(button.id, 0); 
     });
 }
-
 function updateBasicButtons() {
     const basicToggle = document.querySelectorAll('.basicToggle');
-    
     basicToggle.forEach(button => {
         if (button.id === "blushToggle") {
             if (charAppearance && typeof charAppearance.blush !== "undefined") {
@@ -393,10 +334,8 @@ function updateBasicButtons() {
         }
     });
 }
-
 function updateSelectorColor(selector, bgColor, fgColor) {
     let bgElements, fgElements;
-
     if (selector === 'hair') {
         bgElements = document.querySelectorAll('.cls-b-hair');
         fgElements = document.querySelectorAll('.cls-f-hair');
@@ -413,28 +352,22 @@ function updateSelectorColor(selector, bgColor, fgColor) {
         bgElements = document.querySelectorAll('.cls-b-shoe');
         fgElements = document.querySelectorAll('.cls-f-shoe');
     }
-
     if (!bgElements || !fgElements) {
         console.warn(`Invalid selector: ${selector}`);
         return;
     }
-
-    // Update the fill color of all elements with the selected class
     bgElements.forEach(element => {
         element.style.fill = bgColor;
     });
-
     fgElements.forEach(element => {
         element.style.fill = fgColor;
     });
 }
-
 function updateSelectorColors() {
     const hairToggle = document.getElementById('hairToggle');
     const eyesToggle = document.getElementById('eyesToggle');
     const topToggle = document.getElementById('topToggle');
     const bottomToggle = document.getElementById('bottomToggle');
-
     const hairColors = [
         { bg: "#463533", fg: "#3d2e2e", bgHover: "#3d2e2e", fgHover: "#312627" },
         { bg: "#b0815a", fg: "#946950", bgHover: "#946950", fgHover: "#6b493d" },
@@ -451,7 +384,6 @@ function updateSelectorColors() {
         { bg: "#914646", fg: "#783e45", bgHover: "#783e45", fgHover: "#61353d" },
         { bg: "#4a7378", fg: "#436069", bgHover: "#436069", fgHover: "#37464f" },
     ];
-
     const eyeColors = [
         { bg: "#66835c", fg: "#5b6c4f", bgHover: "#5b6c4f", fgHover: "#4b5641" },
         { bg: "#44573d", fg: "#3a4734", bgHover: "#3a4734", fgHover: "#313a2c" },
@@ -462,7 +394,6 @@ function updateSelectorColors() {
         { bg: "#352421", fg: "#281d1b", bgHover: "#281d1b", fgHover: "#211818" },
         { bg: "#a12610", fg: "#85221b", bgHover: "#85221b", fgHover: "#6c1f1d" },
     ];
-
     const clothingColors = [
         { bg: "#4c464b", fg: "#413b40", bgHover: "#413b40", fgHover: "#332e32" },
         { bg: "#4b6275", fg: "#435361", bgHover: "#435361", fgHover: "#323942" },
@@ -475,7 +406,6 @@ function updateSelectorColors() {
         { bg: "#b35249", fg: "#a14343", bgHover: "#a14343", fgHover: "#783a3d" },
         { bg: "#c5b6a0", fg: "#9c8d83", bgHover: "#9c8d83", fgHover: "#615a55" },
     ];
-
     const skirtColors = [
         { bg: "#413b40", fg: "#363235", bgHover: "#363235", fgHover: "#332e32" },
         { bg: "#3e4957", fg: "#353f4a", bgHover: "#353f4a", fgHover: "#323942" },
@@ -488,16 +418,12 @@ function updateSelectorColors() {
         { bg: "#823c42", fg: "#66343e", bgHover: "#66343e", fgHover: "#592c2e" },
         { bg: "#4a4a4f", fg: "#3c3b3f", bgHover: "#3c3b3f", fgHover: "#37373a" },
     ];
-
     const hairColor = hairColors[charAppearance.hairType] || hairColors[0];
     updateSelectorColor('hair', hairToggle.isHovered ? hairColor.bgHover : hairColor.bg, hairToggle.isHovered ? hairColor.fgHover : hairColor.fg);
-
     const eyeColor = eyeColors[charAppearance.eyes] || eyeColors[0];
     updateSelectorColor('eyes', eyesToggle.isHovered ? eyeColor.bgHover : eyeColor.bg, eyesToggle.isHovered ? eyeColor.fgHover : eyeColor.fg);
-
     const topColor = clothingColors[charAppearance.topType] || clothingColors[0];
     updateSelectorColor('top', topToggle.isHovered ? topColor.bgHover : topColor.bg, topToggle.isHovered ? topColor.fgHover : topColor.fg);
-
     let bottomColor;
     if (charAppearance.clothingBottom === 'skirt') {
         bottomColor = skirtColors[charAppearance.bottomType] || skirtColors[0];
@@ -505,7 +431,6 @@ function updateSelectorColors() {
         bottomColor = clothingColors[charAppearance.bottomType] || clothingColors[0];
     }
     updateSelectorColor('bottom', bottomToggle.isHovered ? bottomColor.bgHover : bottomColor.bg, bottomColor.isHovered ? bottomColor.fgHover : bottomColor.fg);
-
     const autoEyesToggle = document.getElementById('autoEyesToggle');
     const manualEyesToggle = document.getElementById('eyesColorToggle');
     if (!(charAppearance.eyes === 8)) {
@@ -516,14 +441,10 @@ function updateSelectorColors() {
         manualEyesToggle.classList.add('hidden');
     }
 }
-
-
 function updateSkinToneSelector() {
     const skinToneSelectors = document.querySelectorAll('.skinToneSelector');
-
     if (charAppearance && charAppearance.skinTone !== undefined) {
         const selectedSkinTone = charAppearance.skinTone;
-
         skinToneSelectors.forEach(selector => {
             const tone = parseInt(selector.dataset.tone);
             if (tone === selectedSkinTone) {
@@ -533,35 +454,28 @@ function updateSkinToneSelector() {
             }
         });
     } else {
-        // Handle the case where charAppearance or skinTone is not defined.
-        // For example, you could default to a specific skin tone or hide all selectors.
         console.warn("charAppearance or skinTone is not defined.");
         skinToneSelectors.forEach((selector, index) => {
-            if (index === 0) { // Default to the first skin tone
+            if (index === 0) { 
                 selector.classList.add('show');
             } else {
                 selector.classList.remove('show');
             }
         });
-
     }
 }
-
 function initializeSkinToneSelectors() {
     const skinToneSelectors = document.querySelectorAll('.skinToneSelector');
     const skinTonePalette = document.getElementById('skinTonePalette');
-
-    let isDragging = false; // Track if the user is dragging
-
+    let isDragging = false; 
     function updateSkinTonePaletteSprite(spriteIndex) {
-        const paletteHeight = skinTonePalette.offsetHeight; // Get height of palette
-        const spriteHeight = paletteHeight; // Calculate height of each sprite (9 sprites total)
-        const backgroundPositionY = -spriteIndex * spriteHeight; // Calculate background position
-        skinTonePalette.style.backgroundPositionY = `${backgroundPositionY}px`; // Update background position
+        const paletteHeight = skinTonePalette.offsetHeight; 
+        const spriteHeight = paletteHeight; 
+        const backgroundPositionY = -spriteIndex * spriteHeight; 
+        skinTonePalette.style.backgroundPositionY = `${backgroundPositionY}px`; 
     }
-
     function setSkinTone(tone) {
-        refreshCachedAppearance(); // Get the latest charAppearance
+        refreshCachedAppearance(); 
         if (charAppearance) {
             charAppearance.skinTone = tone;
             updateCharAppearance(charAppearance);
@@ -569,52 +483,39 @@ function initializeSkinToneSelectors() {
             console.error("charAppearance is not initialized!");
         }
     }
-
     skinToneSelectors.forEach(selector => {
         const tone = parseInt(selector.dataset.tone);
-
         selector.addEventListener('mouseover', () => {
             updateSkinTonePaletteSprite(tone + 1);
             if (isDragging) {
                 setSkinTone(tone);
             }
         });
-
         selector.addEventListener('mouseout', () => {
             updateSkinTonePaletteSprite(0);
         });
-
         selector.addEventListener('mousedown', () => {
             isDragging = true;
             setSkinTone(tone);
         });
-
         selector.addEventListener('click', () => {
             setSkinTone(tone);
         });
     });
-
-    // Stop dragging when mouse is released anywhere on the page
     document.addEventListener('mouseup', () => {
         isDragging = false;
     });
-
-    // Set initial sprite (all unhovered)
     updateSkinTonePaletteSprite(0);
 }
-
-
 window.updateDisplayedCharSettings = function() {
     refreshCachedAppearance();
-    //console.log(charAppearance);
     updateSkinToneSelector();
     updateBasicButtons();
     updateSelectorColors();
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     initializeCharMenuButtons();
     updateDisplayedCharSettings();
-    initializeSkinToneSelectors(); // Initialize skin tone selector event listeners
+    initializeSkinToneSelectors(); 
     refreshVisibleCharMenus();
 });
