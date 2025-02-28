@@ -1475,17 +1475,15 @@ window.checkNPCs = function() {
   npcs.forEach((npc) => checkNPC(npc, char, 20));
 }
 
-let spaceHeld = false; // Flag to track whether Space is held
+let spaceHeld = false; // Prevents rapid triggers
 
 function spaceDialogueToggle(event) {
   if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle || !isNearNPC) return;
 
-  spaceHeld = true; // Set flag immediately
-
-  setTimeout(() => { spaceHeld = true }, 10); // Small delay to prevent double trigger
+  spaceHeld = true; // Lock the trigger until Space is released
 
   if (window.isTextAnimating) {
-    skipDialogue();
+    skipDialogue(); // Allow skipping mid-animation
     return;
   }
 
@@ -1493,15 +1491,15 @@ function spaceDialogueToggle(event) {
   handleStartEndDialogue();
 }
 
-// Reset the flag when the key is released
+// Reset the flag when Space is released
 function resetSpaceHeld(event) {
   if (event.code === "Space") {
-    spaceHeld = false;
+    spaceHeld = false; // Allow Space to be pressed again
   }
 }
 
 window.addEventListener("keydown", spaceDialogueToggle);
-window.addEventListener("keyup", resetSpaceHeld); // Listen for key release
+window.addEventListener("keyup", resetSpaceHeld);
 
 window.toggleDialogueOpen = function () {
   loadStory();
