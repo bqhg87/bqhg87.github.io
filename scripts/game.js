@@ -813,6 +813,8 @@ window.npcs = [
     spriteX: 1, // white
   }), 
 
+  
+
 
   //MICROWAVES
   createNPC({
@@ -1476,9 +1478,11 @@ window.checkNPCs = function() {
 let spaceHeld = false; // Flag to track whether Space is held
 
 function spaceDialogueToggle(event) {
-  if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle || !isNearNPC) return; // Prevent repeated triggers
+  if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle || !isNearNPC) return;
 
-  spaceHeld = true; // Set flag to prevent retriggering
+  spaceHeld = true; // Set flag immediately
+
+  setTimeout(() => { spaceHeld = true }, 10); // Small delay to prevent double trigger
 
   if (window.isTextAnimating) {
     skipDialogue();
@@ -1486,7 +1490,6 @@ function spaceDialogueToggle(event) {
   }
 
   loadStory();
-
   handleStartEndDialogue();
 }
 
@@ -1511,6 +1514,7 @@ function getStoryForNPC(name) {
 }
 
 function loadStory() {
+  console.log('loadStory function gameJS')
   const npc = npcs.find(npc => npc.name === npcMemory);
   loadDialogue(getStoryForNPC(npc.name), getChapter(npc.name), npc.name); // LOAD STORY
 }
@@ -1566,7 +1570,6 @@ function startDialogue(npcName) {
   document.getElementById('mainGameMenuWrapper').classList.add('hidden');
   npc.indicator.spriteY = -1;
   char.frameY = updateCharDirection((-directionQuery(npc, char)) * Math.PI / 180);
-  //loadDialogue("concept", 1, npcName);
   lowCameraOffsetHistory = lowCameraOffset;
   const direction = snapToValidDirection(directionQuery(char, npc));
   window.npcRelativeDirection = direction;

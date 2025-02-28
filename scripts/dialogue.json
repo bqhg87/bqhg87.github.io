@@ -79,6 +79,942 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+    
+    {
+      "story": "default",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Professor",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "Hello, have you come to take a class today?"
+    },
+    
+    {
+      "story": "default",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Professor",
+      "isNpcSpeaking": false,
+      "finalPart": true,
+      "text": "Not today, I am busy. I will be sure to stop by another time though!"
+    },
+
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "You here for the show? The “northern lights”? Ha! HAARP did this. They can manipulate the ionosphere and control the weather. People need to wake up."
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "HAARP? The High-frequency Active Auroral Research Program? The Alaskan research station? That studies plasma physics in the atmosphere?"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 3,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "That's what they say it is. But last year, they fired high-frequency radio waves into the sky, and suddenly, auroras were seen all over the world. That's not natural",
+"learnMore": "haarp1"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 4,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "Is there any proof HAARP was responsible for those auroras? That seems like a coincidence -"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 5,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "Coincidence? They would never admit what they're doing. They accidentally let it slip, but now we know—HAARP can manipulate the atmosphere. And if they can do that, what else are they doing?"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 6,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "I think they're controlling the weather. Venezuelan media said they caused the Haitian earthquake. And they push storms around with physics, then blame it on climate change. It's all manufactured",
+"learnMore": "haarp2"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 7,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "That sounds… like a big claim"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 8,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": true,
+      "text": "You don't believe me? Fine. Help me prove it. I need solid evidence. If we can show what they're doing, we can wake people up",
+      "updateIndicators": {
+          "Jeffrey": 2,
+          "Professor": 3
+      },
+      "taskPushId": "haarp_library", 
+      "updateStories": {
+          "Professor": "haarp"
+      }, 
+      "topContext": "You want to learn more - go to the library and find the book about HAARP"
+    },
+
+
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Professor",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "I heard HAARP can create auroras and control the weather",
+      "learnMore": "haarp3"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Professor",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "This is a common misconception. HAARP sends high-frequency radio waves into the ionosphere, which excites electrons, causing them to emit red or green light. This is called airglow, a kind of artificial aurora. The effect is tiny and localized, and the power output is only about 3.6 megawatts"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 3,
+      "npc": "Professor",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "So HAARP can cause a glow, but it's not the same as the northern lights?"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 4,
+      "npc": "Professor",
+      "isNpcSpeaking": false,
+      "finalPart": true,
+      "text": "Exactly. The real northern lights are caused by solar storms, where the sun ejects high-energy charged particles. When they collide with our magnetic field, they trigger massive auroras. The power involved is hundreds of terawatts - it would HAARP 10 billion years to match one solar storm", 
+      "updateIndicators": {
+          "Jeffrey": 3,
+          "Professor": 4
+      }, 
+      "updateStories": {
+          "Professor": "complete"
+      }, 
+      "updateChapters": {
+          "Jeffrey": 2
+      },
+      "topContext": "You now know the truth. Go back to the field and share what you've learned"
+    },
+
+
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 1,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "Listen, I know you're worried, but here's the real science. I found actual peer-reviewed information and spoke to an expert in the field. HAARP's power is like a local radio tower—it can't change the weather. The auroras last year came from a coronal mass ejection, not HAARP"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 2,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "But the timing..."
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 3,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "That's how misuse of physics works. They use real terms but ignore key facts. HAARP can't do anything close to what people claim"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 4,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "But why?"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 5,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "Because mistrust is powerful. The more people doubt scientists by misusing their work, the more they turn to conspiracy groups. It's not about science - it's about control"
+    },
+    {
+      "story": "haarp",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 6,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": true,
+      "text": "Thanks for helping, I feel so much better about it now!",
+      "updateIndicators": {
+          "Jeffrey": 4
+      }, 
+      "updateStories": {
+          "Jeffrey": "complete"
+      }
+    },
+
+    {
+      "story": "complete",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": true,
+      "finalPart": true,
+      "text": "Oh, hello again! Thank you again for informing me - homest, I don't know what I was thinking!"
+    },
+    {
+      "story": "complete",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Professor",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "Ah, just the person! Did you get to the bottom of the truth in the end?"
+    },
+    {
+      "story": "complete",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Jeffrey",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "Yes I did. Thank you again for your help!"
+    },
+    {
+      "story": "complete",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 3,
+      "npc": "Professor",
+      "isNpcSpeaking": true,
+      "finalPart": true,
+      "text": "Not a problem. Always happy to help get the truth on these issues to more people!"
+    },
+
+
+
+
+
+
+    {
+      "story": "default",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Engineer",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "I wonder what this part does... oh, hello"
+    },
+    {
+      "story": "default",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Engineer",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "Hi, I didn't mean to interrupt, sorry"
+    },
+    {
+      "story": "default",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 3,
+      "npc": "Engineer",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "No worries! I dont often come across people out here, good to see you!"
+    },
+    {
+      "story": "default",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 4,
+      "npc": "Engineer",
+      "isNpcSpeaking": false,
+      "finalPart": true,
+      "text": "That's ok then - have a nice day!"
+    },
+
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Mervin",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "Do you hear that?!",
+      "topContext": "You hear a distant humming..."
+    },
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Mervin",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "Yes, that! That hum! It's coming from that tower! They installed it last week, and now people are forgetting things! My dog won't come home, my plants are dying, this is how it starts!",
+      "learnMore": "fiveg1"
+    },
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 3,
+      "npc": "Mervin",
+      "isNpcSpeaking": false,
+      "finalPart": true,
+      "text": "You're saying a phone tower is making people forget things and causing other issues? That sounds a little far-fetched",
+      "updateIndicators": {
+          "Mervin": 2,
+          "Engineer": 3
+      }, 
+      "updateStories": {
+          "Engineer": "fiveG"
+      }, 
+      "taskPushId": "5g_tower", 
+      "topContext": "Go to the 5G tower to investigate the mysterious humming sound."
+    },
+
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Engineer",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "I've been hearing this strange hum around town, and people are acting weird. Some think it's coming from the 5G tower. Could it be messing with us?"
+    },
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Engineer",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "Oh, you've heard the hum too? That's not 5G. It's interference from an old signal relay that wasn't deactivated properly. Some older buildings have wiring that picks it up. It's harmless, just an audio glitch",
+"learnMore": "fiveg3"
+    },
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 3,
+      "npc": "Engineer",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "But Mervin says people are forgetting things and acting strange",
+"learnMore": "fiveg2"
+    },
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 4,
+      "npc": "Engineer",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "That's paranoia talking. Memory issues? Stress. The town's just nervous because of all these conspiracy rumours. The real problem is misinformation"
+    },
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 5,
+      "npc": "Engineer",
+      "isNpcSpeaking": true,
+      "finalPart": true,
+      "text": "Here, if you could help me fix the tower, we can stop the humming and put an end to all these nonsense conspiracies", 
+      "updateIndicators": {
+          "Mervin": 3,
+          "Engineer": 4
+      }, 
+      "updateStories": {
+          "Engineer": "complete"
+      }, 
+      "taskPushId": "5g_fix", 
+      "updateChapters": {
+          "Mervin": 2
+      },
+
+      "topContext": "Help the Engineer to fix the 5G tower."
+    },
+
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 1,
+      "npc": "Mervin",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "See? The hum's gone. It was just a faulty signal, not some mind-control experiment"
+    },
+    {
+      "story": "fiveG",
+      "gamemode": "inform",
+      "chapter": 2,
+      "part": 1,
+      "npc": "Mervin",
+      "isNpcSpeaking": true,
+      "finalPart": true,
+      "text": "You think you've stopped the hum? You think that was it?! This goes deeper! But… fine. I'll look into it myself", 
+      "updateIndicators": {
+          "Mervin": 4
+      }, 
+      "updateStories": {
+          "Mervin": "complete"
+      }
+    },
+
+    {
+      "story": "complete",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Mervin",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "Hi! Turns out maybe I owe you an apology... After further research I believe you were correct"
+    },
+    {
+      "story": "complete",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 2,
+      "npc": "Mervin",
+      "isNpcSpeaking": false,
+      "finalPart": false,
+      "text": "Glad you found that. Not to worry, just happy to see the truth is spreading. Good day!"
+    },
+
+    {
+      "story": "complete",
+      "gamemode": "inform",
+      "chapter": 1,
+      "part": 1,
+      "npc": "Engineer",
+      "isNpcSpeaking": true,
+      "finalPart": false,
+      "text": "I am so glad to have gotten that tower fixed. One more job off my to-do list!"
+    },
+
+
+
+
+
+
+
+
+    
+
+
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 1,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "Stop a dangerous power plant being built near our homes! Oh, Hello."
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 2,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "What's going on here?"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 3,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "I'm a member of the Clean Energy Initiative. We're trying to stop a dangerous nuclear plant being built"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 4,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "With disasters like Chernobyl, Fukushima and Three Mile Island do we really want a nuclear power plant on our doorstep? That's not even mentioning the problems of radioactive waste. A potential fuel for nuclear weaponry and source of poisonous radiation"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 5,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "Thanks. But I think you might be overblowing the risks…"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 6,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": true,
+    "text": "Suit yourself",
+    "updateIndicators": {
+      "Clean Energy Party Volunteer": 2
+    },
+    "taskPushId": "nuclear_library",
+    "topContext": "Maybe I could find out some more at the library..."
+  },
+
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 1,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "Hello again! What do you want?"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 2,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "Nuclear power's not half as dangerous you're making out!"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 3,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "I don't get it? I want to protect our home! Even if the chance of a accident is small, the cost of building a power station with that sort of potential damage just isn't worth it!"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 4,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "If we want to decarbonise our energy grid we're going to need reliable energy that is non-emitting and resource efficient. Nuclear is both"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 5,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "But how do we manage the waste products? That sticks around for generations and includes Plutonium which can be used to make nuclear weapons"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 6,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "Nuclear waste allows us to contain the toxic byproducts by being much smaller volume. Ionising radiation is scary but we shouldn't let that blind us to the waste produced by other power generation methods"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 7,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "The manufacture of solar panels leaves behind heavy metals and emits carcinogenic hexchromium and we don't yet have effective ways of disposing of wind turbine blades. Nuclear waste although expensive to dispose of is low volume and we have safe methods of disposal like geological disposal"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 8,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "[...]"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 9,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "Look I accept that there are political and economic challenges. Nuclear power is much larger investment but it's not a scientific argument"
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 10,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": true,
+    "text": "It will take consideration, but there may be some truth in what you say..."
+  },
+  {
+    "story": "nuclear",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 11,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": false,
+    "finalPart": true,
+    "text": "Consideration is all I ask. Have a good day",
+    "updateIndicators": {
+      "Clean Energy Party Volunteer": 4
+    },
+    "updateStories": {
+      "Clean Energy Party Volunteer": "complete"
+    }
+  },
+
+  {
+    "story": "complete",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 1,
+    "npc": "Clean Energy Party Volunteer",
+    "isNpcSpeaking": true,
+    "finalPart": true,
+    "text": "You know, on second thought you might be risht... maybe I need o find a different job..."
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "story": "default",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 1,
+    "npc": "Leader",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "Something is afoot in this town..."
+  },
+  {
+    "story": "default",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 2,
+    "npc": "Leader",
+    "isNpcSpeaking": true,
+    "finalPart": true,
+    "text": "And I won't stop until I get to the bottom of it..."
+  },
+
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 1,
+    "npc": "Doomsday Prepper",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "Have you heard? Gamma ray bursts are coming! We might all be doomed! I'm so scared. Some people are putting together survival kits—I don't know if it will help, but it's better than nothing. The leader over there is explaining everything. Maybe he knows what to do",
+    "learnMore": "grb1"
+  },
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 2,
+    "npc": "Doomsday Prepper",
+    "isNpcSpeaking": true,
+    "finalPart": true,
+    "text": "I just don't know what to believe. Everyone's saying different things, and it's all so terrifying. But the leader… he sounds so sure. Maybe he really knows something we don't",
+    "updateIndicators": {
+      "Doomsday Prepper": 2,
+      "Leader": 3
+    },
+    "updateStories": {
+      "Leader": "grbs"
+    },
+    "taskPushId": "grb_leader",
+    "topContext": "You should find the leader to speak to him about your concerns"
+  },
+
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 1,
+    "npc": "Leader",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "So, you've heard about gamma ray bursts. The most powerful cosmic explosions in the universe. When a massive star collapses, it releases beams of radiation—pure destruction. If one hits Earth, it's all over. No one else understands the science, but I do. They're all too scared to think logically. That's why I'm trying to help"
+  },
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 2,
+    "npc": "Leader",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "I've read about GRBs. Aren't they incredibly rare? And don't they have to be within 200 light-years to be dangerous?"
+  },
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 3,
+    "npc": "Leader",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "Rare? Maybe. But do you really want to take that risk? I have data from an old space observatory. The truth is there—but it's too sensitive to share with just anyone. You'll just have to trust me, I know what I'm talking about better than anyone else"
+  },
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 4,
+    "npc": "Leader",
+    "isNpcSpeaking": false,
+    "finalPart": true,
+    "text": "I'd rather see the evidence myself before letting fear decide for me.",
+    "learnMore": "grb2",
+    "updateIndicators": {
+      "Doomsday Prepper": 3,
+      "Leader": 4
+    },
+    "updateStories": {
+      "Leader": "complete"
+    },
+    "updateChapters": {
+      "Doomsday Prepper": 2
+    },
+    "taskPushId": "grb_items",
+    "topContext": "You need to fix the observatory to find the data. Search the town for the telescope, hammer and computer, and then take them to the observatory"
+  },
+
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 1,
+    "npc": "Doomsday Prepper",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "I know you're scared, but you don't have to be. Here's the real science. Gamma ray bursts happen when massive stars collapse, sending energy in two narrow beams. They are well understood and predictable. And there are no stars near Earth at risk of collapsing"
+  },
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 2,
+    "npc": "Doomsday Prepper",
+    "isNpcSpeaking": false,
+    "finalPart": false,
+    "text": "The leader knew this, but he hid it to keep you afraid—because fear gives him power. Don't let fear control your lives. If you want to understand, we can get the town using the observatory again. Let's learn the truth together"
+  },
+  {
+    "story": "grbs",
+    "gamemode": "inform",
+    "chapter": 2,
+    "part": 3,
+    "npc": "Doomsday Prepper",
+    "isNpcSpeaking": true,
+    "finalPart": true,
+    "text": "Wow, thank you so much for explaining that all to me. I can't believe how much of my life I would have missed out on if I'd blindly followed the leader! ",
+    "updateIndicators": {
+      "Doomsday Prepper": 4
+    },
+    "updateStories": {
+      "Doomsday Prepper": "complete"
+    }
+  },
+
+  {
+    "story": "complete",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 1,
+    "npc": "Doomsday Prepper",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "I am finally finding purpose rid of that mind-consuming leader, thank you!"
+  },
+  {
+    "story": "complete",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 2,
+    "npc": "Doomsday Prepper",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "I do hope he is doing well though..."
+  },
+
+  {
+    "story": "complete",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 1,
+    "npc": "Leader",
+    "isNpcSpeaking": true,
+    "finalPart": false,
+    "text": "I think I will finish that physics degree I started now I am free..."
+  },
+  {
+    "story": "complete",
+    "gamemode": "inform",
+    "chapter": 1,
+    "part": 2,
+    "npc": "Leader",
+    "isNpcSpeaking": true,
+    "finalPart": true,
+    "text": "What WAS I thinking?"
+  },
+
+
+
+
+
+
+
+
+
+
     {
       "story": "blackHole",
       "gamemode": "inform",

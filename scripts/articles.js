@@ -37,6 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><p><span class="darkened">George Scott</span> - Introductory article, LHC script, 5G script, LHG article and 5G article.</p></li>
             <li><p><span class="darkened">Zahra Wilkinson</span> - Quantum healing script, Gamma Ray Bursts script, Weather control script, Quantum healing article, Nuclear Energy article,playtesting and credits.</p></li>
           <ul>
+          <h2>Assets</h2>
+          <ul class="wide-spacing bulleted">
+            <li>
+          </ul>
           <p>Special thanks to Dr Paul Mackay for his invaluable advice and guidance throughout the creation and development of this project.</p>
         </div>
       </div>

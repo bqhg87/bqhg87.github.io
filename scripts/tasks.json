@@ -12,6 +12,10 @@
     "nuclear_library":"Go to library and learn more about nuclear power", 
 
     "micro_beans": "Go to the restaurant and microwave the beans",
-    "micro_return": "Deliver the microwaved beans back to grandma"
+    "micro_return": "Deliver the microwaved beans back to grandma",
+
+    "grb_leader": "Find the leader to speak to him about your concerns",
+    "grb_items": "Find the telescope, hammer and computer and fix the observatory"
+
 }
 
