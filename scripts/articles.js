@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const articleDiv = articleWrapper.querySelector('.article');
 
   // List of valid articles
-  const validArticles = ['about', 'credits','references', 'qh1','qh2','qh3','qh4','qh5','haarp1','haarp2','haarp3','micro1','micro2','micro3','lhc1','lhc2','lhc3','ne1','ne2','ne3','grb1','grb2','grb3','fiveg1','fiveg2','fiveg3','conclusionInform'];
+  const validArticles = ['about', 'howToPlay','credits','references', 'qh1','qh2','qh3','qh4','qh5','haarp1','haarp2','haarp3','micro1','micro2','micro3','lhc1','lhc2','lhc3','ne1','ne2','ne3','grb1','grb2','grb3','fiveg1','fiveg2','fiveg3','conclusionInform'];
 
   const articleContents = {
     about:`
@@ -16,6 +16,20 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>Conspiracy theories have existed for centuries, but in the digital age, they spread faster than ever. Echo Grove explores some of the most well-known physics-related conspiracies, including fears about 5G radiation, the Large Hadron Collider creating black holes, gamma ray bursts, HAARP controlling the weather, quantum healing devices, the dangers of nuclear power, and microwave ovens emitting harmful radiation. <br><br> Players will encounter conspiracy theorists, sceptical scientists, and conflicting narratives, choosing to uncover the scientific truth or fuel public paranoia.<br>We created this game to address the misuse of physics in conspiracy theories. Scientific concepts are often misunderstood, exaggerated, or deliberately distorted to create fear and distrust. By placing players in these scenarios, we aim to demonstrate how misinformation spreads and how scientific literacy can challenge it.<br><br> We are a group of Durham University students passionate about science communication and critical thinking. Through this game, we want to highlight the importance of questioning sources, understanding real physics, and recognising how conspiracy theories manipulate information. The world of science is full of incredible discoveries, but separating fact from fiction has never been more important.<br><br> We hope you enjoy the game!</p>
         </div>
+      </div>
+    </div>
+    `,
+    howToPlay:`
+    <div id="articleContainer">
+      <div id="articleHead">
+        <h1 id="articleTitle">How To Play</h1>
+      </div>
+      <div id="articleBody">
+        <div class="articleItem wide">
+          <h2>Movement controls</h2>
+          <p>Use wasd, arrow keys or cursor clicks to move around the map</p>
+          <h2>Interacting</h2>
+          <p>Use spacebar to interact with NPCs and complete quests</p>
       </div>
     </div>
     `,
@@ -179,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div id="articleBody">
           <div class="articleItem wide">
             <p>This effect is only reinforced by the further portrayal of physics as a field too complicated for any prospective customers to understand, which absolves the vendor of any responsibility to provide scientific backing for their claims, and allows them to place themselves in a position of power. Quotes from real social media posts include: 'Well, it's quantum physics so I'm not going to get too technical' <sup><a href="https://www.facebook.com/sarah.a.wilson.79" title="https://www.facebook.com/sarah.a.wilson.79" target="blank" >[3]</a></sup>, 'in more layman's terms' <sup><a href="https://www.facebook.com/sarah.a.wilson.79" title="https://www.facebook.com/sarah.a.wilson.79" target="blank" >[3]</a></sup>, 'you do not need to be able to understand quantum physics' <sup><a href="https://www.facebook.com/share/r/167Fb8s5zW/" title="https://www.facebook.com/share/r/167Fb8s5zW/" target="blank" >[9]</a></sup>, and 'the less information you know, the better' <sup><a href="https://www.facebook.com/share/r/167Fb8s5zW/" title="https://www.facebook.com/share/r/167Fb8s5zW/" target="blank" >[9]</a></sup>. This perpetuates an 'us versus them' <sup><a href=" https://www.cambridge.org/core/journals/spanish-journal-of-psychology/article/are-conspiracy-theories-harmless/FA0A9D612CC82B02F91AAC2439B4A2FB " title=" https://www.cambridge.org/core/journals/spanish-journal-of-psychology/article/are-conspiracy-theories-harmless/FA0A9D612CC82B02F91AAC2439B4A2FB " target="blank" >[10]</a></sup> dynamic, reflecting the key 'Something must be wrong' and 'Persecuted victim' hallmarks of conspiracy theories seen in The Conspiracy Theory Handbook <sup><a href="https://www.climatechangecommunication.org/all/the-conspiracy-theory-handbook/" title="https://www.climatechangecommunication.org/all/the-conspiracy-theory-handbook/" target="blank" >[11]</a></sup>.<br>
-            So-called quantum healers have been seen to use screenshots <sup><a href="https://www.facebook.com/miranda.wilcox.360" title="https://www.facebook.com/miranda.wilcox.360" target="blank" >[12]</a></sup> of articles on quantum entanglement in reputable journals as proof of the healing properties of their products, whilst also suggesting that scientists are only just 'catch[ing] up' with ideas they have known to be true for a long time. This example of confirmation bias not only strips away the context from the journal articles, but is also an example of circular reasoning, as the posts seem to imply that scientists are both correct and incorrect at the same time.</p>
+            So-called quantum healers have been seen to use screenshots <sup><a href="https://www.facebook.com/miranda.wilcox.360" title="https://www.facebook.com/miranda.wilcox.360" target="blank" >[12]</a></sup> of articles on quantum entanglement in reputable journals as proof of the healing properties of their products, whilst also suggesting that scientists have only just 'caught on' with ideas they have known to be true for a long time. This example of confirmation bias not only strips away the context from the journal articles, but is also an example of circular reasoning, as the posts seem to imply that scientists are both correct and incorrect at the same time.</p>
           </div>
         </div>
       </div>
@@ -207,14 +221,23 @@ document.addEventListener('DOMContentLoaded', () => {
           <br>
           Quantum mechanics refers to a branch of physics that deals with the interactions of matter and light on atomic and subatomic scales. These interactions don't follow the rules of most interactions between objects, which is usually known as 'classical mechanics'. This means that, in contrast, quantum mechanics is quite counterintuitive in comparison to our everyday classical physics. Whilst this means quantum mechanics can seem quite magical, it is in fact heavily backed by many peer-reviewed studies and is well documented and understood.</p>
         </div>
+        
         <div class="articleItem wide">
           <h2>Energy:</h2> <br>
           <p>Many quantum healers claim that wave-particle duality demonstrates the interconnection between matter and energy, linking this directly to healing that is said to result from influencing the 'energy field' of the body <sup><a href="https://www.quantumenergyhealing.co.uk/" title="https://www.quantumenergyhealing.co.uk/" target="blank" >[1]</a><a href="https://www.quantumenergyhealing.co.uk/" title="https://www.quantumenergyhealing.co.uk/" target="blank" >[2]</a><a href="https://drlodayahospital.com/blogs/quantum-healing-benefits-risks/" title="https://drlodayahospital.com/blogs/quantum-healing-benefits-risks/" target="blank" >[3]</a></sup>. Unfortunately, there is no empirical evidence linking physics energy concepts such as this to any healing effects <sup><a href="https://doi.org/10.1103/physrevphyseducres.20.020145" title="https://doi.org/10.1103/physrevphyseducres.20.020145" target="blank" >[4]</a></sup>.</p>
         </div>
-        <div class="articleItem wide">
-          <h2>Entanglement:</h2> <br>
+        
+      
+
+        <div class="articleItem left">
+            <img class="articleImg" src="/assets/articleImages/SPDC_figure.png" alt="Quantum entanglement experiment">
+            <p class="ImgCaption"></p> 
+        </div>
+        <div class="articleItem right">
+          <h2>Entanglement:</h2>
           <p>'Quantum entanglement' is a word full of physics jargon that can sound incredibly complicated, and simple explanations of this phenomenon can sound very convincing, even when they are incorrect. Contrary to some views <sup><a href="https://www.prittieyoga.co.uk/blog2024/what-is-quantum-healing" title="https://www.prittieyoga.co.uk/blog2024/what-is-quantum-healing" target="blank" >[5]</a></sup>, quantum entanglement does not provide any proof of shared consciousness or an ability to unlock your own consciousness - it instead describes the relationship between two particles, where changes to one can affect the other.<br>Whilst applying these principles to health and healing can sound promising, it is unfortunately not a real application of quantum physics, and the suggestion that every conceivable thing in the universe - including our body and our consciousness - is interconnected is unfortunately false <sup><a href="https://doi.org/10.1103/physrevphyseducres.20.020145" title="https://doi.org/10.1103/physrevphyseducres.20.020145" target="blank" >[4]</a></sup>.</p>
         </div>
+      
         <div class="articleItem wide">
           <h2>Observer Effect:</h2> <br>
           <p>Proponents of quantum healing also often refer to the observer effect <sup><a href="https://www.prittieyoga.co.uk/blog2024/what-is-quantum-healing" title="https://www.prittieyoga.co.uk/blog2024/what-is-quantum-healing" target="blank" >[5]</a></sup> - which is the idea that in quantum physics, observing or measuring something can actually change it, because there is no way to measure something without affecting it. To understand this, imagine checking the pressure of a bike tyre - when you attach the pressure gauge, some air escapes, meaning you've changed the amount of air in the tyre simply by measuring it. This effect is true even on the quantum level, but some people believe that this implies our intentions shape our reality by directing energy, which is untrue. Reality cannot be determined by external human intervention <sup><a href="https://doi.org/10.1103/physrevphyseducres.20.020145" title="https://doi.org/10.1103/physrevphyseducres.20.020145" target="blank" >[4]</a></sup>.</p>
@@ -231,15 +254,17 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>In many discussions surrounding this topic, there appears to be a lack of foundational arguments, leading some writers to rely on various manipulation tactics instead.<p>
         </div>
-        <div class="aricleItem right1">
-          <img src="/assets/articleImages/High_Frequency_Active_Auroral_Research_Program_site.jpg" alt="HAARP research station">
+        <div class="articleItem left">
+          <img class="articleImg" src="/assets/articleImages/High_Frequency_Active_Auroral_Research_Program_site.jpg" alt="HAARP research station">
+          <p class="ImgCaption">The HAARP research station in Alaska has been a freuqent source of speculation for conspiracy theor</p>
         </div>
-        <div class="articleItem left1">
-          Often, rather than presenting facts, writers frame their posts as questions. For instance, a post asking, "What's going on in Houston, Texas?" over an image that may otherwise not raise too many questions, but the presence of the question means it begins to seem suspicious. By not stating their own theories, they may aim to foster curiosity among those who are unfamiliar with the issue, while allowing the imaginations of those already engaged to run rampant.<br><br>
-          Phrases such as "if you know... you know!" exploit human nature's tendency to fear exclusion. This approach creates an impression of an insider group, enticing individuals to explore further.<br><br>The inclusion of emojis in these posts can enhance relatability, with the 'thinking' emoji frequently used to project a sense of reliability—suggesting that the writer is engaging in critical thinking and thereby establishing trustworthiness.
+        <div class="articleItem right">
+          <p>Often, rather than presenting facts, writers frame their posts as questions. For instance, a post asking, "What's going on in Houston, Texas?" over an image that may otherwise not raise too many questions, but the presence of the question means it begins to seem suspicious. By not stating their own theories, they may aim to foster curiosity among those who are unfamiliar with the issue, while allowing the imaginations of those already engaged to run rampant.<br><br>
+          Phrases such as "if you know... you know!" exploit human nature's tendency to fear exclusion. This approach creates an impression of an insider group, enticing individuals to explore further.<br><br>The inclusion of emojis in these posts can enhance relatability, with the 'thinking' emoji frequently used to project a sense of reliability—suggesting that the writer is engaging in critical thinking and thereby establishing trustworthiness.</p>
         </div>
         <div class="articleItem wide">
-          Often, precise numbers are quoted without appropriate sourcing. By being specific with what they claim to be facts or data they create a feeling of trust, as if they know exactly what is happening. This is similar to a common issue in statistical representation, where data is cited with greater precision than warranted, knowingly or not misrepresenting the inherent uncertainty in measurements and calculations, which can lead to a false sense of security regarding the certainty of the value.</p>
+          <p>Often, precise numbers are quoted without appropriate sourcing. By being specific with what they claim to be facts or data they create a feeling of trust, as if they know exactly what is happening. This is similar to a common issue in statistical representation, where data is cited with greater precision than warranted, knowingly or not misrepresenting the inherent uncertainty in measurements and calculations, which can lead to a false sense of security regarding the certainty of the value.</p>
+        </div>
       </div>
     </div>
   `,
@@ -249,8 +274,16 @@ document.addEventListener('DOMContentLoaded', () => {
         <h1 id="articleTitle">Online Influence:</h1>
       </div>
       <div id="articleBody">
+        <div class="articleItem left">
+          <p>These issues are exacerbated by algorithms on platforms such as Facebook, where the primary goal is to drive engagement. Consequently, controversial posts often receive increased visibility; for example, reactions other than likes have previously been given five times the weight of likes. Fortunately, this was addressed in 2019 when data scientists at Facebook acknowledged that posts receiving angry emoji reactions were more likely to contain misinformation, subsequently leading to a change that reduced their impact on engagement<sup><a href="https://theweek.com/facebook/1006422/facebook-reportedly-gave-the-angry-emoji-5-times-as-much-weight-as-a-like" title="https://theweek.com/facebook/1006422/facebook-reportedly-gave-the-angry-emoji-5-times-as-much-weight-as-a-like" target="blank" >[1]</a></sup>.</p>
+        </div>
+        <div class="articleItem right">
+          <img class="articleImg" src="/assets/articleImages/1024px-Aurora_borealis_above_Lyngenfjorden,_2012_March.jpg" alt="auroras">
+          <p class="ImgCaption">HAARP investigates the Ionosphere the layer of the atmosphere which becomes ionised in auroras</p>
+        </div>
         <div class="articleItem wide">
-          <p>These issues are exacerbated by algorithms on platforms such as Facebook, where the primary goal is to drive engagement. Consequently, controversial posts often receive increased visibility; for example, reactions other than likes have previously been given five times the weight of likes. Fortunately, this was addressed in 2019 when data scientists at Facebook acknowledged that posts receiving angry emoji reactions were more likely to contain misinformation, subsequently leading to a change that reduced their impact on engagement<sup><a href="https://theweek.com/facebook/1006422/facebook-reportedly-gave-the-angry-emoji-5-times-as-much-weight-as-a-like" title="https://theweek.com/facebook/1006422/facebook-reportedly-gave-the-angry-emoji-5-times-as-much-weight-as-a-like" target="blank" >[1]</a></sup>.<br><br> While this adjustment has been made, it remains all too easy to fall into a cycle of conspiracy theories and misinformation. The ability to search for terms like "weather control" often yields numerous posts spreading misinformation, many of which feature little to no fact-checking. The influence that just a few similar searches can have on an individual's feed is concerning. One way to mitigate this effect is to periodically log out of these platforms, open a private browsing window, and observe the content that appears without the constraints of the tunnel the algorithm creates.</p>
+          <p>While this adjustment has been made, it remains all too easy to fall into a cycle of conspiracy theories and misinformation. The ability to search for terms like "weather control" often yields numerous posts spreading misinformation, many of which feature little to no fact-checking. The influence that just a few similar searches can have on an individual's feed is concerning. One way to mitigate this effect is to periodically log out of these platforms, open a private browsing window, and observe the content that appears without the constraints of the tunnel the algorithm creates.</p>
+        </div>
       </div>
     </div>
   `,
@@ -286,7 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>Inaccurate information is frequently spread on sites such as Medical Daily and Instagram, utilizing various techniques to mislead the audience.</p>
         </div>
         <div class="articleItem left">
-          <img src="./assets/articleImages/microwave.jpg" alt="A domestic microwave">
+          <img class="articleItem left" src="./assets/articleImages/microwave.jpg" alt="A domestic microwave">
+          <p class="ImgCaption">Misunderstandings of scientific terminology has provoked fears</p>
         </div>
         <div class="articleItem right">
           <p>One common method is the use of false source links. When individuals encounter a claim that cites a source, accompanied by a link, it can enhance their perception of the claim's legitimacy. In many cases, consumers may not take the time to verify the link, leading them to trust that credible information supports the claim. This strategy allows the creators of such content to cite sources that are unrelated to the topic at hand.
@@ -350,11 +384,15 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>Nuclear accidents have a large impact on the public perception of nuclear energy. Members of the public frequently associate the risk of nuclear energy with the accidentally nuclear power station disasters at Fukushima, Chernobyl and Three Mile Island <sup><a href="https://doi.org/10.1016/j.enpol.2016.09.061" title="https://doi.org/10.1016/j.enpol.2016.09.061" target="blank" >[1]</a><a href="https://doi.org/10.1016/j.enpol.2019.110888" title="https://doi.org/10.1016/j.enpol.2019.110888" target="blank" >[2]</a></sup>.</p>
       </div>
+      <div class="articleItem left">
+        <img class="articleImg" src="/assets/articleImages/pripyat.jpg" alt="Corridor in pripyat">
+        <p class="ImgCaption">Corridor in Pripyat, the city evacuated following the Chernobyl Disaster</p> 
+      </div>
       <div class="articleItem right">
         <h2>Chernobyl</h2>
         <p>The Chernobyl nuclear accident occurred in 1986, caused by a combination of faulty reactor design and poor personnel training. Following a shutdown test, one of the plant's reactors exploded, causing a major fire and releasing a significant amount of smoke, fission products and debris. The majority of the material was deposited near the site, but lighter fission products were carried northwest by the wind. The accident resulted in the largest uncontrolled release of radioactive material into the environment by a civilian operation ever recorded. Radioactive substances remained in the air for around 10 days, with Iodine-131 and Caesium-137 (two types of radioactive elements) contributing significantly to radiation doses.<br>In total, the accident killed 30 operators and firemen. 237 people onsite were diagnosed with acute radiation syndrome (ARS) and 28 died as a result <sup><a href="https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/chernobyl-accident" title="https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/chernobyl-accident " target="blank" >[3]</a></sup>. The accident had long-term effects for many people in Belarus, Russia and Ukraine, most notably including thyroid cancer in children and leukaemia in the power plant's operators. The release and subsequent transport of radioactive material also had significant negative impacts on the environment, with radionuclides (elements that release radiation as they break down over time) subsequently found in wood, forest food products and freshwater fish, causing particularly significant damage to forests and fresh water bodies <sup><a href="https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2016)581972" title="https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2016)581972" target="blank" >[4]</a></sup>. The economic impact of the disaster was grave - estimates put the total cost of the Chernobyl accident for Belarus at $235 billion as of 2005 <sup><a href="https://www.iaea.org/sites/default/files/chernobyl.pdf" title="https://www.iaea.org/sites/default/files/chernobyl.pdf" target="blank" >[5]</a></sup>. In the case of Ukraine, the financial impacts are still felt to this day, and as of 2019, the Ukrainian government continued to pay benefits to 36,525 women who became widows as a result of the accident <sup><a href="https://www.bbc.co.uk/future/article/20190725-will-we-ever-know-chernobyls-true-death-toll" title="https://www.bbc.co.uk/future/article/20190725-will-we-ever-know-chernobyls-true-death-toll" target="blank" >[6]</a></sup>.</p>
       </div>
-      <div class="articleItem left">
+      <div class="articleItem wide">
         <h2>Fukushima</h2>
         <p>The now decommissioned Fukushima nuclear power plant sits on the east coast of Japan, where in 2011, it was struck by an earthquake-driven tsunami. The preceding earthquake activated the safety sensors at the plant, leading to a shutdown of the reactors<sup><a href="https://www.bbc.co.uk/news/world-asia-56252695" title="https://www.bbc.co.uk/news/world-asia-56252695" target="blank" >[7]</a></sup>. The damage caused by the earthquake then led to a power cut at the plant, forcing it to run on emergency backup generators<sup><a href="https://doi.org/10.1126/science.abi5976" title="https://doi.org/10.1126/science.abi5976" target="blank" >[8]</a></sup>, which tried to cool the reactors as they remained incredibly hot. However, the arriving tsunami flooded the nearby sea wall and knocked out the emergency generators, preventing them from cooling the reactors<sup><a href="https://www.bbc.co.uk/news/world-asia-56252695" title="https://www.bbc.co.uk/news/world-asia-56252695" target="blank" >[7]</a></sup>. The sheer heat still present in the reactors led to them overheating and partially melting - known as a nuclear meltdown - causing hydrogen and oxygen to combine and explode, releasing radioactive material into the atmosphere and ocean<sup><a href="https://www.bbc.co.uk/news/world-asia-56252695" title="https://www.bbc.co.uk/news/world-asia-56252695" target="blank" >[7]</a><a href="https://doi.org/10.1126/science.abi5976" title="https://doi.org/10.1126/science.abi5976" target="blank" >[8]</a></sup>. 2,313 disaster-related deaths were recorded among earthquake, tsunami and nuclear evacuees from the area surrounding Fukushima, but only one of these was attributed to radiation <sup><a href="https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/fukushima-daiichi-accident#:~:text=Official%20figures%20show%20that%20there,by%20the%20earthquake%20or%20tsunami" title="https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/fukushima-daiichi-accident#:~:text=Official%20figures%20show%20that%20there,by%20the%20earthquake%20or%20tsunami" target="blank" >[9]</a></sup>. 
         The nuclear disaster led to no other adverse health effects in the local population <sup><a href="https://www.bbc.co.uk/news/world-asia-56252695" title="https://www.bbc.co.uk/news/world-asia-56252695" target="blank" >[7]</a></sup>, including no other cases of radiation sickness <sup><a href="https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/fukushima-daiichi-accident#:~:text=Official%20figures%20show%20that%20there,by%20the%20earthquake%20or%20tsunami" title="https://world-nuclear.org/information-library/safety-and-security/safety-of-plants/fukushima-daiichi-accident#:~:text=Official%20figures%20show%20that%20there,by%20the%20earthquake%20or%20tsunami" target="blank" >[9]</a></sup>. The economic cost to Japan of the earthquake, tsunami and nuclear disaster was said to be $188 billion <sup><a href="https://www.aljazeera.com/news/2021/3/10/fukushima-disaster-in-maps-and-charts" title="https://www.aljazeera.com/news/2021/3/10/fukushima-disaster-in-maps-and-charts" target="blank" >[10]</a></sup>.</p>
@@ -372,6 +410,10 @@ document.addEventListener('DOMContentLoaded', () => {
       <div id="articleBody">
         <div class="articleItem wide">
           <p>A common concern seen on social media is the fear over the safety of nuclear waste disposal, with some describing it as 'dangerous' and a 'potential human and environmental disaster' <sup><a href="https://www.facebook.com/thesusanbradley/" title="https://www.facebook.com/thesusanbradley/" target="blank" >[12]</a></sup>. Whilst nuclear waste may be hazardous, most major industrial processes produce hazardous waste and less than 0.05% of all hazardous waste in the US results from nuclear power. Additionally, the transport of nuclear waste has never resulted in any radioactive release that has caused harm to people or the environment. The vast majority of nuclear waste only remains harmfully radioactive for a few tens of years, meaning it can easily be disposed of in near-surface underground facilities. Only about 3% of nuclear waste requires isolation for many thousands of years, and national regulations and international conventions, combined with technological developments and a multi-barrier approach, ensure that this waste is handled correctly and disposed of in a manner that secures its isolation and guarantees that it poses no risk to human health or to the environment<sup><a href="https://world-nuclear.org/information-library/nuclear-fuel-cycle/nuclear-waste/radioactive-wastes-myths-and-realities" title="https://world-nuclear.org/information-library/nuclear-fuel-cycle/nuclear-waste/radioactive-wastes-myths-and-realities" target="blank" >[13]</a></sup>.</p>
+      </div>
+      <div class="articleItem left">
+        <img class="articleImg" src="/assets/articleImages/fission-reaction.jpg" alt="Nuclear fission reaction">
+        <p class="ImgCaption">Nuclear fission releases lots of energy</p>
       </div>
       <div class="articleItem right">
           <p><br>One of the most feared of the hazards associated with nuclear power is ionising radiation. Radiation is a form of energy that travels as energised particles or electromagnetic waves. It is known as 'ionising' when it has sufficient energy to pull an electron away from its atom. Whilst 'ionising' is often thrown around like a scary word, it includes types of waves we hear about every day, such as X-rays<sup><a href="https://www.arpansa.gov.au/understanding-radiation/what-is-radiation/ionising-radiation" title="https://www.arpansa.gov.au/understanding-radiation/what-is-radiation/ionising-radiation" target="blank" >[14]</a></sup>. Like X-rays, all ionising radiation is dangerous, as it can cause cells to die or mutate, then leading to cancer<sup><a href="https://www.who.int/news-room/questions-and-answers/item/radiation-ionizing-radiation" title="https://www.who.int/news-room/questions-and-answers/item/radiation-ionizing-radiation" target="blank" >[15]</a></sup>. Nuclear power plants naturally emit ionising radiation, but, like X-rays, barriers can protect against this radiation, and current protection standards for nuclear power plants are based on the idea that any exposure to radiation carries some risk, so all steps are taken to ensure that radiation exposure for power plant workers remains as low as possible and that exposure for local residents is almost zero<sup><a href="https://www.nrdc.org/stories/nuclear-power-101" title="https://www.nrdc.org/stories/nuclear-power-101" target="blank" >[16]</a></sup>.</p>
@@ -407,6 +449,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>Many believe that gamma ray bursts (GRBs) may have triggered one or more extinction events, particularly the Ordovician extinction, during which marine species experienced a dramatic decline. Given this, it's understandable that there exists concerns regarding GRBs. However, there is no need for alarm.</p>
       </div>
+      <div class="articleItem wide">
+        <img class="articleImg" src="/assets/articleImages/GRB080319B_illustration_NASA.jpg" alt="artist's impression of a GRB event">
+        <p class="ImgCaption">It is possible Gamma Ray bursts may have already triggered a mass extinction millions of years ago</p>
+      </div>
       <div class="articleItem left">
         <p>Currently, Earth is protected by a layer of ozone situated 15-30km above the surface. A nearby GRB could potentially break down this layer, resulting in the formation of ground-level ozone. Nonetheless, even if the event were centered over the South Pole, where ozone depletion would be most concentrated, models indicate that surface ozone levels would peak at about 10 parts per billion. This level is significantly below the threshold of 30 parts per billion that would pose an increased risk of respiratory failure in humans or harm to vegetation.</p>
       </div>
@@ -421,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <h1 id="articleTitle">Other Hazards and Comparison</h1>
       </div>
       <div id="articleBody">
-        <div class="articleItem right">
+        <div class="articleItem wide">
           <p>While many conspiracy theories and sources of misinformation can be disproven through scientific investigation, the evidence supporting the existence of gamma ray bursts complicates efforts to counteract misinformation.<br>The depletion of the ozone layer would also affect human health in a different way. This layer serves as a protective shield against UV radiation, and its absence could lead to an increased risk of sunburn and DNA damage, similar to the effects observed in regions with a depleted ozone layer, such as parts of the southern hemisphere. Additionally, the presence of nitrous oxide in the atmosphere would reduce sunlight reaching the Earth's surface, potentially leading to global cooling, while nitric acid rain could adversely affect ecosystems. </p>
         </div>
         <div class="articleItem wide">
@@ -439,7 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>In the game, players encounter a persistent hum near a newly installed 5G tower. Some dismiss it as background noise, while others believe it causes strange effects, from memory lapses to unusual animal behaviour. One character, Mervin, insists the hum is part of a larger cover-up, linking unrelated events to support his claim.</p>
       </div>
-      <div class="articleItem right">
+      <div class="articleItem wide">
         <p>This reflects how conspiracy theories develop in real life. Faced with uncertainty, people seek explanations that align with their fears rather than evidence. Even when a logical answer, such as interference from an old signal relay, is provided, some reject it in favour of a dramatic interpretation. The storyline demonstrates how misinformation spreads and how difficult it is to change minds once fear takes hold.</p>
       </div>
       <div class="articleItem wide">
@@ -456,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>Despite growing paranoia, the explanation is simple: some buildings' wiring picks up certain frequencies, creating an audio glitch. The hum has no connection to memory loss, plant health, or animal behaviour. Concerns about 5G have been widely studied, with no scientific evidence proving harm. The World Health Organization and other regulators confirm that 5G's non-ionising radiation lacks the energy to damage human cells or DNA. Its frequency range is similar to Wi-Fi and radio waves, which have been safely used for decades. </p>
       </div>
-      <div class="articleItem right">
+      <div class="articleItem wide">
           <p>Fears about 5G stem from misunderstandings about radio frequencies, much like past concerns over electricity and mobile phones. As shown in the game, misinformation thrives when new technology emerges, and unfamiliarity breeds fear. Understanding how 5G works helps separate fact from speculation.</p>
       </div>
     </div>
@@ -470,7 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="articleItem wide">
           <p>The game demonstrates how conspiracy theories shape public perception, even without evidence. Mervin refuses to accept the engineer's explanation, insisting the hum is part of something bigger. If players choose to publish his claims, paranoia spreads, showing how misinformation influences beliefs. In reality, false 5G claims led to vandalism and harassment during the COVID-19 pandemic, proving how difficult it is to correct misinformation once it takes hold. </p>
       </div>
-      <div class="articleItem left">
+      <div class="articleItem wide">
           <p>The game highlights how emotion often outweighs evidence, eroding trust in experts and affecting real-world issues like public health and climate change. Recognising how misinformation spreads is crucial to ensuring facts, not fear, shape our understanding. The hum was never a real threat, yet reactions to it mirror the dangers of misinformation. Conspiracy theories may seem harmless, but they spread fear, erode trust in science, and can lead to real-world harm. Understanding their influence helps us approach new information critically.</p>
       </div>
     </div>

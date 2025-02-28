@@ -63,6 +63,20 @@ mkst8.src = './assets/buildings/mkst8.png';
 mkst9.src = './assets/buildings/mkst9.png';
 mkst10.src = './assets/buildings/mkst10.png';
 mkst11.src = './assets/buildings/mkst11.png';
+const mdst1 = new Image();
+mdst1.src = './assets/buildings/mdst1.png';
+const mdtw3 = new Image();
+mdtw3.src = './assets/buildings/mdtw3.png';
+const mdrg1 = new Image();
+mdrg1.src = './assets/buildings/mdrg1.png';
+const mdel3 = new Image();
+mdel3.src = './assets/buildings/mdel3.png';
+const mdel4 = new Image();
+mdel4.src = './assets/buildings/mdel4.png';
+const lb1 = new Image();
+lb1.src = './assets/buildings/lb1.png';
+const th1 = new Image();
+th1.src = './assets/buildings/th1.png';
 const shadow = new Image();
 shadow.src = './assets/char/shadow.png';
 const blush = new Image();
@@ -407,10 +421,99 @@ const objectsToDraw = [
     zIndex: 1,
   },
   {
+    image: mdtw3,
+    x: -274,
+    y: 159,
+    frameWidth: 52,
+    frameHeight: 112,
+    feet: 1,
+    zIndex: 1,
+    fadeBehind: true,
+    fadeFeet: 17,
+    fadeHead: 99,
+    fadeLeft: 24,
+    fadeRight: 24
+  },
+  {
+    image: mdst1,
+    x: -243,
+    y: 205,
+    frameWidth: 128,
+    frameHeight: 101,
+    feet: 1,
+    zIndex: 10,
+    fadeBehind: true,
+    fadeFeet: 25,
+    fadeHead: 90,
+    fadeLeft: 50,
+    fadeRight: 45
+  },
+  {
+    image: mdrg1,
+    x: -240,
+    y: 116,
+    frameWidth: 106,
+    frameHeight: 77,
+    feet: 1,
+    zIndex: 10,
+    fadeBehind: true,
+    fadeFeet: 17,
+    fadeHead: 64,
+    fadeLeft: 50,
+    fadeRight: 50
+  },
+  {
+    image: mdel3,
+    x: -127,
+    y: 99,
+    frameWidth: 109,
+    frameHeight: 71,
+    feet: 1,
+    zIndex: 10,
+    fadeBehind: true,
+    fadeFeet: 10,
+    fadeHead: 60,
+    fadeLeft: 50,
+    fadeRight: 50
+  },
+  {
+    image: mdel4,
+    x: -223,
+    y: 329,
+    frameWidth: 57,
+    frameHeight: 71,
+    feet: 1,
+    zIndex: 10,
+    fadeBehind: true,
+    fadeFeet: 51,
+    fadeHead: 61,
+    fadeLeft: 20,
+    fadeRight: 27
+  },
+  {
+    image: lb1,
+    x: 166,
+    y: -236,
+    frameWidth: 166,
+    frameHeight: 137,
+    feet: 1,
+    zIndex: 10,
+  },
+  {
+    image: th1,
+    x: -75,
+    y: -300,
+    frameWidth: 162,
+    frameHeight: 157,
+    feet: 1,
+    zIndex: 10,
+  },
+  {
     image: overlap,
     x: -1024,
     y: -1024,
-    zIndex: 9009
+    zIndex: 9009,
+    feet: -10000
   },
   {
     image: pearTree,
@@ -1481,7 +1584,7 @@ let spaceHeld = false; // Prevents rapid triggers
 function spaceDialogueToggle(event) {
   if (event.code !== "Space" || spaceHeld || blockSpaceDialogueToggle || !isNearNPC) return;
 
-  spaceHeld = true; // Lock the trigger until Space is released
+  setTimeout(() => { spaceHeld = true }, 50); // Lock the trigger until Space is released
 
   if (window.isTextAnimating) {
     skipDialogue(); // Allow skipping mid-animation
