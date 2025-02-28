@@ -149,7 +149,48 @@ body {
   font-style: normal;
 }
 
-h1, h2, h3, p, a, span {
+ul.wide-spacing {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+ul.bulleted {
+  list-style: none; /* Remove default bullets */
+  padding-left: 0; /* Remove default padding */
+}
+
+ul.bulleted li {
+  display: flex;
+  align-items: flex-start; /* Align bullet with the top line */
+  gap: 10px; /* Space between bullet and text */
+}
+
+ul.bulleted li::before {
+  content: "\2022"; /* Unicode bullet */
+  font-size: 20px;
+  line-height: 1; /* Ensure the bullet is aligned properly */
+  flex-shrink: 0; /* Prevent bullet from resizing */
+}
+
+span.darkened {
+  all: unset;
+  color: rgb(97, 70, 60); /* Darker color for 'Hamish Campbell' */
+}
+a.bright {
+  color: rgb(136, 162, 84);
+}
+a.bright:hover {
+  color: rgb(115, 150, 72);
+}
+a.bright:active {
+  color: rgb(140, 195, 73);
+}
+
+#resetGame {
+  cursor: pointer;
+}
+
+h1, h2, h3, p, a, span, li {
   margin: 0;
   font-family: 'mcPixel', sans-serif;
 }
@@ -170,7 +211,7 @@ h3 {
   display: inline-block;
   font-size: 24.1px;
 }
-p {
+p, li {
   font-size: 12px; /*calc(24.1px * 0.5)*/
 }
 span {
@@ -204,7 +245,7 @@ ul {
   position: relative;
   padding-left: calc((24.1px * 8/7 + 0.5px) * 0.5); /* Space for custom bullet */
 }
-li a {
+.submenu.li a {
   position: relative;
   display: block; /* Make the <a> fill the whole width of the <li> */
   text-decoration: none; /* Remove underline */
@@ -221,10 +262,10 @@ li a {
   color: rgb(163, 123, 94); /* Normal bullet color */
   transition: color 0.2s ease; /* Smooth transition */
 }
-li:hover::before, li:hover a {
+.submenu.li:hover::before, .submenu.li:hover a {
   color: rgb(124, 96, 82);
 }
-li:active::before, li:active a {
+.submenu.li:active::before, .submenu.li:active a {
   color: rgb(97, 70, 60);
 }
 
@@ -387,6 +428,7 @@ span, li a {
   height: fit-content;
   min-height: 20px;
   width: 100%;
+  max-width: calc(100% - 20px);
 }
 
 #articleTitle {

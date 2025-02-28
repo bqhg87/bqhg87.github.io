@@ -35,6 +35,11 @@ document.getElementById("resetGame").addEventListener("click", function() {
   const confirmation = confirm("Are you sure you would like to reset the game? This will reset all your progress.");
   
   if (confirmation) {
+      window.char.x = 40;
+      window.char.y = -94;
+      // Retain charAppearance before clearing
+      const charAppearance = JSON.parse(localStorage.getItem('charAppearance'));
+
       // Clear localStorage and sessionStorage
       localStorage.clear();
       sessionStorage.clear();
@@ -43,6 +48,17 @@ document.getElementById("resetGame").addEventListener("click", function() {
       document.cookie.split(";").forEach(cookie => {
           document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/");
       });
+
+      // Restore charAppearance after clearing
+      if (charAppearance) {
+          localStorage.setItem('charAppearance', JSON.stringify(charAppearance));
+      }
+
+      // Ensure charMemory is reset with new values
+      const initialCharMemory = JSON.parse(localStorage.getItem('charMemory') || '{}');
+      initialCharMemory.x = 40;
+      initialCharMemory.y = -94;
+      localStorage.setItem('charMemory', JSON.stringify(initialCharMemory));
 
       // Force a hard refresh (bypasses cache)
       location.reload(true);

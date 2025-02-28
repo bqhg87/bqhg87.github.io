@@ -170,6 +170,90 @@ const objectsToDraw = [
     zIndex: 1,
   },
   {
+    image: cowbrown,
+    x: -286,
+    y: 590,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 400,
+    animationOffset: 2,
+    animationFrames: 8,
+    feet: 1,
+    zIndex: 1
+  },
+  {
+    image: cowlight,
+    x: -186,
+    y: 622,
+    frameX: 0,
+    frameY: 4,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 600,
+    animationOffset: 0,
+    animationFrames: 4,
+    feet: 1,
+    zIndex: 1
+  },
+  {
+    image: cowpink,
+    x: -35,
+    y: 538,
+    frameX: 0,
+    frameY: 5,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 200,
+    animationOffset: 1,
+    animationFrames: 20,
+    feet: 1,
+    zIndex: 1
+  },
+  {
+    image: cowpurple,
+    x: -148,
+    y: 508,
+    frameX: 0,
+    frameY: 6,
+    frameWidth: 32,
+    frameHeight: 32,
+    animationSpeed: 200,
+    animationOffset: 5,
+    animationFrames: 4,
+    feet: 1,
+    zIndex: 1
+  },
+  {
+    image: boat,
+    x: 125,
+    y: 603,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 48,
+    frameHeight: 32,
+    animationSpeed: 1000,
+    animationOffset: 0,
+    animationFrames: 1,
+    feet: 1,
+    zIndex: 1
+  },
+  {
+    image: tower5g,
+    x: -300,
+    y: 450,
+    frameX: 0,
+    frameY: 0,
+    frameWidth: 54,
+    frameHeight: 96,
+    animationSpeed: 200,
+    animationOffset: 0,
+    animationFrames: 10,
+    feet: -1,
+    zIndex: 1
+  },
+  {
     image: mdel2,
     x: 33,
     y: 91,
@@ -336,90 +420,6 @@ const objectsToDraw = [
     feet: 0,
     zIndex: 1
   },
-  {
-    image: cowbrown,
-    x: -286,
-    y: 590,
-    frameX: 0,
-    frameY: 0,
-    frameWidth: 32,
-    frameHeight: 32,
-    animationSpeed: 400,
-    animationOffset: 2,
-    animationFrames: 8,
-    feet: 1,
-    zIndex: 1
-  },
-  {
-    image: cowlight,
-    x: -186,
-    y: 622,
-    frameX: 0,
-    frameY: 4,
-    frameWidth: 32,
-    frameHeight: 32,
-    animationSpeed: 600,
-    animationOffset: 0,
-    animationFrames: 4,
-    feet: 1,
-    zIndex: 1
-  },
-  {
-    image: cowpink,
-    x: -35,
-    y: 538,
-    frameX: 0,
-    frameY: 5,
-    frameWidth: 32,
-    frameHeight: 32,
-    animationSpeed: 200,
-    animationOffset: 1,
-    animationFrames: 20,
-    feet: 1,
-    zIndex: 1
-  },
-  {
-    image: cowpurple,
-    x: -148,
-    y: 508,
-    frameX: 0,
-    frameY: 6,
-    frameWidth: 32,
-    frameHeight: 32,
-    animationSpeed: 200,
-    animationOffset: 5,
-    animationFrames: 4,
-    feet: 1,
-    zIndex: 1
-  },
-  {
-    image: boat,
-    x: 125,
-    y: 603,
-    frameX: 0,
-    frameY: 0,
-    frameWidth: 48,
-    frameHeight: 32,
-    animationSpeed: 1000,
-    animationOffset: 0,
-    animationFrames: 1,
-    feet: 1,
-    zIndex: 1
-  },
-  {
-    image: tower5g,
-    x: -300,
-    y: 450,
-    frameX: 0,
-    frameY: 0,
-    frameWidth: 54,
-    frameHeight: 96,
-    animationSpeed: 200,
-    animationOffset: 0,
-    animationFrames: 10,
-    feet: -1,
-    zIndex: 1
-  },
 ];
 window.char = objectsToDraw[0]; // this is the character
 const collisionMapOffset = objectsToDraw[2];
@@ -428,7 +428,7 @@ const cowlightNPC = objectsToDraw[8];
 const cowpinkNPC = objectsToDraw[9];
 const cowpurpleNPC = objectsToDraw[10];
 const boatAnimate = objectsToDraw[11];
-const animate5G = objectsToDraw[12];
+const animate5G = objectsToDraw[13];
 
 // Consolidated image loading
 const images = [charSheet, npcIndicators, groundImage, collisionMap, exampleHouse, shadow, blush, eyes];
