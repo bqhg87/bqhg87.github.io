@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <ul class="wide-spacing bulleted">
             <li><p><span class="darkened">Hamish Campbell</span> - Nuclear Energy script, Nuclear Energy article, artwork, implementation, coding, text entry and article editing.</p></li>
             <li><p><span class="darkened">Jayden Heppenstall</span> - Microwaves script, Gamma Ray Bursts article, Weather control article, Microwaves article, set design, implementation, coding and text entry.</p></li>
-            <li><p><span class="darkened">Elizabeth Seddon</span> - Game design, implementation, coding, map design, additional script writing, editing and artwork.</p></li>
+            <li><p><span class="darkened">George Seddon</span> - Game design, implementation, coding, map design, additional script writing, editing and artwork.</p></li>
             <li><p><span class="darkened">George Scott</span> - Introductory article, LHC script, 5G script, LHG article and 5G article.</p></li>
             <li><p><span class="darkened">Zahra Wilkinson</span> - Quantum healing script, Gamma Ray Bursts script, Weather control script, Quantum healing article, Nuclear Energy article,playtesting and credits.</p></li>
           <ul>
@@ -672,3 +672,4 @@ document.addEventListener('DOMContentLoaded', () => {
     previousWidth = width;
   });
 });
+
